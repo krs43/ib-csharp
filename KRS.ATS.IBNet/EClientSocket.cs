@@ -1465,15 +1465,6 @@ namespace KRS.ATS.IBNet
         }
 		
         //UPGRADE_NOTE: Synchronized keyword was removed from method 'error'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
-        protected internal virtual void  error(System.String err)
-        {
-            lock (this)
-            {
-                m_anyWrapper.error(err);
-            }
-        }
-		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'error'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         protected internal virtual void  error(int id, int errorCode, System.String errorMsg)
         {
             lock (this)

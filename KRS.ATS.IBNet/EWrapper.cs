@@ -7,7 +7,7 @@ using KRS.ATS.IBNet;
 
 namespace KRS.ATS.IBNet
 {
-    public interface EWrapper:AnyWrapper
+    public interface EWrapper
     {
 		
         ///////////////////////////////////////////////////////////////////////
@@ -36,5 +36,7 @@ namespace KRS.ATS.IBNet
         void  historicalData(int reqId, System.String date, double open, double high, double low, double close, int volume, int count, double WAP, bool hasGaps);
         void  scannerParameters(System.String xml);
         void  scannerData(int reqId, int rank, ContractDetails contractDetails, System.String distance, System.String benchmark, System.String projection, System.String legsStr);
+        void error(int id, int errorCode, System.String errorMsg);
+        void connectionClosed();
     }
 }

@@ -33,25 +33,47 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnyWrapper.cs" />
-    <Compile Include="AnyWrapperMsgGenerator.cs" />
-    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="EventArgs\BondContractDetailsEventArgs.cs" />
+    <Compile Include="EventArgs\ConnectionClosedEventArgs.cs" />
+    <Compile Include="EventArgs\ErrorEventArgs.cs" />
+    <Compile Include="EventArgs\HistoricalDataEventArgs.cs" />
+    <Compile Include="EventArgs\ManagedAccountsEventArgs.cs" />
+    <Compile Include="EventArgs\ReceiveFAEventArgs.cs" />
+    <Compile Include="EventArgs\ScannerDataEventArgs.cs" />
+    <Compile Include="EventArgs\ScannerParametersEventArgs.cs" />
+    <Compile Include="EventArgs\UpdateMktDepthL2EventArgs.cs" />
     <Compile Include="ComboLeg.cs" />
     <Compile Include="Contract.cs" />
     <Compile Include="ContractDetails.cs" />
+    <Compile Include="EventArgs\ContractDetailsEventArgs.cs" />
     <Compile Include="EClientErrors.cs" />
     <Compile Include="EClientSocket.cs" />
     <Compile Include="EReader.cs" />
     <Compile Include="EWrapper.cs" />
     <Compile Include="EWrapperMsgGenerator.cs" />
+    <Compile Include="EventArgs\ExecDetailsEventArgs.cs" />
     <Compile Include="Execution.cs" />
     <Compile Include="ExecutionFilter.cs" />
     <Compile Include="IBClient.cs" />
+    <Compile Include="EventArgs\NextValidIdEventArgs.cs" />
+    <Compile Include="EventArgs\OpenOrderEventArgs.cs" />
     <Compile Include="Order.cs" />
+    <Compile Include="EventArgs\OrderStatusEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScannerSubscription.cs" />
     <Compile Include="SupportClass.cs" />
+    <Compile Include="EventArgs\TickEFPEventArgs.cs" />
+    <Compile Include="EventArgs\TickGenericEventArgs.cs" />
+    <Compile Include="EventArgs\TickOptionComputationEventArgs.cs" />
+    <Compile Include="EventArgs\TickPriceEventArgs.cs" />
+    <Compile Include="EventArgs\TickSizeEventArgs.cs" />
+    <Compile Include="EventArgs\TickStringEventArgs.cs" />
     <Compile Include="TickType.cs" />
+    <Compile Include="EventArgs\UpdateAccountTimeEventArgs.cs" />
+    <Compile Include="EventArgs\UpdateAccountValueEventArgs.cs" />
+    <Compile Include="EventArgs\UpdateMktDepthEventArgs.cs" />
+    <Compile Include="EventArgs\UpdateNewsBulletinEventArgs.cs" />
+    <Compile Include="EventArgs\UpdatePortfolioEventArgs.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
