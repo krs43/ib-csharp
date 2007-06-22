@@ -15,8 +15,8 @@ namespace KRS.ATS.IBNet
 		
         public int m_conId;
         public int m_ratio;
-        public System.String m_action; // BUY/SELL
-        public System.String m_exchange;
+        public String m_action; // BUY/SELL
+        public String m_exchange;
         public int m_openClose;
 		
         public ComboLeg()
@@ -26,7 +26,7 @@ namespace KRS.ATS.IBNet
             m_openClose = 0;
         }
 		
-        public ComboLeg(int p_ConId, int p_Ratio, System.String p_Action, System.String p_exchange, int p_openClose)
+        public ComboLeg(int p_ConId, int p_Ratio, String p_Action, String p_exchange, int p_openClose)
         {
             m_conId = p_ConId;
             m_ratio = p_Ratio;
@@ -35,7 +35,7 @@ namespace KRS.ATS.IBNet
             m_openClose = p_openClose;
         }
 		
-        public  override bool Equals(System.Object p_other)
+        public  override bool Equals(Object p_other)
         {
             if (this == p_other)
             {
@@ -47,15 +47,10 @@ namespace KRS.ATS.IBNet
             }
 			
             ComboLeg l_theOther = (ComboLeg) p_other;
-            System.String l_thisAction = m_action != null?m_action:"";
-            System.String l_thisExchange = m_exchange != null?m_exchange:"";
+            String l_thisAction = m_action ?? "";
+            String l_thisExchange = m_exchange ?? "";
 			
-            return (System.String.Compare(l_thisAction, l_theOther.m_action, true) == 0 && System.String.Compare(l_thisExchange, l_theOther.m_exchange, true) == 0 && m_conId == l_theOther.m_conId && m_ratio == l_theOther.m_ratio && m_openClose == l_theOther.m_openClose);
-        }
-        //UPGRADE_NOTE: The following method implementation was automatically added to preserve functionality. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1306'"
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
+            return (String.Compare(l_thisAction, l_theOther.m_action, true) == 0 && String.Compare(l_thisExchange, l_theOther.m_exchange, true) == 0 && m_conId == l_theOther.m_conId && m_ratio == l_theOther.m_ratio && m_openClose == l_theOther.m_openClose);
         }
     }
 }

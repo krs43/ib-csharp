@@ -2,9 +2,6 @@
 * ContractDetails.java
 *
 */
-using System;
-using KRS.ATS.IBNet;
-
 namespace KRS.ATS.IBNet
 {
     public class ContractDetails

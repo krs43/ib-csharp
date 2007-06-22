@@ -214,7 +214,7 @@ namespace KRS.ATS.IBNet
                 if (m_serverVersion >= 20)
                 {
                     m_TwsTime = m_reader.readStr();
-                    System.Console.Out.WriteLine("TWS Time at connection:" + m_TwsTime);
+                    Console.Out.WriteLine("TWS Time at connection:" + m_TwsTime);
                 }
                 if (m_serverVersion < SERVER_VERSION)
                 {
@@ -260,7 +260,7 @@ namespace KRS.ATS.IBNet
                         m_socket.Close();
                     }
                 }
-                catch
+                catch (Exception)
                 {
                 }
 				
@@ -541,7 +541,7 @@ namespace KRS.ATS.IBNet
         }
 		
         //UPGRADE_NOTE: Synchronized keyword was removed from method 'reqHistoricalData'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
-        public virtual void  reqHistoricalData(int tickerId, Contract contract, String endDateTime, String durationStr, String barSizeSetting, System.String whatToShow, int useRTH, int formatDate)
+        public virtual void  reqHistoricalData(int tickerId, Contract contract, String endDateTime, String durationStr, String barSizeSetting, String whatToShow, int useRTH, int formatDate)
         {
             lock (this)
             {
@@ -614,7 +614,7 @@ namespace KRS.ATS.IBNet
                         }
                     }
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(tickerId, IBClientErrors.FAIL_SEND_REQHISTDATA, "" + e);
@@ -668,7 +668,7 @@ namespace KRS.ATS.IBNet
                         send(contract.m_includeExpired);
                     }
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_REQCONTRACT, "" + e);
@@ -723,7 +723,7 @@ namespace KRS.ATS.IBNet
                         send(numRows);
                     }
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(tickerId, IBClientErrors.FAIL_SEND_REQMKTDEPTH, "" + e);
@@ -754,7 +754,7 @@ namespace KRS.ATS.IBNet
                     send(VERSION);
                     send(tickerId);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(tickerId, IBClientErrors.FAIL_SEND_CANMKT, "" + e);
@@ -792,7 +792,7 @@ namespace KRS.ATS.IBNet
                     send(VERSION);
                     send(tickerId);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(tickerId, IBClientErrors.FAIL_SEND_CANMKTDEPTH, "" + e);
@@ -802,7 +802,7 @@ namespace KRS.ATS.IBNet
         }
 		
         //UPGRADE_NOTE: Synchronized keyword was removed from method 'exerciseOptions'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
-        public virtual void  exerciseOptions(int tickerId, Contract contract, int exerciseAction, int exerciseQuantity, System.String account, int override_Renamed)
+        public virtual void  exerciseOptions(int tickerId, Contract contract, int exerciseAction, int exerciseQuantity, String account, int override_Renamed)
         {
             lock (this)
             {
@@ -841,7 +841,7 @@ namespace KRS.ATS.IBNet
                     send(account);
                     send(override_Renamed);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(tickerId, IBClientErrors.FAIL_SEND_REQMKT, "" + e);
@@ -1002,9 +1002,9 @@ namespace KRS.ATS.IBNet
                         sendMax(order.m_delta);
                         // Volatility orders had specific watermark price attribs in server version 26
                         //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                        double lower = (m_serverVersion == 26 && order.m_orderType.Equals("VOL"))?System.Double.MaxValue:order.m_stockRangeLower;
+                        double lower = (m_serverVersion == 26 && order.m_orderType.Equals("VOL"))?Double.MaxValue:order.m_stockRangeLower;
                         //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                        double upper = (m_serverVersion == 26 && order.m_orderType.Equals("VOL"))?System.Double.MaxValue:order.m_stockRangeUpper;
+                        double upper = (m_serverVersion == 26 && order.m_orderType.Equals("VOL"))?Double.MaxValue:order.m_stockRangeUpper;
                         sendMax(lower);
                         sendMax(upper);
                     }
@@ -1033,9 +1033,9 @@ namespace KRS.ATS.IBNet
                         {
                             // Volatility orders had specific watermark price attribs in server version 26
                             //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                            double lower = order.m_orderType.Equals("VOL")?order.m_stockRangeLower:System.Double.MaxValue;
+                            double lower = order.m_orderType.Equals("VOL")?order.m_stockRangeLower:Double.MaxValue;
                             //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                            double upper = order.m_orderType.Equals("VOL")?order.m_stockRangeUpper:System.Double.MaxValue;
+                            double upper = order.m_orderType.Equals("VOL")?order.m_stockRangeUpper:Double.MaxValue;
                             sendMax(lower);
                             sendMax(upper);
                         }
@@ -1048,7 +1048,7 @@ namespace KRS.ATS.IBNet
                         sendMax(order.m_trailStopPrice);
                     }
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(id, IBClientErrors.FAIL_SEND_ORDER, "" + e);
@@ -1058,7 +1058,7 @@ namespace KRS.ATS.IBNet
         }
 		
         //UPGRADE_NOTE: Synchronized keyword was removed from method 'reqAccountUpdates'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
-        public virtual void  reqAccountUpdates(bool subscribe, System.String acctCode)
+        public virtual void  reqAccountUpdates(bool subscribe, String acctCode)
         {
             lock (this)
             {
@@ -1085,7 +1085,7 @@ namespace KRS.ATS.IBNet
                         send(acctCode);
                     }
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_ACCT, "" + e);
@@ -1129,7 +1129,7 @@ namespace KRS.ATS.IBNet
                         send(filter.m_side);
                     }
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_EXEC, "" + e);
@@ -1160,7 +1160,7 @@ namespace KRS.ATS.IBNet
                     send(VERSION);
                     send(id);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(id, IBClientErrors.FAIL_SEND_CORDER, "" + e);
@@ -1190,7 +1190,7 @@ namespace KRS.ATS.IBNet
                     send((int)OutgoingMessage.REQ_OPEN_ORDERS);
                     send(VERSION);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_OORDER, "" + e);
@@ -1220,7 +1220,7 @@ namespace KRS.ATS.IBNet
                     send(VERSION);
                     send(numIds);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_CORDER, "" + e);
@@ -1250,7 +1250,7 @@ namespace KRS.ATS.IBNet
                     send(VERSION);
                     send(allMsgs);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_CORDER, "" + e);
@@ -1280,7 +1280,7 @@ namespace KRS.ATS.IBNet
                     send((int)OutgoingMessage.CANCEL_NEWS_BULLETINS);
                     send(VERSION);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_CORDER, "" + e);
@@ -1311,7 +1311,7 @@ namespace KRS.ATS.IBNet
                     send(VERSION);
                     send(bAutoBind);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_OORDER, "" + e);
@@ -1341,7 +1341,7 @@ namespace KRS.ATS.IBNet
                     send((int)OutgoingMessage.REQ_ALL_OPEN_ORDERS);
                     send(VERSION);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_OORDER, "" + e);
@@ -1371,7 +1371,7 @@ namespace KRS.ATS.IBNet
                     send((int)OutgoingMessage.REQ_MANAGED_ACCTS);
                     send(VERSION);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_OORDER, "" + e);
@@ -1408,7 +1408,7 @@ namespace KRS.ATS.IBNet
                     send(VERSION);
                     send(faDataType);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(faDataType, IBClientErrors.FAIL_SEND_FA_REQUEST, "" + e);
@@ -1418,7 +1418,7 @@ namespace KRS.ATS.IBNet
         }
 		
         //UPGRADE_NOTE: Synchronized keyword was removed from method 'replaceFA'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
-        public virtual void  replaceFA(int faDataType, System.String xml)
+        public virtual void  replaceFA(int faDataType, String xml)
         {
             lock (this)
             {
@@ -1446,7 +1446,7 @@ namespace KRS.ATS.IBNet
                     send(faDataType);
                     send(xml);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                     error(faDataType, IBClientErrors.FAIL_SEND_FA_REPLACE, "" + e);

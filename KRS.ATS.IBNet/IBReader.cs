@@ -2,11 +2,14 @@
 * EReader.java
 *
 */
+using System.Threading;
+
 namespace KRS.ATS.IBNet
 {
     public class IBReader
     {
         #region Thread Sync
+        private Thread mThread;
         /// <summary>
         /// Lock covering stopping and stopped
         /// </summary>
@@ -92,6 +95,7 @@ namespace KRS.ATS.IBNet
         {
             m_parent = parent;
             m_dis = dis;
+            mThread = new Thread(Run);
         }
         public void  Run()
         {
@@ -109,6 +113,12 @@ namespace KRS.ATS.IBNet
                 parent.wrapper.connectionClosed();
                 m_parent.close();
             }
+        }
+
+        internal void Start()
+        {
+            if(!Stopping)
+                mThread.Start();
         }
         #endregion
 
