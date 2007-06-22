@@ -1,103 +1,56 @@
-/*
-* EClientSocket.java
-*
-*/
 using System;
 using KRS.ATS.IBNet;
 
 namespace KRS.ATS.IBNet
 {
-    public class EClientSocket
+    /// <summary>
+    /// Client version history
+    ///  6 = Added parentId to orderStatus
+    ///  7 = The new execDetails event returned for an order filled status and reqExecDetails
+    ///     Also market depth is available.
+    ///  8 = Added lastFillPrice to orderStatus() event and permId to execution details
+    ///  9 = Added 'averageCost', 'unrealizedPNL', and 'unrealizedPNL' to updatePortfolio event
+    /// 10 = Added 'serverId' to the 'open order' & 'order status' events.
+    ///      We send back all the API open orders upon connection.
+    ///      Added new methods reqAllOpenOrders, reqAutoOpenOrders()
+    ///      Added FA support - reqExecution has filter.
+    ///                       - reqAccountUpdates takes acct code.
+    /// 11 = Added permId to openOrder event.
+    /// 12 = requsting open order attributes ignoreRth, hidden, and discretionary
+    /// 13 = added goodAfterTime
+    /// 14 = always send size on bid/ask/last tick
+    /// 15 = send allocation description string on openOrder
+    /// 16 = can receive account name in account and portfolio updates, and fa params in openOrder
+    /// 17 = can receive liquidation field in exec reports, and notAutoAvailable field in mkt data
+    /// 18 = can receive good till date field in open order messages, and request intraday backfill
+    /// 19 = can receive rthOnly flag in ORDER_STATUS
+    /// 20 = expects TWS time string on connection after server version >= 20.
+    /// 21 = can receive bond contract details.
+    /// 22 = can receive price magnifier in version 2 contract details message
+    /// 23 = support for scanner
+    /// 24 = can receive volatility order parameters in open order messages
+    /// 25 = can receive HMDS query start and end times
+    /// 26 = can receive option vols in option market data messages
+    /// 27 = can receive delta neutral order type and delta neutral aux price in place order version 20: API 8.85
+    /// 28 = can receive option model computation ticks: API 8.9
+    /// 29 = can receive trail stop limit price in open order and can place them: API 8.91
+    /// 30 = can receive extended bond contract def, new ticks, and trade count in bars
+    /// 31 = can receive EFP extensions to scanner and market data, and combo legs on open orders 
+    /// </summary>
+    public class IBClientSocket : IDisposable
     {
-        virtual public bool Connected
-        {
-            get
-            {
-                return m_connected;
-            }
-			
-        }
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'setServerLogLevel'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
-        virtual public int ServerLogLevel
-        {
-            set
-            {
-                lock (this)
-                {
-                    // not connected?
-                    if (!m_connected)
-                    {
-                        error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
-                        return ;
-                    }
-					
-                    //UPGRADE_NOTE: Final was removed from the declaration of 'VERSION '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-                    int VERSION = 1;
-					
-                    // send the set server logging level message
-                    try
-                    {
-                        send(SET_SERVER_LOGLEVEL);
-                        send(VERSION);
-                        send(value);
-                    }
-                    catch (System.Exception e)
-                    {
-                        //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                        error(EClientErrors.NO_VALID_ID, EClientErrors.FAIL_SEND_SERVER_LOG_LEVEL, "" + e);
-                        close();
-                    }
-                }
-            }
-			
-        }
-		
-        // Client version history
-        //
-        // 	6 = Added parentId to orderStatus
-        // 	7 = The new execDetails event returned for an order filled status and reqExecDetails
-        //     Also market depth is available.
-        // 	8 = Added lastFillPrice to orderStatus() event and permId to execution details
-        //  9 = Added 'averageCost', 'unrealizedPNL', and 'unrealizedPNL' to updatePortfolio event
-        // 10 = Added 'serverId' to the 'open order' & 'order status' events.
-        //      We send back all the API open orders upon connection.
-        //      Added new methods reqAllOpenOrders, reqAutoOpenOrders()
-        //      Added FA support - reqExecution has filter.
-        //                       - reqAccountUpdates takes acct code.
-        // 11 = Added permId to openOrder event.
-        // 12 = requsting open order attributes ignoreRth, hidden, and discretionary
-        // 13 = added goodAfterTime
-        // 14 = always send size on bid/ask/last tick
-        // 15 = send allocation description string on openOrder
-        // 16 = can receive account name in account and portfolio updates, and fa params in openOrder
-        // 17 = can receive liquidation field in exec reports, and notAutoAvailable field in mkt data
-        // 18 = can receive good till date field in open order messages, and request intraday backfill
-        // 19 = can receive rthOnly flag in ORDER_STATUS
-        // 20 = expects TWS time string on connection after server version >= 20.
-        // 21 = can receive bond contract details.
-        // 22 = can receive price magnifier in version 2 contract details message
-        // 23 = support for scanner
-        // 24 = can receive volatility order parameters in open order messages
-        // 25 = can receive HMDS query start and end times
-        // 26 = can receive option vols in option market data messages
-        // 27 = can receive delta neutral order type and delta neutral aux price in place order version 20: API 8.85
-        // 28 = can receive option model computation ticks: API 8.9
-        // 29 = can receive trail stop limit price in open order and can place them: API 8.91
-        // 30 = can receive extended bond contract def, new ticks, and trade count in bars
-        // 31 = can receive EFP extensions to scanner and market data, and combo legs on open orders 
-		
+        #region Values
         private const int CLIENT_VERSION = 31;
         private const int SERVER_VERSION = 1;
-        //UPGRADE_NOTE: Final was removed from the declaration of 'EOL'. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-        private static readonly sbyte[] EOL = new sbyte[]{0};
-        private const System.String BAG_SEC_TYPE = "BAG";
 		
         // FA msg data types
         public const int GROUPS = 1;
         public const int PROFILES = 2;
         public const int ALIASES = 3;
-		
-        public static System.String faMsgTypeName(int faDataType)
+
+        private const String BAG_SEC_TYPE = "BAG";
+
+        public static String faMsgTypeName(int faDataType)
         {
             switch (faDataType)
             {
@@ -113,68 +66,85 @@ namespace KRS.ATS.IBNet
             }
             return null;
         }
-		
-        // outgoing msg id's
-        private const int REQ_MKT_DATA = 1;
-        private const int CANCEL_MKT_DATA = 2;
-        private const int PLACE_ORDER = 3;
-        private const int CANCEL_ORDER = 4;
-        private const int REQ_OPEN_ORDERS = 5;
-        private const int REQ_ACCOUNT_DATA = 6;
-        private const int REQ_EXECUTIONS = 7;
-        private const int REQ_IDS = 8;
-        private const int REQ_CONTRACT_DATA = 9;
-        private const int REQ_MKT_DEPTH = 10;
-        private const int CANCEL_MKT_DEPTH = 11;
-        private const int REQ_NEWS_BULLETINS = 12;
-        private const int CANCEL_NEWS_BULLETINS = 13;
-        private const int SET_SERVER_LOGLEVEL = 14;
-        private const int REQ_AUTO_OPEN_ORDERS = 15;
-        private const int REQ_ALL_OPEN_ORDERS = 16;
-        private const int REQ_MANAGED_ACCTS = 17;
-        private const int REQ_FA = 18;
-        private const int REPLACE_FA = 19;
-        private const int REQ_HISTORICAL_DATA = 20;
-        private const int EXERCISE_OPTIONS = 21;
-        private const int REQ_SCANNER_SUBSCRIPTION = 22;
-        private const int CANCEL_SCANNER_SUBSCRIPTION = 23;
-        private const int REQ_SCANNER_PARAMETERS = 24;
-        private const int CANCEL_HISTORICAL_DATA = 25;
-		
-        private AnyWrapper m_anyWrapper; // msg handler
+        #endregion
+
+        #region Private Variables
+        private static readonly sbyte[] EOL = new sbyte[]{0};
+        private readonly IBWrapper m_anyWrapper; // msg handler
         private System.Net.Sockets.TcpClient m_socket; // the socket
-        //UPGRADE_TODO: Class 'java.io.DataOutputStream' was converted to 'System.IO.BinaryWriter' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioDataOutputStream'"
         private System.IO.BinaryWriter m_dos; // the socket output stream
         private bool m_connected; // true if we are connected
-        private EReader m_reader; // thread which reads msgs from socket
+        private IBReader m_reader; // thread which reads msgs from socket
         private int m_serverVersion = 1;
-        private System.String m_TwsTime;
-		
-        public virtual int serverVersion()
+        private String m_TwsTime;
+        #endregion
+
+        #region Properties
+        public bool Connected
         {
-            return m_serverVersion;
+            get
+            {
+                return m_connected;
+            }
+			
         }
-        public virtual System.String TwsConnectionTime()
+        public int ServerLogLevel
         {
-            return m_TwsTime;
+            set
+            {
+                lock (this)
+                {
+                    // not connected?
+                    if (!m_connected)
+                    {
+                        error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
+                        return ;
+                    }
+					
+                    //UPGRADE_NOTE: Final was removed from the declaration of 'VERSION '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
+                    int VERSION = 1;
+					
+                    // send the set server logging level message
+                    try
+                    {
+                        send((int)OutgoingMessage.SET_SERVER_LOGLEVEL);
+                        send(VERSION);
+                        send(value);
+                    }
+                    catch (Exception e)
+                    {
+                        //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
+                        error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_SERVER_LOG_LEVEL, "" + e);
+                        close();
+                    }
+                }
+            }
+			
         }
-        public virtual AnyWrapper wrapper()
+        public int serverVersion
         {
-            return m_anyWrapper;
+            get { return m_serverVersion; }
         }
-        public virtual EReader reader()
+        public String TwsConnectionTime
         {
-            return m_reader;
+            get { return m_TwsTime;}
         }
-		
-		
-        public EClientSocket(AnyWrapper anyWrapper)
+        public IBWrapper wrapper
+        {
+            get {return m_anyWrapper;}
+        }
+        public IBReader reader
+        {
+            get {return m_reader;}
+        }
+        #endregion
+
+        #region General Methods
+        public IBClientSocket(IBWrapper anyWrapper)
         {
             m_anyWrapper = anyWrapper;
         }
-		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'eConnect'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
-        public virtual void  eConnect(System.String host, int port, int clientId)
+        public virtual void Connect(String host, int port, int clientId)
         {
             lock (this)
             {
@@ -187,26 +157,24 @@ namespace KRS.ATS.IBNet
                 try
                 {
                     System.Net.Sockets.TcpClient socket = new System.Net.Sockets.TcpClient(host, port);
-                    eConnect(socket, clientId);
+                    Connect(socket, clientId);
                 }
-                catch (System.Exception e)
+                catch (Exception)
                 {
                     connectionError();
                 }
             }
         }
-		
         protected internal virtual void  connectionError()
         {
-            m_anyWrapper.error(EClientErrors.NO_VALID_ID, EClientErrors.CONNECT_FAIL.code(), EClientErrors.CONNECT_FAIL.msg());
+            m_anyWrapper.error(IBClientErrors.NO_VALID_ID, IBClientErrors.CONNECT_FAIL.code(), IBClientErrors.CONNECT_FAIL.msg());
             m_reader = null;
         }
-		
-        protected internal virtual System.String checkConnected(System.String host)
+        protected internal virtual String checkConnected(String host)
         {
             if (m_connected)
             {
-                m_anyWrapper.error(EClientErrors.NO_VALID_ID, EClientErrors.ALREADY_CONNECTED.code(), EClientErrors.ALREADY_CONNECTED.msg());
+                m_anyWrapper.error(IBClientErrors.NO_VALID_ID, IBClientErrors.ALREADY_CONNECTED.code(), IBClientErrors.ALREADY_CONNECTED.msg());
                 return null;
             }
             if (isNull(host))
@@ -215,15 +183,14 @@ namespace KRS.ATS.IBNet
             }
             return host;
         }
-		
         //UPGRADE_TODO: Class 'java.io.DataInputStream' was converted to 'System.IO.BinaryReader' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioDataInputStream'"
-        public virtual EReader createReader(EClientSocket socket, System.IO.BinaryReader dis)
+        public virtual IBReader createReader(IBClientSocket socket, System.IO.BinaryReader dis)
         {
-            return new EReader(socket, dis);
+            return new IBReader(socket, dis);
         }
 		
         //UPGRADE_NOTE: Synchronized keyword was removed from method 'eConnect'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
-        public virtual void  eConnect(System.Net.Sockets.TcpClient socket, int clientId)
+        public virtual void  Connect(System.Net.Sockets.TcpClient socket, int clientId)
         {
             lock (this)
             {
@@ -243,7 +210,7 @@ namespace KRS.ATS.IBNet
 				
                 // check server version
                 m_serverVersion = m_reader.readInt();
-                System.Console.Out.WriteLine("Server Version:" + m_serverVersion);
+                Console.Out.WriteLine("Server Version:" + m_serverVersion);
                 if (m_serverVersion >= 20)
                 {
                     m_TwsTime = m_reader.readStr();
@@ -251,7 +218,7 @@ namespace KRS.ATS.IBNet
                 }
                 if (m_serverVersion < SERVER_VERSION)
                 {
-                    m_anyWrapper.error(EClientErrors.NO_VALID_ID, EClientErrors.UPDATE_TWS.code(), EClientErrors.UPDATE_TWS.msg());
+                    m_anyWrapper.error(IBClientErrors.NO_VALID_ID, IBClientErrors.UPDATE_TWS.code(), IBClientErrors.UPDATE_TWS.msg());
                     return ;
                 }
 				
@@ -269,7 +236,7 @@ namespace KRS.ATS.IBNet
         }
 		
         //UPGRADE_NOTE: Synchronized keyword was removed from method 'eDisconnect'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
-        public virtual void  eDisconnect()
+        public virtual void  Disconnect()
         {
             lock (this)
             {
@@ -284,7 +251,7 @@ namespace KRS.ATS.IBNet
                     // stop reader thread
                     if (m_reader != null)
                     {
-                        m_reader.Interrupt();
+                        m_reader.Stop();
                     }
 					
                     // close socket
@@ -293,14 +260,38 @@ namespace KRS.ATS.IBNet
                         m_socket.Close();
                     }
                 }
-                catch (System.Exception e)
+                catch
                 {
                 }
 				
                 m_connected = false;
             }
         }
+        //UPGRADE_NOTE: Synchronized keyword was removed from method 'error'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
+        protected internal virtual void  error(int id, int errorCode, String errorMsg)
+        {
+            lock (this)
+            {
+                m_anyWrapper.error(id, errorCode, errorMsg);
+            }
+        }
 		
+        protected internal virtual void  close()
+        {
+            Disconnect();
+            m_anyWrapper.connectionClosed();
+        }
+        ///<summary>
+        ///Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        ///</summary>
+        ///<filterpriority>2</filterpriority>
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region Network Commmands
         //UPGRADE_NOTE: Synchronized keyword was removed from method 'cancelScannerSubscription'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  cancelScannerSubscription(int tickerId)
         {
@@ -309,13 +300,13 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
                 if (m_serverVersion < 24)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.UPDATE_TWS, "  It does not support API scanner subscription.");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.UPDATE_TWS, "  It does not support API scanner subscription.");
                     return ;
                 }
 				
@@ -325,14 +316,14 @@ namespace KRS.ATS.IBNet
                 // send cancel mkt data msg
                 try
                 {
-                    send(CANCEL_SCANNER_SUBSCRIPTION);
+                    send((int)OutgoingMessage.CANCEL_SCANNER_SUBSCRIPTION);
                     send(VERSION);
                     send(tickerId);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(tickerId, EClientErrors.FAIL_SEND_CANSCANNER, "" + e);
+                    error(tickerId, IBClientErrors.FAIL_SEND_CANSCANNER, "" + e);
                     close();
                 }
             }
@@ -346,13 +337,13 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
                 if (m_serverVersion < 24)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.UPDATE_TWS, "  It does not support API scanner subscription.");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.UPDATE_TWS, "  It does not support API scanner subscription.");
                     return ;
                 }
 				
@@ -361,13 +352,13 @@ namespace KRS.ATS.IBNet
 				
                 try
                 {
-                    send(REQ_SCANNER_PARAMETERS);
+                    send((int)OutgoingMessage.REQ_SCANNER_PARAMETERS);
                     send(VERSION);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.FAIL_SEND_REQSCANNERPARAMETERS, "" + e);
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_REQSCANNERPARAMETERS, "" + e);
                     close();
                 }
             }
@@ -381,13 +372,13 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
                 if (m_serverVersion < 24)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.UPDATE_TWS, "  It does not support API scanner subscription.");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.UPDATE_TWS, "  It does not support API scanner subscription.");
                     return ;
                 }
 				
@@ -396,7 +387,7 @@ namespace KRS.ATS.IBNet
 				
                 try
                 {
-                    send(REQ_SCANNER_SUBSCRIPTION);
+                    send((int)OutgoingMessage.REQ_SCANNER_SUBSCRIPTION);
                     send(VERSION);
                     send(tickerId);
                     sendMax(subscription.numberOfRows());
@@ -427,24 +418,24 @@ namespace KRS.ATS.IBNet
                         send(subscription.stockTypeFilter());
                     }
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(tickerId, EClientErrors.FAIL_SEND_REQSCANNER, "" + e);
+                    error(tickerId, IBClientErrors.FAIL_SEND_REQSCANNER, "" + e);
                     close();
                 }
             }
         }
 		
         //UPGRADE_NOTE: Synchronized keyword was removed from method 'reqMktData'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
-        public virtual void  reqMktData(int tickerId, Contract contract, System.String genericTickList)
+        public virtual void  reqMktData(int tickerId, Contract contract, String genericTickList)
         {
             lock (this)
             {
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
@@ -454,7 +445,7 @@ namespace KRS.ATS.IBNet
                 try
                 {
                     // send req mkt data msg
-                    send(REQ_MKT_DATA);
+                    send((int)OutgoingMessage.REQ_MKT_DATA);
                     send(VERSION);
                     send(tickerId);
 					
@@ -503,10 +494,10 @@ namespace KRS.ATS.IBNet
                         send(genericTickList);
                     }
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(tickerId, EClientErrors.FAIL_SEND_REQMKT, "" + e);
+                    error(tickerId, IBClientErrors.FAIL_SEND_REQMKT, "" + e);
                     close();
                 }
             }
@@ -520,13 +511,13 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
                 if (m_serverVersion < 24)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.UPDATE_TWS, "  It does not support historical data query cancellation.");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.UPDATE_TWS, "  It does not support historical data query cancellation.");
                     return ;
                 }
 				
@@ -536,28 +527,28 @@ namespace KRS.ATS.IBNet
                 // send cancel mkt data msg
                 try
                 {
-                    send(CANCEL_HISTORICAL_DATA);
+                    send((int)OutgoingMessage.CANCEL_HISTORICAL_DATA);
                     send(VERSION);
                     send(tickerId);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(tickerId, EClientErrors.FAIL_SEND_CANSCANNER, "" + e);
+                    error(tickerId, IBClientErrors.FAIL_SEND_CANSCANNER, "" + e);
                     close();
                 }
             }
         }
 		
         //UPGRADE_NOTE: Synchronized keyword was removed from method 'reqHistoricalData'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
-        public virtual void  reqHistoricalData(int tickerId, Contract contract, System.String endDateTime, System.String durationStr, System.String barSizeSetting, System.String whatToShow, int useRTH, int formatDate)
+        public virtual void  reqHistoricalData(int tickerId, Contract contract, String endDateTime, String durationStr, String barSizeSetting, System.String whatToShow, int useRTH, int formatDate)
         {
             lock (this)
             {
                 // not connected?
                 if (!m_connected)
                 {
-                    error(tickerId, EClientErrors.NOT_CONNECTED, "");
+                    error(tickerId, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
@@ -568,11 +559,11 @@ namespace KRS.ATS.IBNet
                 {
                     if (m_serverVersion < 16)
                     {
-                        error(EClientErrors.NO_VALID_ID, EClientErrors.UPDATE_TWS, "  It does not support historical data backfill.");
+                        error(IBClientErrors.NO_VALID_ID, IBClientErrors.UPDATE_TWS, "  It does not support historical data backfill.");
                         return ;
                     }
-					
-                    send(REQ_HISTORICAL_DATA);
+
+                    send((int)OutgoingMessage.REQ_HISTORICAL_DATA);
                     send(VERSION);
                     send(tickerId);
                     send(contract.m_symbol);
@@ -626,7 +617,7 @@ namespace KRS.ATS.IBNet
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(tickerId, EClientErrors.FAIL_SEND_REQHISTDATA, "" + e);
+                    error(tickerId, IBClientErrors.FAIL_SEND_REQHISTDATA, "" + e);
                     close();
                 }
             }
@@ -640,14 +631,14 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
                 // This feature is only available for versions of TWS >=4
                 if (m_serverVersion < 4)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.UPDATE_TWS.code(), EClientErrors.UPDATE_TWS.msg());
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.UPDATE_TWS.code(), IBClientErrors.UPDATE_TWS.msg());
                     return ;
                 }
 				
@@ -657,7 +648,7 @@ namespace KRS.ATS.IBNet
                 try
                 {
                     // send req mkt data msg
-                    send(REQ_CONTRACT_DATA);
+                    send((int)OutgoingMessage.REQ_CONTRACT_DATA);
                     send(VERSION);
 					
                     send(contract.m_symbol);
@@ -680,7 +671,7 @@ namespace KRS.ATS.IBNet
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.FAIL_SEND_REQCONTRACT, "" + e);
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_REQCONTRACT, "" + e);
                     close();
                 }
             }
@@ -694,14 +685,14 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
                 // This feature is only available for versions of TWS >=6
                 if (m_serverVersion < 6)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.UPDATE_TWS.code(), EClientErrors.UPDATE_TWS.msg());
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.UPDATE_TWS.code(), IBClientErrors.UPDATE_TWS.msg());
                     return ;
                 }
 				
@@ -711,7 +702,7 @@ namespace KRS.ATS.IBNet
                 try
                 {
                     // send req mkt data msg
-                    send(REQ_MKT_DEPTH);
+                    send((int)OutgoingMessage.REQ_MKT_DEPTH);
                     send(VERSION);
                     send(tickerId);
 					
@@ -735,7 +726,7 @@ namespace KRS.ATS.IBNet
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(tickerId, EClientErrors.FAIL_SEND_REQMKTDEPTH, "" + e);
+                    error(tickerId, IBClientErrors.FAIL_SEND_REQMKTDEPTH, "" + e);
                     close();
                 }
             }
@@ -749,7 +740,7 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
@@ -759,14 +750,14 @@ namespace KRS.ATS.IBNet
                 // send cancel mkt data msg
                 try
                 {
-                    send(CANCEL_MKT_DATA);
+                    send((int)OutgoingMessage.CANCEL_MKT_DATA);
                     send(VERSION);
                     send(tickerId);
                 }
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(tickerId, EClientErrors.FAIL_SEND_CANMKT, "" + e);
+                    error(tickerId, IBClientErrors.FAIL_SEND_CANMKT, "" + e);
                     close();
                 }
             }
@@ -780,14 +771,14 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
                 // This feature is only available for versions of TWS >=6
                 if (m_serverVersion < 6)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.UPDATE_TWS.code(), EClientErrors.UPDATE_TWS.msg());
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.UPDATE_TWS.code(), IBClientErrors.UPDATE_TWS.msg());
                     return ;
                 }
 				
@@ -797,14 +788,14 @@ namespace KRS.ATS.IBNet
                 // send cancel mkt data msg
                 try
                 {
-                    send(CANCEL_MKT_DEPTH);
+                    send((int)OutgoingMessage.CANCEL_MKT_DEPTH);
                     send(VERSION);
                     send(tickerId);
                 }
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(tickerId, EClientErrors.FAIL_SEND_CANMKTDEPTH, "" + e);
+                    error(tickerId, IBClientErrors.FAIL_SEND_CANMKTDEPTH, "" + e);
                     close();
                 }
             }
@@ -818,7 +809,7 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(tickerId, EClientErrors.NOT_CONNECTED, "");
+                    error(tickerId, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
@@ -829,11 +820,11 @@ namespace KRS.ATS.IBNet
                 {
                     if (m_serverVersion < 21)
                     {
-                        error(EClientErrors.NO_VALID_ID, EClientErrors.UPDATE_TWS, "  It does not support options exercise from the API.");
+                        error(IBClientErrors.NO_VALID_ID, IBClientErrors.UPDATE_TWS, "  It does not support options exercise from the API.");
                         return ;
                     }
-					
-                    send(EXERCISE_OPTIONS);
+
+                    send((int)OutgoingMessage.EXERCISE_OPTIONS);
                     send(VERSION);
                     send(tickerId);
                     send(contract.m_symbol);
@@ -853,7 +844,7 @@ namespace KRS.ATS.IBNet
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(tickerId, EClientErrors.FAIL_SEND_REQMKT, "" + e);
+                    error(tickerId, IBClientErrors.FAIL_SEND_REQMKT, "" + e);
                     close();
                 }
             }
@@ -867,7 +858,7 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
@@ -877,7 +868,7 @@ namespace KRS.ATS.IBNet
                 // send place order msg
                 try
                 {
-                    send(PLACE_ORDER);
+                    send((int)OutgoingMessage.PLACE_ORDER);
                     send(VERSION);
                     send(id);
 					
@@ -1060,7 +1051,7 @@ namespace KRS.ATS.IBNet
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(id, EClientErrors.FAIL_SEND_ORDER, "" + e);
+                    error(id, IBClientErrors.FAIL_SEND_ORDER, "" + e);
                     close();
                 }
             }
@@ -1074,7 +1065,7 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
@@ -1084,7 +1075,7 @@ namespace KRS.ATS.IBNet
                 // send cancel order msg
                 try
                 {
-                    send(REQ_ACCOUNT_DATA);
+                    send((int)OutgoingMessage.REQ_ACCOUNT_DATA);
                     send(VERSION);
                     send(subscribe);
 					
@@ -1097,7 +1088,7 @@ namespace KRS.ATS.IBNet
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.FAIL_SEND_ACCT, "" + e);
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_ACCT, "" + e);
                     close();
                 }
             }
@@ -1111,7 +1102,7 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
@@ -1121,7 +1112,7 @@ namespace KRS.ATS.IBNet
                 // send cancel order msg
                 try
                 {
-                    send(REQ_EXECUTIONS);
+                    send((int)OutgoingMessage.REQ_EXECUTIONS);
                     send(VERSION);
 					
                     // Send the execution rpt filter data
@@ -1141,7 +1132,7 @@ namespace KRS.ATS.IBNet
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.FAIL_SEND_EXEC, "" + e);
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_EXEC, "" + e);
                     close();
                 }
             }
@@ -1155,7 +1146,7 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
@@ -1165,14 +1156,14 @@ namespace KRS.ATS.IBNet
                 // send cancel order msg
                 try
                 {
-                    send(CANCEL_ORDER);
+                    send((int)OutgoingMessage.CANCEL_ORDER);
                     send(VERSION);
                     send(id);
                 }
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(id, EClientErrors.FAIL_SEND_CORDER, "" + e);
+                    error(id, IBClientErrors.FAIL_SEND_CORDER, "" + e);
                     close();
                 }
             }
@@ -1186,7 +1177,7 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
@@ -1196,13 +1187,13 @@ namespace KRS.ATS.IBNet
                 // send cancel order msg
                 try
                 {
-                    send(REQ_OPEN_ORDERS);
+                    send((int)OutgoingMessage.REQ_OPEN_ORDERS);
                     send(VERSION);
                 }
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.FAIL_SEND_OORDER, "" + e);
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_OORDER, "" + e);
                     close();
                 }
             }
@@ -1216,7 +1207,7 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
@@ -1225,14 +1216,14 @@ namespace KRS.ATS.IBNet
 				
                 try
                 {
-                    send(REQ_IDS);
+                    send((int)OutgoingMessage.REQ_IDS);
                     send(VERSION);
                     send(numIds);
                 }
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.FAIL_SEND_CORDER, "" + e);
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_CORDER, "" + e);
                     close();
                 }
             }
@@ -1246,7 +1237,7 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
@@ -1255,14 +1246,14 @@ namespace KRS.ATS.IBNet
 				
                 try
                 {
-                    send(REQ_NEWS_BULLETINS);
+                    send((int)OutgoingMessage.REQ_NEWS_BULLETINS);
                     send(VERSION);
                     send(allMsgs);
                 }
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.FAIL_SEND_CORDER, "" + e);
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_CORDER, "" + e);
                     close();
                 }
             }
@@ -1276,7 +1267,7 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
@@ -1286,13 +1277,13 @@ namespace KRS.ATS.IBNet
                 // send cancel order msg
                 try
                 {
-                    send(CANCEL_NEWS_BULLETINS);
+                    send((int)OutgoingMessage.CANCEL_NEWS_BULLETINS);
                     send(VERSION);
                 }
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.FAIL_SEND_CORDER, "" + e);
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_CORDER, "" + e);
                     close();
                 }
             }
@@ -1306,7 +1297,7 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
@@ -1316,14 +1307,14 @@ namespace KRS.ATS.IBNet
                 // send req open orders msg
                 try
                 {
-                    send(REQ_AUTO_OPEN_ORDERS);
+                    send((int)OutgoingMessage.REQ_AUTO_OPEN_ORDERS);
                     send(VERSION);
                     send(bAutoBind);
                 }
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.FAIL_SEND_OORDER, "" + e);
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_OORDER, "" + e);
                     close();
                 }
             }
@@ -1337,7 +1328,7 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
@@ -1347,13 +1338,13 @@ namespace KRS.ATS.IBNet
                 // send req all open orders msg
                 try
                 {
-                    send(REQ_ALL_OPEN_ORDERS);
+                    send((int)OutgoingMessage.REQ_ALL_OPEN_ORDERS);
                     send(VERSION);
                 }
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.FAIL_SEND_OORDER, "" + e);
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_OORDER, "" + e);
                     close();
                 }
             }
@@ -1367,7 +1358,7 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
@@ -1377,13 +1368,13 @@ namespace KRS.ATS.IBNet
                 // send req FA managed accounts msg
                 try
                 {
-                    send(REQ_MANAGED_ACCTS);
+                    send((int)OutgoingMessage.REQ_MANAGED_ACCTS);
                     send(VERSION);
                 }
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.FAIL_SEND_OORDER, "" + e);
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.FAIL_SEND_OORDER, "" + e);
                     close();
                 }
             }
@@ -1397,14 +1388,14 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
                 // This feature is only available for versions of TWS >= 13
                 if (m_serverVersion < 13)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.UPDATE_TWS.code(), EClientErrors.UPDATE_TWS.msg());
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.UPDATE_TWS.code(), IBClientErrors.UPDATE_TWS.msg());
                     return ;
                 }
 				
@@ -1413,14 +1404,14 @@ namespace KRS.ATS.IBNet
 				
                 try
                 {
-                    send(REQ_FA);
+                    send((int)OutgoingMessage.REQ_FA);
                     send(VERSION);
                     send(faDataType);
                 }
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(faDataType, EClientErrors.FAIL_SEND_FA_REQUEST, "" + e);
+                    error(faDataType, IBClientErrors.FAIL_SEND_FA_REQUEST, "" + e);
                     close();
                 }
             }
@@ -1434,14 +1425,14 @@ namespace KRS.ATS.IBNet
                 // not connected?
                 if (!m_connected)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.NOT_CONNECTED, "");
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.NOT_CONNECTED, "");
                     return ;
                 }
 				
                 // This feature is only available for versions of TWS >= 13
                 if (m_serverVersion < 13)
                 {
-                    error(EClientErrors.NO_VALID_ID, EClientErrors.UPDATE_TWS.code(), EClientErrors.UPDATE_TWS.msg());
+                    error(IBClientErrors.NO_VALID_ID, IBClientErrors.UPDATE_TWS.code(), IBClientErrors.UPDATE_TWS.msg());
                     return ;
                 }
 				
@@ -1450,7 +1441,7 @@ namespace KRS.ATS.IBNet
 				
                 try
                 {
-                    send(REPLACE_FA);
+                    send((int)OutgoingMessage.REPLACE_FA);
                     send(VERSION);
                     send(faDataType);
                     send(xml);
@@ -1458,45 +1449,33 @@ namespace KRS.ATS.IBNet
                 catch (System.Exception e)
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Throwable.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    error(faDataType, EClientErrors.FAIL_SEND_FA_REPLACE, "" + e);
+                    error(faDataType, IBClientErrors.FAIL_SEND_FA_REPLACE, "" + e);
                     close();
                 }
             }
         }
-		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'error'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
-        protected internal virtual void  error(int id, int errorCode, System.String errorMsg)
-        {
-            lock (this)
-            {
-                m_anyWrapper.error(id, errorCode, errorMsg);
-            }
-        }
-		
-        protected internal virtual void  close()
-        {
-            eDisconnect();
-            m_anyWrapper.connectionClosed();
-        }
-		
-        private static bool is_Renamed(System.String str)
+        #endregion
+
+        #region Helper Methods
+
+        private static bool is_Renamed(String str)
         {
             // return true if the string is not empty
             return str != null && str.Length > 0;
         }
 		
-        private static bool isNull(System.String str)
+        private static bool isNull(String str)
         {
             // return true if the string is null or empty
             return !is_Renamed(str);
         }
 		
-        private void  error(int id, EClientErrors.CodeMsgPair pair, System.String tail)
+        private void  error(int id, IBClientErrors.CodeMsgPair pair, String tail)
         {
             error(id, pair.code(), pair.msg() + tail);
         }
 		
-        protected internal virtual void  send(System.String str)
+        protected internal virtual void  send(String str)
         {
             // write string to data buffer; writer thread will
             // write it to socket
@@ -1514,47 +1493,47 @@ namespace KRS.ATS.IBNet
 		
         protected internal virtual void  send(int val)
         {
-            send(System.Convert.ToString(val));
+            send(Convert.ToString(val));
         }
 		
         protected internal virtual void  send(char val)
         {
-            m_dos.Write((System.Byte) val);
+            m_dos.Write((Byte) val);
             sendEOL();
         }
 		
         protected internal virtual void  send(double val)
         {
-            send(System.Convert.ToString(val));
+            send(Convert.ToString(val));
         }
 		
         protected internal virtual void  send(long val)
         {
-            send(System.Convert.ToString(val));
+            send(Convert.ToString(val));
         }
 		
         private void  sendMax(double val)
         {
             //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-            if (val == System.Double.MaxValue)
+            if (val == Double.MaxValue)
             {
                 sendEOL();
             }
             else
             {
-                send(System.Convert.ToString(val));
+                send(Convert.ToString(val));
             }
         }
 		
         private void  sendMax(int val)
         {
-            if (val == System.Int32.MaxValue)
+            if (val == Int32.MaxValue)
             {
                 sendEOL();
             }
             else
             {
-                send(System.Convert.ToString(val));
+                send(Convert.ToString(val));
             }
         }
 		
@@ -1562,5 +1541,6 @@ namespace KRS.ATS.IBNet
         {
             send(val?1:0);
         }
+        #endregion
     }
 }

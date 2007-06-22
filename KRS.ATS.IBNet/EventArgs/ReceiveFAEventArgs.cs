@@ -23,9 +23,10 @@ namespace KRS.ATS.IBNet
             }
         }
 
-        public ReceiveFAEventArgs(int faDataType)
+        public ReceiveFAEventArgs(int faDataType, string xml)
         {
             this.faDataType = faDataType;
+            this.xml = xml;
         }
     }
 }

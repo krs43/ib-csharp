@@ -2,95 +2,127 @@
 * EReader.java
 *
 */
-using System;
-using KRS.ATS.IBNet;
-
 namespace KRS.ATS.IBNet
 {
-    public class EReader:SupportClass.ThreadClass
+    public class IBReader
     {
-		
-        // incoming msg id's
-        internal const int TICK_PRICE = 1;
-        internal const int TICK_SIZE = 2;
-        internal const int ORDER_STATUS = 3;
-        internal const int ERR_MSG = 4;
-        internal const int OPEN_ORDER = 5;
-        internal const int ACCT_VALUE = 6;
-        internal const int PORTFOLIO_VALUE = 7;
-        internal const int ACCT_UPDATE_TIME = 8;
-        internal const int NEXT_VALID_ID = 9;
-        internal const int CONTRACT_DATA = 10;
-        internal const int EXECUTION_DATA = 11;
-        internal const int MARKET_DEPTH = 12;
-        internal const int MARKET_DEPTH_L2 = 13;
-        internal const int NEWS_BULLETINS = 14;
-        internal const int MANAGED_ACCTS = 15;
-        internal const int RECEIVE_FA = 16;
-        internal const int HISTORICAL_DATA = 17;
-        internal const int BOND_CONTRACT_DATA = 18;
-        internal const int SCANNER_PARAMETERS = 19;
-        internal const int SCANNER_DATA = 20;
-        internal const int TICK_OPTION_COMPUTATION = 21;
-        internal const int TICK_GENERIC = 45;
-        internal const int TICK_STRING = 46;
-        internal const int TICK_EFP = 47;
-		
-		
-        private EClientSocket m_parent;
-        //UPGRADE_TODO: Class 'java.io.DataInputStream' was converted to 'System.IO.BinaryReader' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioDataInputStream'"
-        private System.IO.BinaryReader m_dis;
-		
-        protected internal virtual EClientSocket parent()
+        #region Thread Sync
+        /// <summary>
+        /// Lock covering stopping and stopped
+        /// </summary>
+        readonly object stopLock = new object();
+        /// <summary>
+        /// Whether or not the worker thread has been asked to stop
+        /// </summary>
+        bool stopping = false;
+        /// <summary>
+        /// Whether or not the worker thread has stopped
+        /// </summary>
+        bool stopped = false;
+
+        /// <summary>
+        /// Returns whether the worker thread has been asked to stop.
+        /// This continues to return true even after the thread has stopped.
+        /// </summary>
+        public bool Stopping
         {
-            return m_parent;
+            get
+            {
+                lock (stopLock)
+                {
+                    return stopping;
+                }
+            }
         }
-        private EWrapper eWrapper()
+
+        /// <summary>
+        /// Returns whether the worker thread has stopped.
+        /// </summary>
+        public bool Stopped
         {
-            return (EWrapper) parent().wrapper();
+            get
+            {
+                lock (stopLock)
+                {
+                    return stopped;
+                }
+            }
         }
-		
-        //UPGRADE_TODO: Class 'java.io.DataInputStream' was converted to 'System.IO.BinaryReader' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioDataInputStream'"
-        public EReader(EClientSocket parent, System.IO.BinaryReader dis):this("EReader", parent, dis)
+
+        /// <summary>
+        /// Tells the worker thread to stop, typically after completing its 
+        /// current work item. (The thread is *not* guaranteed to have stopped
+        /// by the time this method returns.)
+        /// </summary>
+        public void Stop()
         {
+            lock (stopLock)
+            {
+                stopping = true;
+            }
         }
-		
-        //UPGRADE_TODO: Class 'java.io.DataInputStream' was converted to 'System.IO.BinaryReader' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioDataInputStream'"
-        protected internal EReader(System.String name, EClientSocket parent, System.IO.BinaryReader dis)
+
+        /// <summary>
+        /// Called by the worker thread to indicate when it has stopped.
+        /// </summary>
+        void SetStopped()
         {
-            //UPGRADE_NOTE: The Name property of a Thread in C# is write-once. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1140'"
-            Name = name;
+            lock (stopLock)
+            {
+                stopped = true;
+            }
+        }
+        #endregion
+
+        #region Private Variables / Properties
+        private readonly IBClientSocket m_parent;
+        private readonly System.IO.BinaryReader m_dis;
+        protected internal virtual IBClientSocket parent
+        {
+            get {return m_parent;}
+        }
+        private IBWrapper Wrapper
+        {
+            get {return parent.wrapper;}
+        }
+        #endregion
+
+        #region General Code
+        public IBReader(IBClientSocket parent, System.IO.BinaryReader dis)
+        {
             m_parent = parent;
             m_dis = dis;
         }
-		
-        override public void  Run()
+        public void  Run()
         {
             try
             {
                 // loop until thread is terminated
-                //UPGRADE_ISSUE: Method 'java.lang.Thread.isInterrupted' was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1000_javalangThreadisInterrupted'"
-                while (!isInterrupted() && processMsg(readInt()))
+                while (!Stopping && processMsg((IncomingMessage)readInt()))
+#pragma warning disable 642
                     ;
+#pragma warning restore 642
             }
-            catch (System.Exception ex)
+            finally
             {
-                parent().wrapper().error(ex);
-                parent().wrapper().connectionClosed();
+                SetStopped();
+                parent.wrapper.connectionClosed();
+                m_parent.close();
             }
-            m_parent.close();
         }
-		
+        #endregion
+
+        #region Process Message
         /// <summary>Overridden in subclass. </summary>
-        protected internal virtual bool processMsg(int msgId)
+        protected internal virtual bool processMsg(IncomingMessage msgId)
         {
-            if (msgId == - 1)
+            if (msgId == IncomingMessage.ERROR)
                 return false;
 			
             switch (msgId)
             {
 				
-                case TICK_PRICE:  {
+                case IncomingMessage.TICK_PRICE:  {
                     int version = readInt();
                     int tickerId = readInt();
                     int tickType = readInt();
@@ -105,7 +137,7 @@ namespace KRS.ATS.IBNet
                     {
                         canAutoExecute = readInt();
                     }
-                    eWrapper().tickPrice(tickerId, tickType, price, canAutoExecute);
+                    Wrapper.tickPrice(tickerId, tickType, price, canAutoExecute);
 						
                     if (version >= 2)
                     {
@@ -127,24 +159,26 @@ namespace KRS.ATS.IBNet
                         }
                         if (sizeTickType != - 1)
                         {
-                            eWrapper().tickSize(tickerId, sizeTickType, size);
+                            Wrapper.tickSize(tickerId, sizeTickType, size);
                         }
                     }
                     break;
                 }
-				
-                case TICK_SIZE:  {
+
+            case IncomingMessage.TICK_SIZE:
+                {
                     int version = readInt();
                     int tickerId = readInt();
                     int tickType = readInt();
                     int size = readInt();
 						
-                    eWrapper().tickSize(tickerId, tickType, size);
+                    Wrapper.tickSize(tickerId, tickType, size);
                     break;
                 }
-				
-				
-                case TICK_OPTION_COMPUTATION:  {
+
+
+            case IncomingMessage.TICK_OPTION_COMPUTATION:
+                {
                     int version = readInt();
                     int tickerId = readInt();
                     int tickType = readInt();
@@ -174,34 +208,37 @@ namespace KRS.ATS.IBNet
                         //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                         modelPrice = pvDividend = System.Double.MaxValue;
                     }
-                    eWrapper().tickOptionComputation(tickerId, tickType, impliedVol, delta, modelPrice, pvDividend);
+                    Wrapper.tickOptionComputation(tickerId, tickType, impliedVol, delta, modelPrice, pvDividend);
                     break;
                 }
-				
-				
-                case TICK_GENERIC:  {
+
+
+            case IncomingMessage.TICK_GENERIC:
+                {
                     int version = readInt();
                     int tickerId = readInt();
                     int tickType = readInt();
                     double value_Renamed = readDouble();
 						
-                    eWrapper().tickGeneric(tickerId, tickType, value_Renamed);
+                    Wrapper.tickGeneric(tickerId, tickType, value_Renamed);
                     break;
                 }
-				
-				
-                case TICK_STRING:  {
+
+
+            case IncomingMessage.TICK_STRING:
+                {
                     int version = readInt();
                     int tickerId = readInt();
                     int tickType = readInt();
                     System.String value_Renamed = readStr();
 						
-                    eWrapper().tickString(tickerId, tickType, value_Renamed);
+                    Wrapper.tickString(tickerId, tickType, value_Renamed);
                     break;
                 }
-				
-				
-                case TICK_EFP:  {
+
+
+            case IncomingMessage.TICK_EFP:
+                {
                     int version = readInt();
                     int tickerId = readInt();
                     int tickType = readInt();
@@ -212,12 +249,13 @@ namespace KRS.ATS.IBNet
                     System.String futureExpiry = readStr();
                     double dividendImpact = readDouble();
                     double dividendsToExpiry = readDouble();
-                    eWrapper().tickEFP(tickerId, tickType, basisPoints, formattedBasisPoints, impliedFuturesPrice, holdDays, futureExpiry, dividendImpact, dividendsToExpiry);
+                    Wrapper.tickEFP(tickerId, tickType, basisPoints, formattedBasisPoints, impliedFuturesPrice, holdDays, futureExpiry, dividendImpact, dividendsToExpiry);
                     break;
                 }
-				
-				
-                case ORDER_STATUS:  {
+
+
+            case IncomingMessage.ORDER_STATUS:
+                {
                     int version = readInt();
                     int id = readInt();
                     System.String status = readStr();
@@ -249,12 +287,13 @@ namespace KRS.ATS.IBNet
                         clientId = readInt();
                     }
 						
-                    eWrapper().orderStatus(id, status, filled, remaining, avgFillPrice, permId, parentId, lastFillPrice, clientId);
+                    Wrapper.orderStatus(id, status, filled, remaining, avgFillPrice, permId, parentId, lastFillPrice, clientId);
                     break;
                 }
-				
-				
-                case ACCT_VALUE:  {
+
+
+            case IncomingMessage.ACCT_VALUE:
+                {
                     int version = readInt();
                     System.String key = readStr();
                     System.String val = readStr();
@@ -264,12 +303,13 @@ namespace KRS.ATS.IBNet
                     {
                         accountName = readStr();
                     }
-                    eWrapper().updateAccountValue(key, val, cur, accountName);
+                    Wrapper.updateAccountValue(key, val, cur, accountName);
                     break;
                 }
-				
-				
-                case PORTFOLIO_VALUE:  {
+
+
+            case IncomingMessage.PORTFOLIO_VALUE:
+                {
                     int version = readInt();
                     Contract contract = new Contract();
                     contract.m_symbol = readStr();
@@ -302,26 +342,28 @@ namespace KRS.ATS.IBNet
                         accountName = readStr();
                     }
 						
-                    eWrapper().updatePortfolio(contract, position, marketPrice, marketValue, averageCost, unrealizedPNL, realizedPNL, accountName);
+                    Wrapper.updatePortfolio(contract, position, marketPrice, marketValue, averageCost, unrealizedPNL, realizedPNL, accountName);
 						
                     break;
                 }
-				
-				
-                case ACCT_UPDATE_TIME:  {
+
+
+            case IncomingMessage.ACCT_UPDATE_TIME:
+                {
                     int version = readInt();
                     System.String timeStamp = readStr();
-                    eWrapper().updateAccountTime(timeStamp);
+                    Wrapper.updateAccountTime(timeStamp);
                     break;
                 }
-				
-				
-                case ERR_MSG:  {
+
+
+            case IncomingMessage.ERR_MSG:
+                {
                     int version = readInt();
                     if (version < 2)
                     {
                         System.String msg = readStr();
-                        m_parent.error(msg);
+                        m_parent.error(-1,-1,msg);
                     }
                     else
                     {
@@ -332,9 +374,10 @@ namespace KRS.ATS.IBNet
                     }
                     break;
                 }
-				
-				
-                case OPEN_ORDER:  {
+
+
+            case IncomingMessage.OPEN_ORDER:
+                {
                     // read version
                     int version = readInt();
 						
@@ -452,7 +495,7 @@ namespace KRS.ATS.IBNet
                             order.m_deltaNeutralAuxPrice = readDouble();
                         }
                         order.m_continuousUpdate = readInt();
-                        if (m_parent.serverVersion() == 26)
+                        if (m_parent.serverVersion == 26)
                         {
                             order.m_stockRangeLower = readDouble();
                             order.m_stockRangeUpper = readDouble();
@@ -472,20 +515,22 @@ namespace KRS.ATS.IBNet
                         contract.m_comboLegsDescrip = readStr();
                     }
 						
-                    eWrapper().openOrder(order.m_orderId, contract, order);
+                    Wrapper.openOrder(order.m_orderId, contract, order);
                     break;
                 }
-				
-				
-                case NEXT_VALID_ID:  {
+
+
+            case IncomingMessage.NEXT_VALID_ID:
+                {
                     int version = readInt();
                     int orderId = readInt();
-                    eWrapper().nextValidId(orderId);
+                    Wrapper.nextValidId(orderId);
                     break;
                 }
-				
-				
-                case SCANNER_DATA:  {
+
+
+            case IncomingMessage.SCANNER_DATA:
+                {
                     ContractDetails contract = new ContractDetails();
                     int version = readInt();
                     int tickerId = readInt();
@@ -511,13 +556,14 @@ namespace KRS.ATS.IBNet
                         {
                             legsStr = readStr();
                         }
-                        eWrapper().scannerData(tickerId, rank, contract, distance, benchmark, projection, legsStr);
+                        Wrapper.scannerData(tickerId, rank, contract, distance, benchmark, projection, legsStr);
                     }
                     break;
                 }
-				
-				
-                case CONTRACT_DATA:  {
+
+
+            case IncomingMessage.CONTRACT_DATA:
+                {
                     int version = readInt();
                     ContractDetails contract = new ContractDetails();
                     contract.m_summary.m_symbol = readStr();
@@ -539,11 +585,12 @@ namespace KRS.ATS.IBNet
                     {
                         contract.m_priceMagnifier = readInt();
                     }
-                    eWrapper().contractDetails(contract);
+                    Wrapper.contractDetails(contract);
                     break;
                 }
-				
-                case BOND_CONTRACT_DATA:  {
+
+            case IncomingMessage.BOND_CONTRACT_DATA:
+                {
                     int version = readInt();
                     ContractDetails contract = new ContractDetails();
 						
@@ -575,11 +622,12 @@ namespace KRS.ATS.IBNet
                         contract.m_summary.m_nextOptionPartial = readBoolFromInt();
                         contract.m_summary.m_notes = readStr();
                     }
-                    eWrapper().bondContractDetails(contract);
+                    Wrapper.bondContractDetails(contract);
                     break;
                 }
-				
-                case EXECUTION_DATA:  {
+
+            case IncomingMessage.EXECUTION_DATA:
+                {
                     int version = readInt();
                     int orderId = readInt();
 						
@@ -615,11 +663,12 @@ namespace KRS.ATS.IBNet
                         exec.m_liquidation = readInt();
                     }
 						
-                    eWrapper().execDetails(orderId, contract, exec);
+                    Wrapper.execDetails(orderId, contract, exec);
                     break;
                 }
-				
-                case MARKET_DEPTH:  {
+
+            case IncomingMessage.MARKET_DEPTH:
+                {
                     int version = readInt();
                     int id = readInt();
 						
@@ -629,11 +678,12 @@ namespace KRS.ATS.IBNet
                     double price = readDouble();
                     int size = readInt();
 						
-                    eWrapper().updateMktDepth(id, position, operation, side, price, size);
+                    Wrapper.updateMktDepth(id, position, operation, side, price, size);
                     break;
                 }
-				
-                case MARKET_DEPTH_L2:  {
+
+            case IncomingMessage.MARKET_DEPTH_L2:
+                {
                     int version = readInt();
                     int id = readInt();
 						
@@ -644,39 +694,43 @@ namespace KRS.ATS.IBNet
                     double price = readDouble();
                     int size = readInt();
 						
-                    eWrapper().updateMktDepthL2(id, position, marketMaker, operation, side, price, size);
+                    Wrapper.updateMktDepthL2(id, position, marketMaker, operation, side, price, size);
                     break;
                 }
-				
-                case NEWS_BULLETINS:  {
+
+            case IncomingMessage.NEWS_BULLETINS:
+                {
                     int version = readInt();
                     int newsMsgId = readInt();
                     int newsMsgType = readInt();
                     System.String newsMessage = readStr();
                     System.String originatingExch = readStr();
 						
-                    eWrapper().updateNewsBulletin(newsMsgId, newsMsgType, newsMessage, originatingExch);
+                    Wrapper.updateNewsBulletin(newsMsgId, newsMsgType, newsMessage, originatingExch);
                     break;
                 }
-				
-                case MANAGED_ACCTS:  {
+
+            case IncomingMessage.MANAGED_ACCTS:
+                {
                     int version = readInt();
                     System.String accountsList = readStr();
 						
-                    eWrapper().managedAccounts(accountsList);
+                    Wrapper.managedAccounts(accountsList);
                     break;
                 }
-				
-                case RECEIVE_FA:  {
+
+            case IncomingMessage.RECEIVE_FA:
+                {
                     int version = readInt();
                     int faDataType = readInt();
                     System.String xml = readStr();
 						
-                    eWrapper().receiveFA(faDataType, xml);
+                    Wrapper.receiveFA(faDataType, xml);
                     break;
                 }
-				
-                case HISTORICAL_DATA:  {
+
+            case IncomingMessage.HISTORICAL_DATA:
+                {
                     int version = readInt();
                     int reqId = readInt();
                     System.String startDateStr;
@@ -705,30 +759,32 @@ namespace KRS.ATS.IBNet
                             barCount = readInt();
                         }
                         //UPGRADE_NOTE: Exceptions thrown by the equivalent in .NET of method 'java.lang.Boolean.valueOf' may be different. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1099'"
-                        eWrapper().historicalData(reqId, date, open, high, low, close, volume, barCount, WAP, System.Boolean.Parse(hasGaps));
+                        Wrapper.historicalData(reqId, date, open, high, low, close, volume, barCount, WAP, System.Boolean.Parse(hasGaps));
                     }
                     // send end of dataset marker
-                    eWrapper().historicalData(reqId, completedIndicator, - 1, - 1, - 1, - 1, - 1, - 1, - 1, false);
+                    Wrapper.historicalData(reqId, completedIndicator, - 1, - 1, - 1, - 1, - 1, - 1, - 1, false);
                     break;
                 }
-				
-                case SCANNER_PARAMETERS:  {
+
+            case IncomingMessage.SCANNER_PARAMETERS:
+                {
                     int version = readInt();
                     System.String xml = readStr();
-                    eWrapper().scannerParameters(xml);
+                    Wrapper.scannerParameters(xml);
                     break;
                 }
 				
                 default:  {
-                    m_parent.error(EClientErrors.NO_VALID_ID, EClientErrors.UNKNOWN_ID.code(), EClientErrors.UNKNOWN_ID.msg());
+                    m_parent.error(IBClientErrors.NO_VALID_ID, IBClientErrors.UNKNOWN_ID.code(), IBClientErrors.UNKNOWN_ID.msg());
                     return false;
                 }
 				
             }
             return true;
         }
-		
-		
+        #endregion
+
+        #region Helper Methods
         protected internal virtual System.String readStr()
         {
             System.Text.StringBuilder buf = new System.Text.StringBuilder();
@@ -770,5 +826,6 @@ namespace KRS.ATS.IBNet
             System.String str = readStr();
             return str == null?0:System.Double.Parse(str);
         }
+        #endregion
     }
 }

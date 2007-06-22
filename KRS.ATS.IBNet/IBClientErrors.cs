@@ -6,7 +6,7 @@ using System;
 
 namespace KRS.ATS.IBNet
 {
-    public class EClientErrors
+    public class IBClientErrors
     {
         internal const int NO_VALID_ID = - 1;
 		
@@ -57,7 +57,7 @@ namespace KRS.ATS.IBNet
         //UPGRADE_NOTE: Final was removed from the declaration of 'FAIL_SEND_REQHISTDATA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
         internal static readonly CodeMsgPair FAIL_SEND_REQHISTDATA = new CodeMsgPair(527, "Request Historical Data Sending Error - ");
 		
-        public EClientErrors()
+        public IBClientErrors()
         {
         }
 		
