@@ -33,6 +33,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionType.cs" />
+    <Compile Include="ComboOpenClose.cs" />
     <Compile Include="EventArgs\BondContractDetailsEventArgs.cs" />
     <Compile Include="EventArgs\ConnectionClosedEventArgs.cs" />
     <Compile Include="EventArgs\ErrorEventArgs.cs" />
@@ -62,7 +64,6 @@
     <Compile Include="OutgoingMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScannerSubscription.cs" />
-    <Compile Include="SupportClass.cs" />
     <Compile Include="EventArgs\TickEFPEventArgs.cs" />
     <Compile Include="EventArgs\TickGenericEventArgs.cs" />
     <Compile Include="EventArgs\TickOptionComputationEventArgs.cs" />

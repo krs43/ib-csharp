@@ -1,40 +1,71 @@
-/*
-* ComboLeg.java
-*
-*/
 using System;
 
 namespace KRS.ATS.IBNet
 {
     public class ComboLeg
     {
-        public const int SAME = 0; // open/close leg value is same as combo
-        public const int OPEN = 1;
-        public const int CLOSE = 2;
-        public const int UNKNOWN = 3;
-		
-        public int m_conId;
-        public int m_ratio;
-        public String m_action; // BUY/SELL
-        public String m_exchange;
-        public int m_openClose;
-		
+        #region Private Variables
+        private int conId;
+        private int ratio;
+        private ActionType action; // BUY/SELL
+        private String exchange;
+        private ComboOpenClose openClose;
+        #endregion
+
+        #region Constructors
         public ComboLeg()
         {
-            m_conId = 0;
-            m_ratio = 0;
-            m_openClose = 0;
+            conId = 0;
+            ratio = 0;
+            openClose = 0;
         }
 		
-        public ComboLeg(int p_ConId, int p_Ratio, String p_Action, String p_exchange, int p_openClose)
+        public ComboLeg(int ConId, int Ratio, ActionType Action, String Exchange, ComboOpenClose OpenClose)
         {
-            m_conId = p_ConId;
-            m_ratio = p_Ratio;
-            m_action = p_Action;
-            m_exchange = p_exchange;
-            m_openClose = p_openClose;
+            conId = ConId;
+            ratio = Ratio;
+            action = Action;
+            exchange = Exchange;
+            openClose = OpenClose;
         }
-		
+
+        #endregion
+
+        #region Properties
+
+        public int ConId
+        {
+            get { return conId; }
+            set { conId = value; }
+        }
+
+        public int Ratio
+        {
+            get { return ratio; }
+            set { ratio = value; }
+        }
+
+        public ActionType Action
+        {
+            get { return action; }
+            set { action = value; }
+        }
+
+        public string Exchange
+        {
+            get { return exchange; }
+            set { exchange = value; }
+        }
+
+        public ComboOpenClose OpenClose
+        {
+            get { return openClose; }
+            set { openClose = value; }
+        }
+
+        #endregion
+
+        #region Object Overrides
         public  override bool Equals(Object p_other)
         {
             if (this == p_other)
@@ -47,10 +78,19 @@ namespace KRS.ATS.IBNet
             }
 			
             ComboLeg l_theOther = (ComboLeg) p_other;
-            String l_thisAction = m_action ?? "";
-            String l_thisExchange = m_exchange ?? "";
+            String l_thisExchange = exchange ?? "";
 			
-            return (String.Compare(l_thisAction, l_theOther.m_action, true) == 0 && String.Compare(l_thisExchange, l_theOther.m_exchange, true) == 0 && m_conId == l_theOther.m_conId && m_ratio == l_theOther.m_ratio && m_openClose == l_theOther.m_openClose);
+            return (action == l_theOther.action &&
+                    String.Compare(l_thisExchange, l_theOther.exchange, true) == 0 &&
+                    conId == l_theOther.conId &&
+                    ratio == l_theOther.ratio &&
+                    openClose == l_theOther.openClose);
         }
+
+        public override int GetHashCode()
+        {
+            return action.GetHashCode() ^ exchange.GetHashCode() ^ conId.GetHashCode() ^ ratio.GetHashCode() ^ openClose.GetHashCode();
+        }
+        #endregion
     }
 }

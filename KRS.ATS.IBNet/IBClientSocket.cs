@@ -292,7 +292,6 @@ namespace KRS.ATS.IBNet
         #endregion
 
         #region Network Commmands
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'cancelScannerSubscription'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  cancelScannerSubscription(int tickerId)
         {
             lock (this)
@@ -329,7 +328,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'reqScannerParameters'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  reqScannerParameters()
         {
             lock (this)
@@ -364,7 +362,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'reqScannerSubscription'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  reqScannerSubscription(int tickerId, ScannerSubscription subscription)
         {
             lock (this)
@@ -427,7 +424,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'reqMktData'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  reqMktData(int tickerId, Contract contract, String genericTickList)
         {
             lock (this)
@@ -449,43 +445,43 @@ namespace KRS.ATS.IBNet
                     send(VERSION);
                     send(tickerId);
 					
-                    send(contract.m_symbol);
-                    send(contract.m_secType);
-                    send(contract.m_expiry);
-                    send(contract.m_strike);
-                    send(contract.m_right);
+                    send(contract.Symbol);
+                    send(contract.SecType);
+                    send(contract.Expiry);
+                    send(contract.Strike);
+                    send(contract.Right);
                     if (m_serverVersion >= 15)
                     {
-                        send(contract.m_multiplier);
+                        send(contract.Multiplier);
                     }
-                    send(contract.m_exchange);
+                    send(contract.Exchange);
                     if (m_serverVersion >= 14)
                     {
-                        send(contract.m_primaryExch);
+                        send(contract.PrimaryExch);
                     }
-                    send(contract.m_currency);
+                    send(contract.Currency);
                     if (m_serverVersion >= 2)
                     {
-                        send(contract.m_localSymbol);
+                        send(contract.LocalSymbol);
                     }
-                    if (m_serverVersion >= 8 && BAG_SEC_TYPE.ToUpper().Equals(contract.m_secType.ToUpper()))
+                    if (m_serverVersion >= 8 && BAG_SEC_TYPE.ToUpper().Equals(contract.SecType.ToUpper()))
                     {
-                        if (contract.m_comboLegs == null)
+                        if (contract.ComboLegs == null)
                         {
                             send(0);
                         }
                         else
                         {
-                            send(contract.m_comboLegs.Count);
+                            send(contract.ComboLegs.Count);
 							
                             ComboLeg comboLeg;
-                            for (int i = 0; i < contract.m_comboLegs.Count; i++)
+                            for (int i = 0; i < contract.ComboLegs.Count; i++)
                             {
-                                comboLeg = (ComboLeg) contract.m_comboLegs[i];
-                                send(comboLeg.m_conId);
-                                send(comboLeg.m_ratio);
-                                send(comboLeg.m_action);
-                                send(comboLeg.m_exchange);
+                                comboLeg = (ComboLeg) contract.ComboLegs[i];
+                                send(comboLeg.ConId);
+                                send(comboLeg.Ratio);
+                                send(comboLeg.Action.ToString());
+                                send(comboLeg.Exchange);
                             }
                         }
                     }
@@ -503,7 +499,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'cancelHistoricalData'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  cancelHistoricalData(int tickerId)
         {
             lock (this)
@@ -540,7 +535,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'reqHistoricalData'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  reqHistoricalData(int tickerId, Contract contract, String endDateTime, String durationStr, String barSizeSetting, String whatToShow, int useRTH, int formatDate)
         {
             lock (this)
@@ -566,19 +560,19 @@ namespace KRS.ATS.IBNet
                     send((int)OutgoingMessage.REQ_HISTORICAL_DATA);
                     send(VERSION);
                     send(tickerId);
-                    send(contract.m_symbol);
-                    send(contract.m_secType);
-                    send(contract.m_expiry);
-                    send(contract.m_strike);
-                    send(contract.m_right);
-                    send(contract.m_multiplier);
-                    send(contract.m_exchange);
-                    send(contract.m_primaryExch);
-                    send(contract.m_currency);
-                    send(contract.m_localSymbol);
+                    send(contract.Symbol);
+                    send(contract.SecType);
+                    send(contract.Expiry);
+                    send(contract.Strike);
+                    send(contract.Right);
+                    send(contract.Multiplier);
+                    send(contract.Exchange);
+                    send(contract.PrimaryExch);
+                    send(contract.Currency);
+                    send(contract.LocalSymbol);
                     if (m_serverVersion >= 31)
                     {
-                        send(contract.m_includeExpired?1:0);
+                        send(contract.IncludeExpired?1:0);
                     }
                     if (m_serverVersion >= 20)
                     {
@@ -592,24 +586,24 @@ namespace KRS.ATS.IBNet
                     {
                         send(formatDate);
                     }
-                    if (BAG_SEC_TYPE.ToUpper().Equals(contract.m_secType.ToUpper()))
+                    if (BAG_SEC_TYPE.ToUpper().Equals(contract.SecType.ToUpper()))
                     {
-                        if (contract.m_comboLegs == null)
+                        if (contract.ComboLegs == null)
                         {
                             send(0);
                         }
                         else
                         {
-                            send(contract.m_comboLegs.Count);
+                            send(contract.ComboLegs.Count);
 							
                             ComboLeg comboLeg;
-                            for (int i = 0; i < contract.m_comboLegs.Count; i++)
+                            for (int i = 0; i < contract.ComboLegs.Count; i++)
                             {
-                                comboLeg = (ComboLeg) contract.m_comboLegs[i];
-                                send(comboLeg.m_conId);
-                                send(comboLeg.m_ratio);
-                                send(comboLeg.m_action);
-                                send(comboLeg.m_exchange);
+                                comboLeg = (ComboLeg) contract.ComboLegs[i];
+                                send(comboLeg.ConId);
+                                send(comboLeg.Ratio);
+                                send(comboLeg.Action.ToString());
+                                send(comboLeg.Exchange);
                             }
                         }
                     }
@@ -623,7 +617,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'reqContractDetails'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  reqContractDetails(Contract contract)
         {
             lock (this)
@@ -651,21 +644,21 @@ namespace KRS.ATS.IBNet
                     send((int)OutgoingMessage.REQ_CONTRACT_DATA);
                     send(VERSION);
 					
-                    send(contract.m_symbol);
-                    send(contract.m_secType);
-                    send(contract.m_expiry);
-                    send(contract.m_strike);
-                    send(contract.m_right);
+                    send(contract.Symbol);
+                    send(contract.SecType);
+                    send(contract.Expiry);
+                    send(contract.Strike);
+                    send(contract.Right);
                     if (m_serverVersion >= 15)
                     {
-                        send(contract.m_multiplier);
+                        send(contract.Multiplier);
                     }
-                    send(contract.m_exchange);
-                    send(contract.m_currency);
-                    send(contract.m_localSymbol);
+                    send(contract.Exchange);
+                    send(contract.Currency);
+                    send(contract.LocalSymbol);
                     if (m_serverVersion >= 31)
                     {
-                        send(contract.m_includeExpired);
+                        send(contract.IncludeExpired);
                     }
                 }
                 catch (Exception e)
@@ -677,7 +670,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'reqMktDepth'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  reqMktDepth(int tickerId, Contract contract, int numRows)
         {
             lock (this)
@@ -706,18 +698,18 @@ namespace KRS.ATS.IBNet
                     send(VERSION);
                     send(tickerId);
 					
-                    send(contract.m_symbol);
-                    send(contract.m_secType);
-                    send(contract.m_expiry);
-                    send(contract.m_strike);
-                    send(contract.m_right);
+                    send(contract.Symbol);
+                    send(contract.SecType);
+                    send(contract.Expiry);
+                    send(contract.Strike);
+                    send(contract.Right);
                     if (m_serverVersion >= 15)
                     {
-                        send(contract.m_multiplier);
+                        send(contract.Multiplier);
                     }
-                    send(contract.m_exchange);
-                    send(contract.m_currency);
-                    send(contract.m_localSymbol);
+                    send(contract.Exchange);
+                    send(contract.Currency);
+                    send(contract.LocalSymbol);
                     if (m_serverVersion >= 19)
                     {
                         send(numRows);
@@ -732,7 +724,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'cancelMktData'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  cancelMktData(int tickerId)
         {
             lock (this)
@@ -763,7 +754,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'cancelMktDepth'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  cancelMktDepth(int tickerId)
         {
             lock (this)
@@ -801,7 +791,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'exerciseOptions'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  exerciseOptions(int tickerId, Contract contract, int exerciseAction, int exerciseQuantity, String account, int override_Renamed)
         {
             lock (this)
@@ -827,15 +816,15 @@ namespace KRS.ATS.IBNet
                     send((int)OutgoingMessage.EXERCISE_OPTIONS);
                     send(VERSION);
                     send(tickerId);
-                    send(contract.m_symbol);
-                    send(contract.m_secType);
-                    send(contract.m_expiry);
-                    send(contract.m_strike);
-                    send(contract.m_right);
-                    send(contract.m_multiplier);
-                    send(contract.m_exchange);
-                    send(contract.m_currency);
-                    send(contract.m_localSymbol);
+                    send(contract.Symbol);
+                    send(contract.SecType);
+                    send(contract.Expiry);
+                    send(contract.Strike);
+                    send(contract.Right);
+                    send(contract.Multiplier);
+                    send(contract.Exchange);
+                    send(contract.Currency);
+                    send(contract.LocalSymbol);
                     send(exerciseAction);
                     send(exerciseQuantity);
                     send(account);
@@ -850,7 +839,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'placeOrder'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  placeOrder(int id, Contract contract, Order order)
         {
             lock (this)
@@ -873,24 +861,24 @@ namespace KRS.ATS.IBNet
                     send(id);
 					
                     // send contract fields
-                    send(contract.m_symbol);
-                    send(contract.m_secType);
-                    send(contract.m_expiry);
-                    send(contract.m_strike);
-                    send(contract.m_right);
+                    send(contract.Symbol);
+                    send(contract.SecType);
+                    send(contract.Expiry);
+                    send(contract.Strike);
+                    send(contract.Right);
                     if (m_serverVersion >= 15)
                     {
-                        send(contract.m_multiplier);
+                        send(contract.Multiplier);
                     }
-                    send(contract.m_exchange);
+                    send(contract.Exchange);
                     if (m_serverVersion >= 14)
                     {
-                        send(contract.m_primaryExch);
+                        send(contract.PrimaryExch);
                     }
-                    send(contract.m_currency);
+                    send(contract.Currency);
                     if (m_serverVersion >= 2)
                     {
-                        send(contract.m_localSymbol);
+                        send(contract.LocalSymbol);
                     }
 					
                     // send main order fields
@@ -928,25 +916,25 @@ namespace KRS.ATS.IBNet
                     }
 					
                     // Send combo legs for BAG requests
-                    if (m_serverVersion >= 8 && BAG_SEC_TYPE.ToUpper().Equals(contract.m_secType.ToUpper()))
+                    if (m_serverVersion >= 8 && BAG_SEC_TYPE.ToUpper().Equals(contract.SecType.ToUpper()))
                     {
-                        if (contract.m_comboLegs == null)
+                        if (contract.ComboLegs == null)
                         {
                             send(0);
                         }
                         else
                         {
-                            send(contract.m_comboLegs.Count);
+                            send(contract.ComboLegs.Count);
 							
                             ComboLeg comboLeg;
-                            for (int i = 0; i < contract.m_comboLegs.Count; i++)
+                            for (int i = 0; i < contract.ComboLegs.Count; i++)
                             {
-                                comboLeg = (ComboLeg) contract.m_comboLegs[i];
-                                send(comboLeg.m_conId);
-                                send(comboLeg.m_ratio);
-                                send(comboLeg.m_action);
-                                send(comboLeg.m_exchange);
-                                send(comboLeg.m_openClose);
+                                comboLeg = (ComboLeg) contract.ComboLegs[i];
+                                send(comboLeg.ConId);
+                                send(comboLeg.Ratio);
+                                send(comboLeg.Action.ToString());
+                                send(comboLeg.Exchange);
+                                send(comboLeg.OpenClose.ToString());
                             }
                         }
                     }
@@ -1057,7 +1045,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'reqAccountUpdates'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  reqAccountUpdates(bool subscribe, String acctCode)
         {
             lock (this)
@@ -1094,7 +1081,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'reqExecutions'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  reqExecutions(ExecutionFilter filter)
         {
             lock (this)
@@ -1138,7 +1124,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'cancelOrder'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  cancelOrder(int id)
         {
             lock (this)
@@ -1169,7 +1154,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'reqOpenOrders'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  reqOpenOrders()
         {
             lock (this)
@@ -1199,7 +1183,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'reqIds'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  reqIds(int numIds)
         {
             lock (this)
@@ -1229,7 +1212,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'reqNewsBulletins'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  reqNewsBulletins(bool allMsgs)
         {
             lock (this)
@@ -1259,7 +1241,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'cancelNewsBulletins'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  cancelNewsBulletins()
         {
             lock (this)
@@ -1289,7 +1270,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'reqAutoOpenOrders'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  reqAutoOpenOrders(bool bAutoBind)
         {
             lock (this)
@@ -1320,7 +1300,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'reqAllOpenOrders'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  reqAllOpenOrders()
         {
             lock (this)
@@ -1350,7 +1329,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'reqManagedAccts'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  reqManagedAccts()
         {
             lock (this)
@@ -1380,7 +1358,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'requestFA'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  requestFA(int faDataType)
         {
             lock (this)
@@ -1417,7 +1394,6 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        //UPGRADE_NOTE: Synchronized keyword was removed from method 'replaceFA'. Lock expression was added. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1027'"
         public virtual void  replaceFA(int faDataType, String xml)
         {
             lock (this)
@@ -1469,6 +1445,24 @@ namespace KRS.ATS.IBNet
             // return true if the string is null or empty
             return !is_Renamed(str);
         }
+
+        /// <summary>
+        /// Converts an array of sbytes to an array of bytes
+        /// </summary>
+        /// <param name="sbyteArray">The array of sbytes to be converted</param>
+        /// <returns>The new array of bytes</returns>
+        public static byte[] ToByteArray(sbyte[] sbyteArray)
+        {
+            byte[] byteArray = null;
+
+            if (sbyteArray != null)
+            {
+                byteArray = new byte[sbyteArray.Length];
+                for (int index = 0; index < sbyteArray.Length; index++)
+                    byteArray[index] = (byte)sbyteArray[index];
+            }
+            return byteArray;
+        }
 		
         private void  error(int id, IBClientErrors.CodeMsgPair pair, String tail)
         {
@@ -1481,14 +1475,24 @@ namespace KRS.ATS.IBNet
             // write it to socket
             if (str != null)
             {
-                m_dos.Write(SupportClass.ToByteArray(str));
+                m_dos.Write(ToByteArray(str));
             }
             sendEOL();
+        }
+
+        /// <summary>
+        /// Converts a string to an array of bytes
+        /// </summary>
+        /// <param name="sourceString">The string to be converted</param>
+        /// <returns>The new array of bytes</returns>
+        public static byte[] ToByteArray(System.String sourceString)
+        {
+            return System.Text.UTF8Encoding.UTF8.GetBytes(sourceString);
         }
 		
         private void  sendEOL()
         {
-            m_dos.Write(SupportClass.ToByteArray(EOL));
+            m_dos.Write(ToByteArray(EOL));
         }
 		
         protected internal virtual void  send(int val)

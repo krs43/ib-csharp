@@ -6,10 +6,9 @@ namespace KRS.ATS.IBNet
 {
     public class IBClient : IBWrapper
     {
-#region Private Variables
+        #region Private Variables
         private IBClientSocket socket;
-        private IBReader reader;
-#endregion
+        #endregion
 
         #region IB Wrapper to Events
 
@@ -347,6 +346,120 @@ namespace KRS.ATS.IBNet
         {
             ConnectionClosedEventArgs e = new ConnectionClosedEventArgs();
             OnConnectionClosed(e);
+        }
+        #endregion
+
+        #region Network Commands
+        public void CancelScannerSubscription(int tickerId)
+        {
+            socket.cancelScannerSubscription(tickerId);
+        }
+        public void ReqScannerParameters()
+        {
+            socket.reqScannerParameters();
+        }
+        public void ReqScannerSubscription(int tickerId, ScannerSubscription subscription)
+        {
+            socket.reqScannerSubscription(tickerId, subscription);
+        }
+        public void ReqMktData(int tickerId, Contract contract, String genericTickList)
+        {
+            socket.reqMktData(tickerId, contract, genericTickList);
+        }
+        public void CancelHistoricalData(int tickerId)
+        {
+            socket.cancelHistoricalData(tickerId);
+        }
+        public void ReqHistoricalData(int tickerId, Contract contract, String endDateTime, String durationStr, String barSizeSetting, String whatToShow, int useRTH, int formatDate)
+        {
+            socket.reqHistoricalData(tickerId, contract, endDateTime, durationStr, barSizeSetting, whatToShow, useRTH, formatDate);
+        }
+        public void ReqContractDetails(Contract contract)
+        {
+            socket.reqContractDetails(contract);
+        }
+        public void ReqMktDepth(int tickerId, Contract contract, int numRows)
+        {
+            socket.reqMktDepth(tickerId, contract, numRows);
+        }
+        public void CancelMktData(int tickerId)
+        {
+            socket.cancelMktData(tickerId);
+        }
+        public void CancelMktDepth(int tickerId)
+        {
+            socket.cancelMktDepth(tickerId);
+        }
+        public void ExerciseOptions(int tickerId, Contract contract, int exerciseAction, int exerciseQuantity, String account, int override_Renamed)
+        {
+            socket.exerciseOptions(tickerId, contract, exerciseAction, exerciseQuantity, account, override_Renamed);
+        }
+        public void PlaceOrder(int id, Contract contract, Order order)
+        {
+            socket.placeOrder(id, contract, order);
+        }
+        public void ReqAccountUpdates(bool subscribe, String acctCode)
+        {
+            socket.reqAccountUpdates(subscribe, acctCode);
+        }
+        public void ReqExecutions(ExecutionFilter filter)
+        {
+            socket.reqExecutions(filter);
+        }
+        public void CancelOrder(int id)
+        {
+            socket.cancelOrder(id);
+        }
+        public void ReqOpenOrders()
+        {
+            socket.reqOpenOrders();
+        }
+        public void ReqIds(int numIds)
+        {
+            socket.reqIds(numIds);
+        }
+        public void ReqNewsBulletins(bool allMsgs)
+        {
+            socket.reqNewsBulletins(allMsgs);
+        }
+        public void CancelNewsBulletins()
+        {
+            socket.cancelNewsBulletins();
+        }
+        public void ReqAutoOpenOrders(bool bAutoBind)
+        {
+            socket.reqAutoOpenOrders(bAutoBind);
+        }
+        public void ReqAllOpenOrders()
+        {
+            socket.reqAllOpenOrders();
+        }
+        public void ReqManagedAccts()
+        {
+            socket.reqManagedAccts();
+        }
+        public void RequestFA(int faDataType)
+        {
+            socket.requestFA(faDataType);
+        }
+        public void ReplaceFA(int faDataType, String xml)
+        {
+            socket.replaceFA(faDataType, xml);
+        }
+        #endregion
+
+        #region IBClientSocket
+        public IBClient()
+        {
+            socket = new IBClientSocket(this);
+        }
+        public virtual void  Disconnect()
+        {
+            socket.Disconnect();
+        }
+        public void Connect(String host, int port, int clientId)
+        {
+            socket.Connect(host, port, clientId);
         }
         #endregion
     }

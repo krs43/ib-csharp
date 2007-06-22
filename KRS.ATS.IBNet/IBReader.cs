@@ -1,7 +1,3 @@
-/*
-* EReader.java
-*
-*/
 using System.Threading;
 
 namespace KRS.ATS.IBNet
@@ -322,15 +318,15 @@ namespace KRS.ATS.IBNet
                 {
                     int version = readInt();
                     Contract contract = new Contract();
-                    contract.m_symbol = readStr();
-                    contract.m_secType = readStr();
-                    contract.m_expiry = readStr();
-                    contract.m_strike = readDouble();
-                    contract.m_right = readStr();
-                    contract.m_currency = readStr();
+                    contract.Symbol = readStr();
+                    contract.SecType = readStr();
+                    contract.Expiry = readStr();
+                    contract.Strike = readDouble();
+                    contract.Right = readStr();
+                    contract.Currency = readStr();
                     if (version >= 2)
                     {
-                        contract.m_localSymbol = readStr();
+                        contract.LocalSymbol = readStr();
                     }
 						
                     int position = readInt();
@@ -397,16 +393,16 @@ namespace KRS.ATS.IBNet
 						
                     // read contract fields
                     Contract contract = new Contract();
-                    contract.m_symbol = readStr();
-                    contract.m_secType = readStr();
-                    contract.m_expiry = readStr();
-                    contract.m_strike = readDouble();
-                    contract.m_right = readStr();
-                    contract.m_exchange = readStr();
-                    contract.m_currency = readStr();
+                    contract.Symbol = readStr();
+                    contract.SecType = readStr();
+                    contract.Expiry = readStr();
+                    contract.Strike = readDouble();
+                    contract.Right = readStr();
+                    contract.Exchange = readStr();
+                    contract.Currency = readStr();
                     if (version >= 2)
                     {
-                        contract.m_localSymbol = readStr();
+                        contract.LocalSymbol = readStr();
                     }
 						
                     // read order fields
@@ -522,7 +518,7 @@ namespace KRS.ATS.IBNet
                     {
                         order.m_basisPoints = readDouble();
                         order.m_basisPointsType = readInt();
-                        contract.m_comboLegsDescrip = readStr();
+                        contract.ComboLegsDescrip = readStr();
                     }
 						
                     Wrapper.openOrder(order.m_orderId, contract, order);
@@ -548,14 +544,14 @@ namespace KRS.ATS.IBNet
                     for (int ctr = 0; ctr < numberOfElements; ctr++)
                     {
                         int rank = readInt();
-                        contract.m_summary.m_symbol = readStr();
-                        contract.m_summary.m_secType = readStr();
-                        contract.m_summary.m_expiry = readStr();
-                        contract.m_summary.m_strike = readDouble();
-                        contract.m_summary.m_right = readStr();
-                        contract.m_summary.m_exchange = readStr();
-                        contract.m_summary.m_currency = readStr();
-                        contract.m_summary.m_localSymbol = readStr();
+                        contract.m_summary.Symbol = readStr();
+                        contract.m_summary.SecType = readStr();
+                        contract.m_summary.Expiry = readStr();
+                        contract.m_summary.Strike = readDouble();
+                        contract.m_summary.Right = readStr();
+                        contract.m_summary.Exchange = readStr();
+                        contract.m_summary.Currency = readStr();
+                        contract.m_summary.LocalSymbol = readStr();
                         contract.m_marketName = readStr();
                         contract.m_tradingClass = readStr();
                         System.String distance = readStr();
@@ -576,14 +572,14 @@ namespace KRS.ATS.IBNet
                 {
                     int version = readInt();
                     ContractDetails contract = new ContractDetails();
-                    contract.m_summary.m_symbol = readStr();
-                    contract.m_summary.m_secType = readStr();
-                    contract.m_summary.m_expiry = readStr();
-                    contract.m_summary.m_strike = readDouble();
-                    contract.m_summary.m_right = readStr();
-                    contract.m_summary.m_exchange = readStr();
-                    contract.m_summary.m_currency = readStr();
-                    contract.m_summary.m_localSymbol = readStr();
+                    contract.m_summary.Symbol = readStr();
+                    contract.m_summary.SecType = readStr();
+                    contract.m_summary.Expiry = readStr();
+                    contract.m_summary.Strike = readDouble();
+                    contract.m_summary.Right = readStr();
+                    contract.m_summary.Exchange = readStr();
+                    contract.m_summary.Currency = readStr();
+                    contract.m_summary.LocalSymbol = readStr();
                     contract.m_marketName = readStr();
                     contract.m_tradingClass = readStr();
                     contract.m_conid = readInt();
@@ -604,21 +600,21 @@ namespace KRS.ATS.IBNet
                     int version = readInt();
                     ContractDetails contract = new ContractDetails();
 						
-                    contract.m_summary.m_symbol = readStr();
-                    contract.m_summary.m_secType = readStr();
-                    contract.m_summary.m_cusip = readStr();
-                    contract.m_summary.m_coupon = readDouble();
-                    contract.m_summary.m_maturity = readStr();
-                    contract.m_summary.m_issueDate = readStr();
-                    contract.m_summary.m_ratings = readStr();
-                    contract.m_summary.m_bondType = readStr();
-                    contract.m_summary.m_couponType = readStr();
-                    contract.m_summary.m_convertible = readBoolFromInt();
-                    contract.m_summary.m_callable = readBoolFromInt();
-                    contract.m_summary.m_putable = readBoolFromInt();
-                    contract.m_summary.m_descAppend = readStr();
-                    contract.m_summary.m_exchange = readStr();
-                    contract.m_summary.m_currency = readStr();
+                    contract.m_summary.Symbol = readStr();
+                    contract.m_summary.SecType = readStr();
+                    contract.m_summary.Cusip = readStr();
+                    contract.m_summary.Coupon = readDouble();
+                    contract.m_summary.Maturity = readStr();
+                    contract.m_summary.IssueDate = readStr();
+                    contract.m_summary.Ratings = readStr();
+                    contract.m_summary.BondType = readStr();
+                    contract.m_summary.CouponType = readStr();
+                    contract.m_summary.Convertible = readBoolFromInt();
+                    contract.m_summary.Callable = readBoolFromInt();
+                    contract.m_summary.Putable = readBoolFromInt();
+                    contract.m_summary.DescAppend = readStr();
+                    contract.m_summary.Exchange = readStr();
+                    contract.m_summary.Currency = readStr();
                     contract.m_marketName = readStr();
                     contract.m_tradingClass = readStr();
                     contract.m_conid = readInt();
@@ -627,10 +623,10 @@ namespace KRS.ATS.IBNet
                     contract.m_validExchanges = readStr();
                     if (version >= 2)
                     {
-                        contract.m_summary.m_nextOptionDate = readStr();
-                        contract.m_summary.m_nextOptionType = readStr();
-                        contract.m_summary.m_nextOptionPartial = readBoolFromInt();
-                        contract.m_summary.m_notes = readStr();
+                        contract.m_summary.NextOptionDate = readStr();
+                        contract.m_summary.NextOptionType = readStr();
+                        contract.m_summary.NextOptionPartial = readBoolFromInt();
+                        contract.m_summary.Notes = readStr();
                     }
                     Wrapper.bondContractDetails(contract);
                     break;
@@ -642,14 +638,14 @@ namespace KRS.ATS.IBNet
                     int orderId = readInt();
 						
                     Contract contract = new Contract();
-                    contract.m_symbol = readStr();
-                    contract.m_secType = readStr();
-                    contract.m_expiry = readStr();
-                    contract.m_strike = readDouble();
-                    contract.m_right = readStr();
-                    contract.m_exchange = readStr();
-                    contract.m_currency = readStr();
-                    contract.m_localSymbol = readStr();
+                    contract.Symbol = readStr();
+                    contract.SecType = readStr();
+                    contract.Expiry = readStr();
+                    contract.Strike = readDouble();
+                    contract.Right = readStr();
+                    contract.Exchange = readStr();
+                    contract.Currency = readStr();
+                    contract.LocalSymbol = readStr();
 						
                     Execution exec = new Execution();
                     exec.m_orderId = orderId;
