@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace KRS.ATS.IBNet
+namespace Krs.Ats.IBNet
 {
-    public enum ActionType 
+    public enum ExecutionSide
     {
-        BUY,
-        SELL
+        BOT,
+        SLD
     }
 }

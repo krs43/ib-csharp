@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace KRS.ATS.IBNet
+namespace Krs.Ats.IBNet
 {
     /// <summary>
     /// Bond Contract Details Event Arguments

@@ -1,38 +1,117 @@
-/*
-* ContractDetails.java
-*
-*/
-namespace KRS.ATS.IBNet
+using System;
+
+namespace Krs.Ats.IBNet
 {
     public class ContractDetails
     {
-        public Contract m_summary;
-        public System.String m_marketName;
-        public System.String m_tradingClass;
-        public int m_conid;
-        public double m_minTick;
-        public System.String m_multiplier;
-        public int m_priceMagnifier;
-        public System.String m_orderTypes;
-        public System.String m_validExchanges;
-		
-        public ContractDetails()
+        #region Private Variables
+        private Contract summary;
+        private String marketName;
+        private String tradingClass;
+        private int conid;
+        private double minTick;
+        private String multiplier;
+        private int priceMagnifier;
+        private String orderTypes;
+        private String validExchanges;
+        #endregion
+
+        #region Constructors
+
+        public ContractDetails() :
+            this(new Contract(), null, null, 0, 0, null, null, null)
         {
-            m_summary = new Contract();
-            m_conid = 0;
-            m_minTick = 0;
+            
         }
 		
-        public ContractDetails(Contract p_summary, System.String p_marketName, System.String p_tradingClass, int p_conid, double p_minTick, System.String p_multiplier, System.String p_orderTypes, System.String p_validExchanges)
+        public ContractDetails(Contract summary, System.String marketName, String tradingClass, int conid, double minTick, System.String multiplier, System.String orderTypes, System.String validExchanges)
         {
-            m_summary = p_summary;
-            m_marketName = p_marketName;
-            m_tradingClass = p_tradingClass;
-            m_conid = p_conid;
-            m_minTick = p_minTick;
-            m_multiplier = p_multiplier;
-            m_orderTypes = p_orderTypes;
-            m_validExchanges = p_validExchanges;
+            this.summary = summary;
+            this.marketName = marketName;
+            this.tradingClass = tradingClass;
+            this.conid = conid;
+            this.minTick = minTick;
+            this.multiplier = multiplier;
+            this.orderTypes = orderTypes;
+            this.validExchanges = validExchanges;
         }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// A contract summary.
+        /// </summary>
+        public Contract Summary
+        {
+            get { return summary; }
+            set { summary = value; }
+        }
+        /// <summary>
+        /// The market name for this contract.
+        /// </summary>
+        public string MarketName
+        {
+            get { return marketName; }
+            set { marketName = value; }
+        }
+        /// <summary>
+        /// The trading class name for this contract.
+        /// </summary>
+        public string TradingClass
+        {
+            get { return tradingClass; }
+            set { tradingClass = value; }
+        }
+        /// <summary>
+        /// The unique contract identifier.
+        /// </summary>
+        public int Conid
+        {
+            get { return conid; }
+            set { conid = value; }
+        }
+        /// <summary>
+        /// The minimum price tick.
+        /// </summary>
+        public double MinTick
+        {
+            get { return minTick; }
+            set { minTick = value; }
+        }
+        /// <summary>
+        /// The order size multiplier.
+        /// </summary>
+        public string Multiplier
+        {
+            get { return multiplier; }
+            set { multiplier = value; }
+        }
+        /// <summary>
+        /// Allows execution and strike prices to be reported consistently with
+        /// market data, historical data and the order price, i.e. Z on LIFFE is
+        /// reported in index points and not GBP.
+        /// </summary>
+        public int PriceMagnifier
+        {
+            get { return priceMagnifier; }
+            set { priceMagnifier = value; }
+        }
+        /// <summary>
+        /// The list of valid order types for this contract.
+        /// </summary>
+        public string OrderTypes
+        {
+            get { return orderTypes; }
+            set { orderTypes = value; }
+        }
+        /// <summary>
+        /// The list of exchanges this contract is traded on.
+        /// </summary>
+        public string ValidExchanges
+        {
+            get { return validExchanges; }
+            set { validExchanges = value; }
+        }
+        #endregion
     }
 }

@@ -1,209 +1,243 @@
 using System;
 
-namespace KRS.ATS.IBNet
+namespace Krs.Ats.IBNet
 {
     public class ScannerSubscription
     {
-        public const int NO_ROW_NUMBER_SPECIFIED = - 1;
-		
-        private int m_numberOfRows = NO_ROW_NUMBER_SPECIFIED;
-        private System.String m_instrument;
-        private System.String m_locationCode;
-        private System.String m_scanCode;
-        //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-        private double m_abovePrice = System.Double.MaxValue;
-        //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-        private double m_belowPrice = System.Double.MaxValue;
-        private int m_aboveVolume = System.Int32.MaxValue;
-        private int m_averageOptionVolumeAbove = System.Int32.MaxValue;
-        //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-        private double m_marketCapAbove = System.Double.MaxValue;
-        //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-        private double m_marketCapBelow = System.Double.MaxValue;
-        private System.String m_moodyRatingAbove;
-        private System.String m_moodyRatingBelow;
-        private System.String m_spRatingAbove;
-        private System.String m_spRatingBelow;
-        private System.String m_maturityDateAbove;
-        private System.String m_maturityDateBelow;
-        //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-        private double m_couponRateAbove = System.Double.MaxValue;
-        //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-        private double m_couponRateBelow = System.Double.MaxValue;
-        private System.String m_excludeConvertible;
-        private System.String m_scannerSettingPairs;
-        private System.String m_stockTypeFilter;
-		
-        // Get
-        public virtual int numberOfRows()
+        #region Values
+        public const int NO_ROW_NUMBER_SPECIFIED = -1;
+        #endregion
+
+        #region Private Variables
+        private int numberOfRows = NO_ROW_NUMBER_SPECIFIED;
+        private String instrument;
+        private String locationCode;
+        private String scanCode;
+        private double abovePrice = Double.MaxValue;
+        private double belowPrice = Double.MaxValue;
+        private int aboveVolume = Int32.MaxValue;
+        private int averageOptionVolumeAbove = Int32.MaxValue;
+        private double marketCapAbove = Double.MaxValue;
+        private double marketCapBelow = Double.MaxValue;
+        private String moodyRatingAbove;
+        private String moodyRatingBelow;
+        private String spRatingAbove;
+        private String spRatingBelow;
+        private String maturityDateAbove;
+        private String maturityDateBelow;
+        private double couponRateAbove = Double.MaxValue;
+        private double couponRateBelow = Double.MaxValue;
+        private String excludeConvertible;
+        private String scannerSettingPairs;
+        private String stockTypeFilter;
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Defines the number of rows of data to return for a query.
+        /// </summary>
+        public int NumberOfRows
         {
-            return m_numberOfRows;
+            get { return numberOfRows; }
+            set { numberOfRows = value; }
         }
-        public virtual System.String instrument()
+
+        /// <summary>
+        /// Defines the instrument type for the scan.
+        /// </summary>
+        public string Instrument
         {
-            return m_instrument;
+            get { return instrument; }
+            set { instrument = value; }
         }
-        public virtual System.String locationCode()
+
+        /// <summary>
+        /// The location, currently the only valid location is US stocks.
+        /// </summary>
+        public string LocationCode
         {
-            return m_locationCode;
+            get { return locationCode; }
+            set { locationCode = value; }
         }
-        public virtual System.String scanCode()
+
+        /// <summary>
+        /// Can be left blank. 
+        /// </summary>
+        public string ScanCode
         {
-            return m_scanCode;
+            get { return scanCode; }
+            set { scanCode = value; }
         }
-        public virtual double abovePrice()
+
+        /// <summary>
+        /// Filter out contracts with a price lower than this value.
+        /// Can be left blank.
+        /// </summary>
+        public double AbovePrice
         {
-            return m_abovePrice;
+            get { return abovePrice; }
+            set { abovePrice = value; }
         }
-        public virtual double belowPrice()
+
+        /// <summary>
+        /// Filter out contracts with a price higher than this value.
+        /// Can be left blank. 
+        /// </summary>
+        public double BelowPrice
         {
-            return m_belowPrice;
+            get { return belowPrice; }
+            set { belowPrice = value; }
         }
-        public virtual int aboveVolume()
+
+        /// <summary>
+        /// Filter out contracts with a volume lower than this value.
+        /// Can be left blank.
+        /// </summary>
+        public int AboveVolume
         {
-            return m_aboveVolume;
+            get { return aboveVolume; }
+            set { aboveVolume = value; }
         }
-        public virtual int averageOptionVolumeAbove()
+
+        /// <summary>
+        /// Can leave empty. 
+        /// </summary>
+        public int AverageOptionVolumeAbove
         {
-            return m_averageOptionVolumeAbove;
+            get { return averageOptionVolumeAbove; }
+            set { averageOptionVolumeAbove = value; }
         }
-        public virtual double marketCapAbove()
+
+        /// <summary>
+        /// Filter out contracts with a market cap lower than this value.
+        /// Can be left blank.
+        /// </summary>
+        public double MarketCapAbove
         {
-            return m_marketCapAbove;
+            get { return marketCapAbove; }
+            set { marketCapAbove = value; }
         }
-        public virtual double marketCapBelow()
+
+        /// <summary>
+        /// Filter out contracts with a market cap above this value.
+        /// Can be left blank.
+        /// </summary>
+        public double MarketCapBelow
         {
-            return m_marketCapBelow;
+            get { return marketCapBelow; }
+            set { marketCapBelow = value; }
         }
-        public virtual System.String moodyRatingAbove()
+
+        /// <summary>
+        /// Filter out contracts with a Moody rating below this value.
+        /// Can be left blank.
+        /// </summary>
+        public string MoodyRatingAbove
         {
-            return m_moodyRatingAbove;
+            get { return moodyRatingAbove; }
+            set { moodyRatingAbove = value; }
         }
-        public virtual System.String moodyRatingBelow()
+
+        /// <summary>
+        /// Filter out contracts with a Moody rating above this value.
+        /// Can be left blank.
+        /// </summary>
+        public string MoodyRatingBelow
         {
-            return m_moodyRatingBelow;
+            get { return moodyRatingBelow; }
+            set { moodyRatingBelow = value; }
         }
-        public virtual System.String spRatingAbove()
+
+        /// <summary>
+        /// Filter out contracts with an S&P rating below this value.
+        /// Can be left blank.
+        /// </summary>
+        public string SpRatingAbove
         {
-            return m_spRatingAbove;
+            get { return spRatingAbove; }
+            set { spRatingAbove = value; }
         }
-        public virtual System.String spRatingBelow()
+
+        /// <summary>
+        /// Filter out contracts with an S&P rating above this value.
+        /// Can be left blank.
+        /// </summary>
+        public string SpRatingBelow
         {
-            return m_spRatingBelow;
+            get { return spRatingBelow; }
+            set { spRatingBelow = value; }
         }
-        public virtual System.String maturityDateAbove()
+
+        /// <summary>
+        /// Filter out contracts with a maturity date earlier than this value.
+        /// Can be left blank.
+        /// </summary>
+        public string MaturityDateAbove
         {
-            return m_maturityDateAbove;
+            get { return maturityDateAbove; }
+            set { maturityDateAbove = value; }
         }
-        public virtual System.String maturityDateBelow()
+
+        /// <summary>
+        /// Filter out contracts with a maturity date later than this value.
+        /// Can be left blank.
+        /// </summary>
+        public string MaturityDateBelow
         {
-            return m_maturityDateBelow;
+            get { return maturityDateBelow; }
+            set { maturityDateBelow = value; }
         }
-        public virtual double couponRateAbove()
+
+        /// <summary>
+        /// Filter out contracts with a coupon rate lower than this value.
+        /// Can be left blank.
+        /// </summary>
+        public double CouponRateAbove
         {
-            return m_couponRateAbove;
+            get { return couponRateAbove; }
+            set { couponRateAbove = value; }
         }
-        public virtual double couponRateBelow()
+
+        /// <summary>
+        /// Filter out contracts with a coupon rate higher than this value.
+        /// Can be left blank.
+        /// </summary>
+        public double CouponRateBelow
         {
-            return m_couponRateBelow;
+            get { return couponRateBelow; }
+            set { couponRateBelow = value; }
         }
-        public virtual System.String excludeConvertible()
+
+        /// <summary>
+        /// Filter out convertible bonds.
+        /// Can be left blank.
+        /// </summary>
+        public string ExcludeConvertible
         {
-            return m_excludeConvertible;
+            get { return excludeConvertible; }
+            set { excludeConvertible = value; }
         }
-        public virtual System.String scannerSettingPairs()
+
+        /// <summary>
+        /// Can leave empty. For example, a pairing "Annual, true" used on the
+        /// "top Option Implied Vol % Gainers" scan would return annualized volatilities.
+        /// </summary>
+        public string ScannerSettingPairs
         {
-            return m_scannerSettingPairs;
+            get { return scannerSettingPairs; }
+            set { scannerSettingPairs = value; }
         }
-        public virtual System.String stockTypeFilter()
+
+        /// <summary>
+        /// ALL (excludes nothing)
+        /// STOCK (excludes ETFs)
+        /// ETF (includes ETFs)
+        /// </summary>
+        public string StockTypeFilter
         {
-            return m_stockTypeFilter;
+            get { return stockTypeFilter; }
+            set { stockTypeFilter = value; }
         }
-		
-        // Set
-        public virtual void  numberOfRows(int num)
-        {
-            m_numberOfRows = num;
-        }
-        public virtual void  instrument(System.String txt)
-        {
-            m_instrument = txt;
-        }
-        public virtual void  locationCode(System.String txt)
-        {
-            m_locationCode = txt;
-        }
-        public virtual void  scanCode(System.String txt)
-        {
-            m_scanCode = txt;
-        }
-        public virtual void  abovePrice(double price)
-        {
-            m_abovePrice = price;
-        }
-        public virtual void  belowPrice(double price)
-        {
-            m_belowPrice = price;
-        }
-        public virtual void  aboveVolume(int volume)
-        {
-            m_aboveVolume = volume;
-        }
-        public virtual void  averageOptionVolumeAbove(int volume)
-        {
-            m_averageOptionVolumeAbove = volume;
-        }
-        public virtual void  marketCapAbove(double cap)
-        {
-            m_marketCapAbove = cap;
-        }
-        public virtual void  marketCapBelow(double cap)
-        {
-            m_marketCapBelow = cap;
-        }
-        public virtual void  moodyRatingAbove(System.String r)
-        {
-            m_moodyRatingAbove = r;
-        }
-        public virtual void  moodyRatingBelow(System.String r)
-        {
-            m_moodyRatingBelow = r;
-        }
-        public virtual void  spRatingAbove(System.String r)
-        {
-            m_spRatingAbove = r;
-        }
-        public virtual void  spRatingBelow(System.String r)
-        {
-            m_spRatingBelow = r;
-        }
-        public virtual void  maturityDateAbove(System.String d)
-        {
-            m_maturityDateAbove = d;
-        }
-        public virtual void  maturityDateBelow(System.String d)
-        {
-            m_maturityDateBelow = d;
-        }
-        public virtual void  couponRateAbove(double r)
-        {
-            m_couponRateAbove = r;
-        }
-        public virtual void  couponRateBelow(double r)
-        {
-            m_couponRateBelow = r;
-        }
-        public virtual void  excludeConvertible(System.String c)
-        {
-            m_excludeConvertible = c;
-        }
-        public virtual void  scannerSettingPairs(System.String val)
-        {
-            m_scannerSettingPairs = val;
-        }
-        public virtual void  stockTypeFilter(System.String val)
-        {
-            m_stockTypeFilter = val;
-        }
+        #endregion
     }
 }

@@ -1,7 +1,8 @@
 using System;
-using KRS.ATS.IBNet;
+using System.Collections.Generic;
+using Krs.Ats.IBNet;
 
-namespace KRS.ATS.IBNet
+namespace Krs.Ats.IBNet
 {
     /// <summary>
     /// Client version history
@@ -42,30 +43,6 @@ namespace KRS.ATS.IBNet
         #region Values
         private const int CLIENT_VERSION = 31;
         private const int SERVER_VERSION = 1;
-		
-        // FA msg data types
-        public const int GROUPS = 1;
-        public const int PROFILES = 2;
-        public const int ALIASES = 3;
-
-        private const String BAG_SEC_TYPE = "BAG";
-
-        public static String faMsgTypeName(int faDataType)
-        {
-            switch (faDataType)
-            {
-				
-                case GROUPS: 
-                    return "GROUPS";
-				
-                case PROFILES: 
-                    return "PROFILES";
-				
-                case ALIASES: 
-                    return "ALIASES";
-            }
-            return null;
-        }
         #endregion
 
         #region Private Variables
@@ -209,11 +186,11 @@ namespace KRS.ATS.IBNet
                 m_reader = createReader(this, dis);
 				
                 // check server version
-                m_serverVersion = m_reader.readInt();
+                m_serverVersion = m_reader.ReadInt();
                 Console.Out.WriteLine("Server Version:" + m_serverVersion);
                 if (m_serverVersion >= 20)
                 {
-                    m_TwsTime = m_reader.readStr();
+                    m_TwsTime = m_reader.ReadStr();
                     Console.Out.WriteLine("TWS Time at connection:" + m_TwsTime);
                 }
                 if (m_serverVersion < SERVER_VERSION)
@@ -387,32 +364,32 @@ namespace KRS.ATS.IBNet
                     send((int)OutgoingMessage.REQ_SCANNER_SUBSCRIPTION);
                     send(VERSION);
                     send(tickerId);
-                    sendMax(subscription.numberOfRows());
-                    send(subscription.instrument());
-                    send(subscription.locationCode());
-                    send(subscription.scanCode());
-                    sendMax(subscription.abovePrice());
-                    sendMax(subscription.belowPrice());
-                    sendMax(subscription.aboveVolume());
-                    sendMax(subscription.marketCapAbove());
-                    sendMax(subscription.marketCapBelow());
-                    send(subscription.moodyRatingAbove());
-                    send(subscription.moodyRatingBelow());
-                    send(subscription.spRatingAbove());
-                    send(subscription.spRatingBelow());
-                    send(subscription.maturityDateAbove());
-                    send(subscription.maturityDateBelow());
-                    sendMax(subscription.couponRateAbove());
-                    sendMax(subscription.couponRateBelow());
-                    send(subscription.excludeConvertible());
+                    sendMax(subscription.NumberOfRows);
+                    send(subscription.Instrument);
+                    send(subscription.LocationCode);
+                    send(subscription.ScanCode);
+                    sendMax(subscription.AbovePrice);
+                    sendMax(subscription.BelowPrice);
+                    sendMax(subscription.AboveVolume);
+                    sendMax(subscription.MarketCapAbove);
+                    sendMax(subscription.MarketCapBelow);
+                    send(subscription.MoodyRatingAbove);
+                    send(subscription.MoodyRatingBelow);
+                    send(subscription.SpRatingAbove);
+                    send(subscription.SpRatingBelow);
+                    send(subscription.MaturityDateAbove);
+                    send(subscription.MaturityDateBelow);
+                    sendMax(subscription.CouponRateAbove);
+                    sendMax(subscription.CouponRateBelow);
+                    send(subscription.ExcludeConvertible);
                     if (m_serverVersion >= 25)
                     {
-                        send(subscription.averageOptionVolumeAbove());
-                        send(subscription.scannerSettingPairs());
+                        send(subscription.AverageOptionVolumeAbove);
+                        send(subscription.ScannerSettingPairs);
                     }
                     if (m_serverVersion >= 27)
                     {
-                        send(subscription.stockTypeFilter());
+                        send(subscription.StockTypeFilter);
                     }
                 }
                 catch (Exception e)
@@ -424,7 +401,7 @@ namespace KRS.ATS.IBNet
             }
         }
 		
-        public virtual void  reqMktData(int tickerId, Contract contract, String genericTickList)
+        public virtual void reqMktData(int tickerId, Contract contract, List<GenericTickType> genericTickList)
         {
             lock (this)
             {
@@ -446,10 +423,10 @@ namespace KRS.ATS.IBNet
                     send(tickerId);
 					
                     send(contract.Symbol);
-                    send(contract.SecType);
+                    send(contract.SecType.ToString());
                     send(contract.Expiry);
                     send(contract.Strike);
-                    send(contract.Right);
+                    send(((contract.Right == RightType.UNDEFINED) ? "" : contract.Right.ToString()));
                     if (m_serverVersion >= 15)
                     {
                         send(contract.Multiplier);
@@ -464,7 +441,7 @@ namespace KRS.ATS.IBNet
                     {
                         send(contract.LocalSymbol);
                     }
-                    if (m_serverVersion >= 8 && BAG_SEC_TYPE.ToUpper().Equals(contract.SecType.ToUpper()))
+                    if (m_serverVersion >= 8 && contract.SecType == SecurityType.BAG)
                     {
                         if (contract.ComboLegs == null)
                         {
@@ -487,7 +464,15 @@ namespace KRS.ATS.IBNet
                     }
                     if (m_serverVersion >= 31)
                     {
-                        send(genericTickList);
+                        string genList = "";
+                        if (genericTickList != null)
+                        {
+                            if (genericTickList.Count > 0)
+                                genList = genericTickList[0].ToString();
+                            for (int ix = 1; ix < genericTickList.Count; ix++)
+                                genList = genList + "," + genericTickList[ix].ToString();
+                        }
+                        send(genList);
                     }
                 }
                 catch (Exception e)
@@ -561,10 +546,10 @@ namespace KRS.ATS.IBNet
                     send(VERSION);
                     send(tickerId);
                     send(contract.Symbol);
-                    send(contract.SecType);
+                    send(contract.SecType.ToString());
                     send(contract.Expiry);
                     send(contract.Strike);
-                    send(contract.Right);
+                    send(((contract.Right == RightType.UNDEFINED) ? "" : contract.Right.ToString()));
                     send(contract.Multiplier);
                     send(contract.Exchange);
                     send(contract.PrimaryExch);
@@ -586,7 +571,7 @@ namespace KRS.ATS.IBNet
                     {
                         send(formatDate);
                     }
-                    if (BAG_SEC_TYPE.ToUpper().Equals(contract.SecType.ToUpper()))
+                    if (contract.SecType == SecurityType.BAG)
                     {
                         if (contract.ComboLegs == null)
                         {
@@ -645,10 +630,10 @@ namespace KRS.ATS.IBNet
                     send(VERSION);
 					
                     send(contract.Symbol);
-                    send(contract.SecType);
+                    send(contract.SecType.ToString());
                     send(contract.Expiry);
                     send(contract.Strike);
-                    send(contract.Right);
+                    send(((contract.Right == RightType.UNDEFINED) ? "" : contract.Right.ToString()));
                     if (m_serverVersion >= 15)
                     {
                         send(contract.Multiplier);
@@ -699,10 +684,10 @@ namespace KRS.ATS.IBNet
                     send(tickerId);
 					
                     send(contract.Symbol);
-                    send(contract.SecType);
+                    send(contract.SecType.ToString());
                     send(contract.Expiry);
                     send(contract.Strike);
-                    send(contract.Right);
+                    send(((contract.Right == RightType.UNDEFINED) ? "" : contract.Right.ToString()));
                     if (m_serverVersion >= 15)
                     {
                         send(contract.Multiplier);
@@ -817,10 +802,10 @@ namespace KRS.ATS.IBNet
                     send(VERSION);
                     send(tickerId);
                     send(contract.Symbol);
-                    send(contract.SecType);
+                    send(contract.SecType.ToString());
                     send(contract.Expiry);
                     send(contract.Strike);
-                    send(contract.Right);
+                    send(((contract.Right == RightType.UNDEFINED) ? "" : contract.Right.ToString()));
                     send(contract.Multiplier);
                     send(contract.Exchange);
                     send(contract.Currency);
@@ -862,10 +847,10 @@ namespace KRS.ATS.IBNet
 					
                     // send contract fields
                     send(contract.Symbol);
-                    send(contract.SecType);
+                    send(contract.SecType.ToString());
                     send(contract.Expiry);
                     send(contract.Strike);
-                    send(contract.Right);
+                    send(((contract.Right == RightType.UNDEFINED) ? "" : contract.Right.ToString()));
                     if (m_serverVersion >= 15)
                     {
                         send(contract.Multiplier);
@@ -882,41 +867,41 @@ namespace KRS.ATS.IBNet
                     }
 					
                     // send main order fields
-                    send(order.m_action);
-                    send(order.m_totalQuantity);
-                    send(order.m_orderType);
-                    send(order.m_lmtPrice);
-                    send(order.m_auxPrice);
+                    send(order.Action.ToString());
+                    send(order.TotalQuantity);
+                    send(order.OrderType.ToString());
+                    send(order.LmtPrice);
+                    send(order.AuxPrice);
 					
                     // send extended order fields
-                    send(order.m_tif);
-                    send(order.m_ocaGroup);
-                    send(order.m_account);
-                    send(order.m_openClose);
-                    send(order.m_origin);
-                    send(order.m_orderRef);
-                    send(order.m_transmit);
+                    send(order.Tif.ToString());
+                    send(order.OcaGroup);
+                    send(order.Account);
+                    send(order.OpenClose);
+                    send(order.Origin);
+                    send(order.OrderRef);
+                    send(order.Transmit);
                     if (m_serverVersion >= 4)
                     {
-                        send(order.m_parentId);
+                        send(order.ParentId);
                     }
 					
                     if (m_serverVersion >= 5)
                     {
-                        send(order.m_blockOrder);
-                        send(order.m_sweepToFill);
-                        send(order.m_displaySize);
-                        send(order.m_triggerMethod);
-                        send(order.m_ignoreRth);
+                        send(order.BlockOrder);
+                        send(order.SweepToFill);
+                        send(order.DisplaySize);
+                        send(order.TriggerMethod);
+                        send(order.IgnoreRth);
                     }
 					
                     if (m_serverVersion >= 7)
                     {
-                        send(order.m_hidden);
+                        send(order.Hidden);
                     }
 					
                     // Send combo legs for BAG requests
-                    if (m_serverVersion >= 8 && BAG_SEC_TYPE.ToUpper().Equals(contract.SecType.ToUpper()))
+                    if (m_serverVersion >= 8 && contract.SecType == SecurityType.BAG)
                     {
                         if (contract.ComboLegs == null)
                         {
@@ -941,99 +926,99 @@ namespace KRS.ATS.IBNet
 					
                     if (m_serverVersion >= 9)
                     {
-                        send(order.m_sharesAllocation); // deprecated
+                        send(order.SharesAllocation); // deprecated
                     }
 					
                     if (m_serverVersion >= 10)
                     {
-                        send(order.m_discretionaryAmt);
+                        send(order.DiscretionaryAmt);
                     }
 					
                     if (m_serverVersion >= 11)
                     {
-                        send(order.m_goodAfterTime);
+                        send(order.GoodAfterTime);
                     }
 					
                     if (m_serverVersion >= 12)
                     {
-                        send(order.m_goodTillDate);
+                        send(order.GoodTillDate);
                     }
 					
                     if (m_serverVersion >= 13)
                     {
-                        send(order.m_faGroup);
-                        send(order.m_faMethod);
-                        send(order.m_faPercentage);
-                        send(order.m_faProfile);
+                        send(order.FaGroup);
+                        send(order.FaMethod);
+                        send(order.FaPercentage);
+                        send(order.FaProfile);
                     }
                     if (m_serverVersion >= 18)
                     {
                         // institutional short sale slot fields.
-                        send(order.m_shortSaleSlot); // 0 only for retail, 1 or 2 only for institution.
-                        send(order.m_designatedLocation); // only populate when order.m_shortSaleSlot = 2.
+                        send(order.ShortSaleSlot); // 0 only for retail, 1 or 2 only for institution.
+                        send(order.DesignatedLocation); // only populate when order.shortSaleSlot = 2.
                     }
                     if (m_serverVersion >= 19)
                     {
-                        send(order.m_ocaType);
-                        send(order.m_rthOnly);
-                        send(order.m_rule80A);
-                        send(order.m_settlingFirm);
-                        send(order.m_allOrNone);
-                        sendMax(order.m_minQty);
-                        sendMax(order.m_percentOffset);
-                        send(order.m_eTradeOnly);
-                        send(order.m_firmQuoteOnly);
-                        sendMax(order.m_nbboPriceCap);
-                        sendMax(order.m_auctionStrategy);
-                        sendMax(order.m_startingPrice);
-                        sendMax(order.m_stockRefPrice);
-                        sendMax(order.m_delta);
+                        send(order.OcaType.ToString());
+                        send(order.RthOnly);
+                        send(order.Rule80A);
+                        send(order.SettlingFirm);
+                        send(order.AllOrNone);
+                        sendMax(order.MinQty);
+                        sendMax(order.PercentOffset);
+                        send(order.ETradeOnly);
+                        send(order.FirmQuoteOnly);
+                        sendMax(order.NbboPriceCap);
+                        sendMax(order.AuctionStrategy);
+                        sendMax(order.StartingPrice);
+                        sendMax(order.StockRefPrice);
+                        sendMax(order.Delta);
                         // Volatility orders had specific watermark price attribs in server version 26
                         //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                        double lower = (m_serverVersion == 26 && order.m_orderType.Equals("VOL"))?Double.MaxValue:order.m_stockRangeLower;
+                        double lower = (m_serverVersion == 26 && order.OrderType.Equals("VOL"))?Double.MaxValue:order.StockRangeLower;
                         //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                        double upper = (m_serverVersion == 26 && order.m_orderType.Equals("VOL"))?Double.MaxValue:order.m_stockRangeUpper;
+                        double upper = (m_serverVersion == 26 && order.OrderType.Equals("VOL"))?Double.MaxValue:order.StockRangeUpper;
                         sendMax(lower);
                         sendMax(upper);
                     }
 					
                     if (m_serverVersion >= 22)
                     {
-                        send(order.m_overridePercentageConstraints);
+                        send(order.OverridePercentageConstraints);
                     }
 					
                     if (m_serverVersion >= 26)
                     {
                         // Volatility orders
-                        sendMax(order.m_volatility);
-                        sendMax(order.m_volatilityType);
+                        sendMax(order.Volatility);
+                        sendMax(order.VolatilityType);
                         if (m_serverVersion < 28)
                         {
-                            send(order.m_deltaNeutralOrderType.ToUpper().Equals("MKT".ToUpper()));
+                            send(order.DeltaNeutralOrderType.ToUpper().Equals("MKT".ToUpper()));
                         }
                         else
                         {
-                            send(order.m_deltaNeutralOrderType);
-                            sendMax(order.m_deltaNeutralAuxPrice);
+                            send(order.DeltaNeutralOrderType);
+                            sendMax(order.DeltaNeutralAuxPrice);
                         }
-                        send(order.m_continuousUpdate);
+                        send(order.ContinuousUpdate);
                         if (m_serverVersion == 26)
                         {
                             // Volatility orders had specific watermark price attribs in server version 26
                             //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                            double lower = order.m_orderType.Equals("VOL")?order.m_stockRangeLower:Double.MaxValue;
+                            double lower = order.OrderType.Equals("VOL")?order.StockRangeLower:Double.MaxValue;
                             //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                            double upper = order.m_orderType.Equals("VOL")?order.m_stockRangeUpper:Double.MaxValue;
+                            double upper = order.OrderType.Equals("VOL")?order.StockRangeUpper:Double.MaxValue;
                             sendMax(lower);
                             sendMax(upper);
                         }
-                        sendMax(order.m_referencePriceType);
+                        sendMax(order.ReferencePriceType);
                     }
 					
                     if (m_serverVersion >= 30)
                     {
                         // TRAIL_STOP_LIMIT stop price
-                        sendMax(order.m_trailStopPrice);
+                        sendMax(order.TrailStopPrice);
                     }
                 }
                 catch (Exception e)
@@ -1104,15 +1089,15 @@ namespace KRS.ATS.IBNet
                     // Send the execution rpt filter data
                     if (m_serverVersion >= 9)
                     {
-                        send(filter.m_clientId);
-                        send(filter.m_acctCode);
+                        send(filter.ClientId);
+                        send(filter.AcctCode);
 						
-                        // Note that the valid format for m_time is "yyyymmdd-hh:mm:ss"
-                        send(filter.m_time);
-                        send(filter.m_symbol);
-                        send(filter.m_secType);
-                        send(filter.m_exchange);
-                        send(filter.m_side);
+                        // Note that the valid format for time is "yyyymmdd-hh:mm:ss"
+                        send(filter.Time.ToString("yyyymmdd-hh:mm:ss"));
+                        send(filter.Symbol);
+                        send(filter.SecType.ToString());
+                        send(filter.Exchange);
+                        send(filter.Side.ToString());
                     }
                 }
                 catch (Exception e)

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace KRS.ATS.IBNet
+namespace Krs.Ats.IBNet
 {
     public class IBClient : IBWrapper
     {
@@ -11,9 +11,7 @@ namespace KRS.ATS.IBNet
         #endregion
 
         #region IB Wrapper to Events
-
-        public delegate void TickPriceEventHandler(object sender, TickPriceEventArgs e);
-        public event TickPriceEventHandler TickPrice;
+        public event EventHandler<TickPriceEventArgs> TickPrice;
         protected virtual void OnTickPrice(TickPriceEventArgs e)
         {
             if(TickPrice!=null)
@@ -25,8 +23,7 @@ namespace KRS.ATS.IBNet
             OnTickPrice(e);
         }
 
-        public delegate void TickSizeEventHandler(object sender, TickSizeEventArgs e);
-        public event TickSizeEventHandler TickSize;
+        public event EventHandler<TickSizeEventArgs> TickSize;
         protected virtual void OnTickSize(TickSizeEventArgs e)
         {
             if(TickSize!=null)
@@ -38,8 +35,7 @@ namespace KRS.ATS.IBNet
             OnTickSize(e);
         }
 
-        public delegate void TickOptionComputationEventHandler(object sender, TickOptionComputationEventArgs e);
-        public event TickOptionComputationEventHandler TickOptionComputation;
+        public event EventHandler<TickOptionComputationEventArgs> TickOptionComputation;
         protected virtual void OnTickOptionComputation(TickOptionComputationEventArgs e)
         {
             if (TickOptionComputation != null)
@@ -51,8 +47,7 @@ namespace KRS.ATS.IBNet
             TickOptionComputationEventArgs e = new TickOptionComputationEventArgs(tickerId, field, impliedVol, delta, modelPrice, pvDividend);
         }
 
-        public delegate void TickGenericEventHandler(object sender, TickGenericEventArgs e);
-        public event TickGenericEventHandler TickGeneric;
+        public event EventHandler<TickGenericEventArgs> TickGeneric;
         protected virtual void OnTickGeneric(TickGenericEventArgs e)
         {
             if (TickGeneric != null)
@@ -64,8 +59,7 @@ namespace KRS.ATS.IBNet
             OnTickGeneric(e);
         }
 
-        public delegate void TickStringEventHandler(object sender, TickStringEventArgs e);
-        public event TickStringEventHandler TickString;
+        public event EventHandler<TickStringEventArgs> TickString;
         protected virtual void OnTickString(TickStringEventArgs e)
         {
             if (TickString != null)
@@ -77,8 +71,7 @@ namespace KRS.ATS.IBNet
             OnTickString(e);
         }
 
-        public delegate void TickEFPEventHandler(object sender, TickEFPEventArgs e);
-        public event TickEFPEventHandler TickEFP;
+        public event EventHandler<TickEFPEventArgs> TickEFP;
         protected virtual void OnTickEFP(TickEFPEventArgs e)
         {
             if(TickEFP!=null)
@@ -93,8 +86,7 @@ namespace KRS.ATS.IBNet
             OnTickEFP(e);
         }
 
-        public delegate void OrderStatusEventHandler(object sender, OrderStatusEventArgs e);
-        public event OrderStatusEventHandler OrderStatus;
+        public event EventHandler<OrderStatusEventArgs> OrderStatus;
         protected virtual void OnOrderStatus(OrderStatusEventArgs e)
         {
             if (OrderStatus != null)
@@ -108,8 +100,7 @@ namespace KRS.ATS.IBNet
             OnOrderStatus(e);
         }
 
-        public delegate void OpenOrderEventHandler(object sender, OpenOrderEventArgs e);
-        public event OpenOrderEventHandler OpenOrder;
+        public event EventHandler<OpenOrderEventArgs> OpenOrder;
         protected virtual void OnOpenOrder(OpenOrderEventArgs e)
         {
             if (OpenOrder != null)
@@ -121,8 +112,7 @@ namespace KRS.ATS.IBNet
             OnOpenOrder(e);
         }
 
-        public delegate void UpdateAccountValueEventHandler(object sender, UpdateAccountValueEventArgs e);
-        public event UpdateAccountValueEventHandler UpdateAccountValue;
+        public event EventHandler<UpdateAccountValueEventArgs> UpdateAccountValue;
         protected virtual void OnUpdateAccountValue(UpdateAccountValueEventArgs e)
         {
             if (UpdateAccountValue != null)
@@ -134,8 +124,7 @@ namespace KRS.ATS.IBNet
             OnUpdateAccountValue(e);
         }
 
-        public delegate void UpdatePortfolioEventHandler(object sender, UpdatePortfolioEventArgs e);
-        public event UpdatePortfolioEventHandler UpdatePortfolio;
+        public event EventHandler<UpdatePortfolioEventArgs> UpdatePortfolio;
         protected virtual void OnUpdatePortfolio(UpdatePortfolioEventArgs e)
         {
             if (UpdatePortfolio != null)
@@ -148,8 +137,7 @@ namespace KRS.ATS.IBNet
             OnUpdatePortfolio(e);
         }
 
-        public delegate void UpdateAccountTimeEventHandler(object sender, UpdateAccountTimeEventArgs e);
-        public event UpdateAccountTimeEventHandler UpdateAccountTime;
+        public event EventHandler<UpdateAccountTimeEventArgs> UpdateAccountTime;
         protected virtual void OnUpdateAccountTime(UpdateAccountTimeEventArgs e)
         {
             if(UpdateAccountTime != null)
@@ -161,8 +149,7 @@ namespace KRS.ATS.IBNet
             OnUpdateAccountTime(e);
         }
 
-        public delegate void NextValidIdEventHandler(object sender, NextValidIdEventArgs e);
-        public event NextValidIdEventHandler NextValidId;
+        public event EventHandler<NextValidIdEventArgs> NextValidId;
         protected virtual void OnNextValidId(NextValidIdEventArgs e)
         {
             if (NextValidId != null)
@@ -174,8 +161,7 @@ namespace KRS.ATS.IBNet
             OnNextValidId(e);
         }
 
-        public delegate void ContractDetailsEventHandler(object sender, ContractDetailsEventArgs e);
-        public event ContractDetailsEventHandler ContractDetails;
+        public event EventHandler<ContractDetailsEventArgs> ContractDetails;
         protected virtual void OnContractDetails(ContractDetailsEventArgs e)
         {
             if (ContractDetails != null)
@@ -187,8 +173,7 @@ namespace KRS.ATS.IBNet
             OnContractDetails(e);
         }
 
-        public delegate void BondContractDetailsEventHandler(object sender, BondContractDetailsEventArgs e);
-        public event BondContractDetailsEventHandler BondContractDetails;
+        public event EventHandler<BondContractDetailsEventArgs> BondContractDetails;
         protected virtual void OnBondContractDetails(BondContractDetailsEventArgs e)
         {
             if (BondContractDetails != null)
@@ -200,8 +185,7 @@ namespace KRS.ATS.IBNet
             OnBondContractDetails(e);
         }
 
-        public delegate void ExecDetailsEventHandler(object sender, ExecDetailsEventArgs e);
-        public event ExecDetailsEventHandler ExecDetails;
+        public event EventHandler<ExecDetailsEventArgs> ExecDetails;
         protected virtual void OnExecDetails(ExecDetailsEventArgs e)
         {
             if(ExecDetails!= null)
@@ -215,8 +199,7 @@ namespace KRS.ATS.IBNet
             OnExecDetails(e);
         }
 
-        public delegate void UpdateMktDepthEventHandler(object sender, UpdateMktDepthEventArgs e);
-        public event UpdateMktDepthEventHandler UpdateMktDepth;
+        public event EventHandler<UpdateMktDepthEventArgs> UpdateMktDepth;
         protected virtual void OnUpdateMktDepth(UpdateMktDepthEventArgs e)
         {
             if (UpdateMktDepth != null)
@@ -228,8 +211,7 @@ namespace KRS.ATS.IBNet
             OnUpdateMktDepth(e);
         }
 
-        public delegate void UpdateMktDepthL2EventHandler(object sender, UpdateMktDepthL2EventArgs e);
-        public event UpdateMktDepthL2EventHandler UpdateMktDepthL2;
+        public event EventHandler<UpdateMktDepthL2EventArgs> UpdateMktDepthL2;
         protected virtual void OnUpdateMktDepthL2(UpdateMktDepthL2EventArgs e)
         {
             if (UpdateMktDepthL2 != null)
@@ -242,8 +224,7 @@ namespace KRS.ATS.IBNet
             OnUpdateMktDepthL2(e);
         }
 
-        public delegate void UpdateNewsBulletinEventHandler(object sender, UpdateNewsBulletinEventArgs e);
-        public event UpdateNewsBulletinEventHandler UpdateNewsBulletin;
+        public event EventHandler<UpdateNewsBulletinEventArgs> UpdateNewsBulletin;
         protected virtual void OnUpdateNewsBulletin(UpdateNewsBulletinEventArgs e)
         {
             if (UpdateNewsBulletin != null)
@@ -255,8 +236,7 @@ namespace KRS.ATS.IBNet
             OnUpdateNewsBulletin(e);
         }
 
-        public delegate void ManagedAccountsEventHandler(object sender, ManagedAccountsEventArgs e);
-        public event ManagedAccountsEventHandler ManagedAccounts;
+        public event EventHandler<ManagedAccountsEventArgs> ManagedAccounts;
         protected virtual void OnManagedAccounts(ManagedAccountsEventArgs e)
         {
             if (ManagedAccounts != null)
@@ -268,8 +248,7 @@ namespace KRS.ATS.IBNet
             OnManagedAccounts(e);
         }
 
-        public delegate void ReceiveFAEventHandler(object sender, ReceiveFAEventArgs e);
-        public event ReceiveFAEventHandler ReceiveFA;
+        public event EventHandler<ReceiveFAEventArgs> ReceiveFA;
         protected virtual void OnReceiveFA(ReceiveFAEventArgs e)
         {
             if (ReceiveFA != null)
@@ -281,8 +260,7 @@ namespace KRS.ATS.IBNet
             OnReceiveFA(e);
         }
 
-        public delegate void HistoricalDataEventHandler(object sender, HistoricalDataEventArgs e);
-        public event HistoricalDataEventHandler HistoricalData;
+        public event EventHandler<HistoricalDataEventArgs> HistoricalData;
         protected virtual void OnHistoricalData(HistoricalDataEventArgs e)
         {
             if (HistoricalData != null)
@@ -295,8 +273,7 @@ namespace KRS.ATS.IBNet
             OnHistoricalData(e);
         }
 
-        public delegate void ScannerParametersEventHandler(object sender, ScannerParametersEventArgs e);
-        public event ScannerParametersEventHandler ScannerParameters;
+        public event EventHandler<ScannerParametersEventArgs> ScannerParameters;
         protected virtual void OnScannerParameters(ScannerParametersEventArgs e)
         {
             if (ScannerParameters != null)
@@ -308,8 +285,7 @@ namespace KRS.ATS.IBNet
             OnScannerParameters(e);
         }
 
-        public delegate void ScannerDataEventHandler(object sender, ScannerDataEventArgs e);
-        public event ScannerDataEventHandler ScannerData;
+        public event EventHandler<ScannerDataEventArgs> ScannerData;
         protected virtual void OnScannerData(ScannerDataEventArgs e)
         {
             if (ScannerData != null)
@@ -322,8 +298,7 @@ namespace KRS.ATS.IBNet
             OnScannerData(e);
         }
 
-        public delegate void ErrorEventHandler(object sender, ErrorEventArgs e);
-        public event ErrorEventHandler Error;
+        public event EventHandler<ErrorEventArgs> Error;
         protected virtual void OnError(ErrorEventArgs e)
         {
             if (Error != null)
@@ -335,8 +310,7 @@ namespace KRS.ATS.IBNet
             OnError(e);
         }
 
-        public delegate void ConnectionClosedEventHandler(object sender, ConnectionClosedEventArgs e);
-        public event ConnectionClosedEventHandler ConnectionClosed;
+        public event EventHandler<ConnectionClosedEventArgs> ConnectionClosed;
         protected virtual void OnConnectionClosed(ConnectionClosedEventArgs e)
         {
             if(ConnectionClosed!=null)
@@ -362,7 +336,7 @@ namespace KRS.ATS.IBNet
         {
             socket.reqScannerSubscription(tickerId, subscription);
         }
-        public void ReqMktData(int tickerId, Contract contract, String genericTickList)
+        public void ReqMktData(int tickerId, Contract contract, List<GenericTickType> genericTickList)
         {
             socket.reqMktData(tickerId, contract, genericTickList);
         }

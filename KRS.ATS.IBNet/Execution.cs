@@ -1,50 +1,159 @@
-/*
-* Execution.java
-*
-*/
 using System;
 
-namespace KRS.ATS.IBNet
+namespace Krs.Ats.IBNet
 {
     public class Execution
     {
-        public int m_orderId;
-        public int m_clientId;
-        public System.String m_execId;
-        public System.String m_time;
-        public System.String m_acctNumber;
-        public System.String m_exchange;
-        public System.String m_side;
-        public int m_shares;
-        public double m_price;
-        public int m_permId;
-        public int m_liquidation;
-		
+        #region Private Variables
+
+        private int orderId;
+        private int clientId;
+        private String execId;
+        private String time;
+        private String acctNumber;
+        private String exchange;
+        private ExecutionSide side;
+        private int shares;
+        private double price;
+        private int permId;
+        private int liquidation;
+        #endregion
+
+        #region Constructors
         public Execution()
         {
-            m_orderId = 0;
-            m_clientId = 0;
-            m_shares = 0;
-            m_price = 0;
-            m_permId = 0;
-            m_liquidation = 0;
+            orderId = 0;
+            clientId = 0;
+            shares = 0;
+            price = 0;
+            permId = 0;
+            liquidation = 0;
         }
 		
-        public Execution(int p_orderId, int p_clientId, System.String p_execId, System.String p_time, System.String p_acctNumber, System.String p_exchange, System.String p_side, int p_shares, double p_price, int p_permId, int p_liquidation)
+        public Execution(int orderId, int clientId, String execId, String time, String acctNumber, String exchange, ExecutionSide side, int shares, double price, int permId, int liquidation)
         {
-            m_orderId = p_orderId;
-            m_clientId = p_clientId;
-            m_execId = p_execId;
-            m_time = p_time;
-            m_acctNumber = p_acctNumber;
-            m_exchange = p_exchange;
-            m_side = p_side;
-            m_shares = p_shares;
-            m_price = p_price;
-            m_permId = p_permId;
-            m_liquidation = p_liquidation;
+            this.orderId = orderId;
+            this.clientId = clientId;
+            this.execId = execId;
+            this.time = time;
+            this.acctNumber = acctNumber;
+            this.exchange = exchange;
+            this.side = side;
+            this.shares = shares;
+            this.price = price;
+            this.permId = permId;
+            this.liquidation = liquidation;
         }
-		
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// The order id.
+        /// Note: TWS orders have a fixed order id of "0."
+        /// </summary>
+        public int OrderId
+        {
+            get { return orderId; }
+            set { orderId = value; }
+        }
+
+        /// <summary>
+        /// The id of the client that placed the order.
+        /// Note: TWS orders have a fixed client id of "0."
+        /// </summary>
+        public int ClientId
+        {
+            get { return clientId; }
+            set { clientId = value; }
+        }
+
+        /// <summary>
+        /// Unique order execution id.
+        /// </summary>
+        public string ExecId
+        {
+            get { return execId; }
+            set { execId = value; }
+        }
+
+        /// <summary>
+        /// The order execution time.
+        /// </summary>
+        public string Time
+        {
+            get { return time; }
+            set { time = value; }
+        }
+
+        /// <summary>
+        /// The customer account number.
+        /// </summary>
+        public string AcctNumber
+        {
+            get { return acctNumber; }
+            set { acctNumber = value; }
+        }
+
+        /// <summary>
+        /// Exchange that executed the order.
+        /// </summary>
+        public string Exchange
+        {
+            get { return exchange; }
+            set { exchange = value; }
+        }
+
+        /// <summary>
+        /// Specifies if the transaction was a sale or a purchase. Valid values are:
+        /// BOT
+        /// SLD
+        /// </summary>
+        public ExecutionSide Side
+        {
+            get { return side; }
+            set { side = value; }
+        }
+        /// <summary>
+        /// The number of shares filled.
+        /// </summary>
+        public int Shares
+        {
+            get { return shares; }
+            set { shares = value; }
+        }
+
+        /// <summary>
+        /// The order execution price.
+        /// </summary>
+        public double Price
+        {
+            get { return price; }
+            set { price = value; }
+        }
+
+        /// <summary>
+        /// The TWS id used to identify orders, remains the same over TWS sessions.
+        /// </summary>
+        public int PermId
+        {
+            get { return permId; }
+            set { permId = value; }
+        }
+
+        /// <summary>
+        /// Identifies the position as one to be liquidated last should the need arise.
+        /// </summary>
+        public int Liquidation
+        {
+            get { return liquidation; }
+            set { liquidation = value; }
+        }
+
+        #endregion
+
+        #region Object Overrides
         public  override bool Equals(System.Object p_other)
         {
             bool l_bRetVal = false;
@@ -60,14 +169,14 @@ namespace KRS.ATS.IBNet
             else
             {
                 Execution l_theOther = (Execution) p_other;
-                l_bRetVal = m_execId.Equals(l_theOther.m_execId);
+                l_bRetVal = execId.Equals(l_theOther.execId);
             }
             return l_bRetVal;
         }
-        //UPGRADE_NOTE: The following method implementation was automatically added to preserve functionality. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1306'"
         public override int GetHashCode()
         {
             return base.GetHashCode();
         }
+        #endregion
     }
 }

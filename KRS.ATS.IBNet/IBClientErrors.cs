@@ -4,7 +4,7 @@
 */
 using System;
 
-namespace KRS.ATS.IBNet
+namespace Krs.Ats.IBNet
 {
     public class IBClientErrors
     {

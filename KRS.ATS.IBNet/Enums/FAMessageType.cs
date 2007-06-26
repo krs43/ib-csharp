@@ -5,9 +5,12 @@ using System.Text;
 namespace Krs.Ats.IBNet
 {
     /// <summary>
-    /// Connection Closed Event Arguments
+    /// FA msg data types
     /// </summary>
-    public class ConnectionClosedEventArgs : EventArgs
+    public enum FAMessageType : int
     {
+        GROUPS = 1,
+        PROFILES = 2,
+        ALIASES = 3
     }
 }

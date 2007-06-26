@@ -3,9 +3,9 @@
 *
 */
 using System;
-using KRS.ATS.IBNet;
+using Krs.Ats.IBNet;
 
-namespace KRS.ATS.IBNet
+namespace Krs.Ats.IBNet
 {
     public interface IBWrapper
     {

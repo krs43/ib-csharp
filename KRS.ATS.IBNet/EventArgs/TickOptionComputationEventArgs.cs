@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace KRS.ATS.IBNet
+namespace Krs.Ats.IBNet
 {
     /// <summary>
     /// Tick Option Computation Event Arguments
     /// </summary>
-    public class TickOptionComputationEventArgs
+    public class TickOptionComputationEventArgs : EventArgs
     {
         private readonly int tickerId;
         public int TickerId

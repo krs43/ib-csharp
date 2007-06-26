@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace KRS.ATS.IBNet
+namespace Krs.Ats.IBNet
 {
-    public class NextValidIdEventArgs
+    public class NextValidIdEventArgs : EventArgs
     {
         private readonly int orderId;
 
