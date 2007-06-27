@@ -9,16 +9,16 @@ namespace Krs.Ats.IBNet
     /// </summary>
     public class ErrorEventArgs : EventArgs
     {
-        private readonly int id;
-        public int Id
+        private readonly int tickerId;
+        public int TickerId
         {
             get
             {
-                return id;
+                return tickerId;
             }
         }
-        private readonly int errorCode;
-        public int ErrorCode
+        private readonly ErrorMessages errorCode;
+        public ErrorMessages ErrorCode
         {
             get
             {
@@ -34,9 +34,9 @@ namespace Krs.Ats.IBNet
             }
         }
 
-        public ErrorEventArgs(int id, int errorCode, string errorMsg)
+        public ErrorEventArgs(int tickerId, ErrorMessages errorCode, string errorMsg)
         {
-            this.id = id;
+            this.tickerId = tickerId;
             this.errorMsg = errorMsg;
             this.errorCode = errorCode;
         }

@@ -33,6 +33,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnumDescConverter.cs" />
     <Compile Include="Enums\ActionSide.cs" />
     <Compile Include="Enums\ComboOpenClose.cs" />
     <Compile Include="Enums\ExecutionSide.cs" />
@@ -61,10 +62,7 @@
     <Compile Include="IBClient.cs" />
     <Compile Include="EventArgs\NextValidIdEventArgs.cs" />
     <Compile Include="EventArgs\OpenOrderEventArgs.cs" />
-    <Compile Include="IBClientErrors.cs" />
-    <Compile Include="IBClientSocket.cs" />
-    <Compile Include="IBReader.cs" />
-    <Compile Include="IBWrapper.cs" />
+    <Compile Include="Enums\ErrorMessages.cs" />
     <Compile Include="Enums\IncomingMessage.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="EventArgs\OrderStatusEventArgs.cs" />

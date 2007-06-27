@@ -37,7 +37,7 @@ namespace Krs.Ats.IBNet
 
         #region Properties
         /// <summary>
-        /// Filter the results of the reqExecutions() method based on the clientId.
+        /// Filter the results of the ReqExecutions() method based on the clientId.
         /// </summary>
         public int ClientId
         {
@@ -46,7 +46,7 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Filter the results of the reqExecutions() method based on an account code.
+        /// Filter the results of the ReqExecutions() method based on an account code.
         /// Note: this is only relevant for Financial Advisor (FA) accounts.
         /// </summary>
         public string AcctCode
@@ -56,7 +56,7 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Filter the results of the reqExecutions() method based on execution reports received after the specified time.
+        /// Filter the results of the ReqExecutions() method based on execution reports received after the specified time.
         /// The format for timeFilter is "yyyymmdd-hh:mm:ss"
         /// </summary>
         public DateTime Time
@@ -66,7 +66,7 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Filter the results of the reqExecutions() method based on the order symbol.
+        /// Filter the results of the ReqExecutions() method based on the order symbol.
         /// </summary>
         public string Symbol
         {
@@ -75,7 +75,7 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Filter the results of the reqExecutions() method based on the order security type.
+        /// Filter the results of the ReqExecutions() method based on the order security type.
         /// Note: Refer to the Contract struct for the list of valid security types.
         /// </summary>
         public SecurityType SecType
@@ -85,7 +85,7 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Filter the results of the reqExecutions() method based on theorder exchange.
+        /// Filter the results of the ReqExecutions() method based on theorder exchange.
         /// </summary>
         public string Exchange
         {
@@ -94,7 +94,7 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Filter the results of the reqExecutions() method based on the order action.
+        /// Filter the results of the ReqExecutions() method based on the order action.
         /// Note: Refer to the Order struct for the list of valid order actions.
         /// </summary>
         public ActionSide Side
