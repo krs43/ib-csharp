@@ -22,12 +22,7 @@ namespace Krs.Ats.IBNet
         #region Constructors
         public Execution()
         {
-            orderId = 0;
-            clientId = 0;
-            shares = 0;
-            price = 0;
-            permId = 0;
-            liquidation = 0;
+
         }
 		
         public Execution(int orderId, int clientId, String execId, String time, String acctNumber, String exchange, ExecutionSide side, int shares, double price, int permId, int liquidation)
@@ -154,24 +149,24 @@ namespace Krs.Ats.IBNet
         #endregion
 
         #region Object Overrides
-        public  override bool Equals(System.Object p_other)
+        public  override bool Equals(Object obj)
         {
-            bool l_bRetVal = false;
+            bool retVal = false;
 			
-            if (p_other == null)
+            if (obj == null)
             {
-                l_bRetVal = false;
+                retVal = false;
             }
-            else if (this == p_other)
+            else if (this == obj)
             {
-                l_bRetVal = true;
+                retVal = true;
             }
             else
             {
-                Execution l_theOther = (Execution) p_other;
-                l_bRetVal = execId.Equals(l_theOther.execId);
+                Execution other = (Execution) obj;
+                retVal = execId.Equals(other.execId);
             }
-            return l_bRetVal;
+            return retVal;
         }
         public override int GetHashCode()
         {

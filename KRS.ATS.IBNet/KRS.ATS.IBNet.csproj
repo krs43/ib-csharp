@@ -34,10 +34,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\ActionSide.cs" />
-    <Compile Include="Enums\ActionType.cs" />
     <Compile Include="Enums\ComboOpenClose.cs" />
     <Compile Include="Enums\ExecutionSide.cs" />
-    <Compile Include="Enums\OCAType.cs" />
+    <Compile Include="Enums\OcaType.cs" />
     <Compile Include="Enums\OrderType.cs" />
     <Compile Include="Enums\TimeInForce.cs" />
     <Compile Include="Enums\TriggerMethod.cs" />
@@ -69,9 +68,9 @@
     <Compile Include="Enums\IncomingMessage.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="EventArgs\OrderStatusEventArgs.cs" />
-    <Compile Include="OutgoingMessage.cs" />
+    <Compile Include="Enums\OutgoingMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RightType.cs" />
+    <Compile Include="Enums\RightType.cs" />
     <Compile Include="ScannerSubscription.cs" />
     <Compile Include="EventArgs\TickEFPEventArgs.cs" />
     <Compile Include="EventArgs\TickGenericEventArgs.cs" />
@@ -79,8 +78,8 @@
     <Compile Include="EventArgs\TickPriceEventArgs.cs" />
     <Compile Include="EventArgs\TickSizeEventArgs.cs" />
     <Compile Include="EventArgs\TickStringEventArgs.cs" />
-    <Compile Include="SecurityType.cs" />
-    <Compile Include="TickType.cs" />
+    <Compile Include="Enums\SecurityType.cs" />
+    <Compile Include="Enums\TickType.cs" />
     <Compile Include="EventArgs\UpdateAccountTimeEventArgs.cs" />
     <Compile Include="EventArgs\UpdateAccountValueEventArgs.cs" />
     <Compile Include="EventArgs\UpdateMktDepthEventArgs.cs" />

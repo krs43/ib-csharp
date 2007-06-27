@@ -38,7 +38,7 @@ namespace Krs.Ats.IBNet
         // extended order fields
         private TimeInForce tif; // "Time in Force" - DAY, GTC, etc.
         private String ocaGroup; // one cancels all group name
-        private OCAType ocaType; // 1 = CANCEL_WITH_BLOCK, 2 = REDUCE_WITH_BLOCK, 3 = REDUCE_NON_BLOCK
+        private OcaType ocaType; // 1 = CANCEL_WITH_BLOCK, 2 = REDUCE_WITH_BLOCK, 3 = REDUCE_NON_BLOCK
         private String orderRef;
         private bool transmit; // if false, order will be created but not transmited
         private int parentId; // Parent order Id, to associate Auto STP or TRAIL orders with the original order.
@@ -253,7 +253,7 @@ namespace Krs.Ats.IBNet
         /// 3 = Remaining orders are proportionately reduced in size with no block
         /// If you use a value "with block"gives your order has overfill protection. This means  that only one order in the group will be routed at a time to remove the possibility of an overfill.
         /// </summary>
-        public OCAType OcaType
+        public OcaType OcaType
         {
             get { return ocaType; }
             set { ocaType = value; }

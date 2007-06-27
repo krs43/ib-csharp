@@ -84,7 +84,7 @@ namespace Krs.Ats.IBNet
                     // send the set server logging level message
                     try
                     {
-                        send((int)OutgoingMessage.SET_SERVER_LOGLEVEL);
+                        send((int)OutgoingMessage.SetServerLogLevel);
                         send(VERSION);
                         send(value);
                     }
@@ -292,7 +292,7 @@ namespace Krs.Ats.IBNet
                 // send cancel mkt data msg
                 try
                 {
-                    send((int)OutgoingMessage.CANCEL_SCANNER_SUBSCRIPTION);
+                    send((int)OutgoingMessage.CancelScannerSubscription);
                     send(VERSION);
                     send(tickerId);
                 }
@@ -327,7 +327,7 @@ namespace Krs.Ats.IBNet
 				
                 try
                 {
-                    send((int)OutgoingMessage.REQ_SCANNER_PARAMETERS);
+                    send((int)OutgoingMessage.RequestScannerParameters);
                     send(VERSION);
                 }
                 catch (Exception e)
@@ -361,7 +361,7 @@ namespace Krs.Ats.IBNet
 				
                 try
                 {
-                    send((int)OutgoingMessage.REQ_SCANNER_SUBSCRIPTION);
+                    send((int)OutgoingMessage.RequestScannerSubscription);
                     send(VERSION);
                     send(tickerId);
                     sendMax(subscription.NumberOfRows);
@@ -418,7 +418,7 @@ namespace Krs.Ats.IBNet
                 try
                 {
                     // send req mkt data msg
-                    send((int)OutgoingMessage.REQ_MKT_DATA);
+                    send((int)OutgoingMessage.RequestMarketData);
                     send(VERSION);
                     send(tickerId);
 					
@@ -426,7 +426,7 @@ namespace Krs.Ats.IBNet
                     send(contract.SecType.ToString());
                     send(contract.Expiry);
                     send(contract.Strike);
-                    send(((contract.Right == RightType.UNDEFINED) ? "" : contract.Right.ToString()));
+                    send(((contract.Right == RightType.Undefined) ? "" : contract.Right.ToString()));
                     if (m_serverVersion >= 15)
                     {
                         send(contract.Multiplier);
@@ -441,7 +441,7 @@ namespace Krs.Ats.IBNet
                     {
                         send(contract.LocalSymbol);
                     }
-                    if (m_serverVersion >= 8 && contract.SecType == SecurityType.BAG)
+                    if (m_serverVersion >= 8 && contract.SecType == SecurityType.Bag)
                     {
                         if (contract.ComboLegs == null)
                         {
@@ -507,7 +507,7 @@ namespace Krs.Ats.IBNet
                 // send cancel mkt data msg
                 try
                 {
-                    send((int)OutgoingMessage.CANCEL_HISTORICAL_DATA);
+                    send((int)OutgoingMessage.CancelHistoricalData);
                     send(VERSION);
                     send(tickerId);
                 }
@@ -542,14 +542,14 @@ namespace Krs.Ats.IBNet
                         return ;
                     }
 
-                    send((int)OutgoingMessage.REQ_HISTORICAL_DATA);
+                    send((int)OutgoingMessage.RequestHistoricalData);
                     send(VERSION);
                     send(tickerId);
                     send(contract.Symbol);
                     send(contract.SecType.ToString());
                     send(contract.Expiry);
                     send(contract.Strike);
-                    send(((contract.Right == RightType.UNDEFINED) ? "" : contract.Right.ToString()));
+                    send(((contract.Right == RightType.Undefined) ? "" : contract.Right.ToString()));
                     send(contract.Multiplier);
                     send(contract.Exchange);
                     send(contract.PrimaryExch);
@@ -571,7 +571,7 @@ namespace Krs.Ats.IBNet
                     {
                         send(formatDate);
                     }
-                    if (contract.SecType == SecurityType.BAG)
+                    if (contract.SecType == SecurityType.Bag)
                     {
                         if (contract.ComboLegs == null)
                         {
@@ -626,14 +626,14 @@ namespace Krs.Ats.IBNet
                 try
                 {
                     // send req mkt data msg
-                    send((int)OutgoingMessage.REQ_CONTRACT_DATA);
+                    send((int)OutgoingMessage.RequestContractData);
                     send(VERSION);
 					
                     send(contract.Symbol);
                     send(contract.SecType.ToString());
                     send(contract.Expiry);
                     send(contract.Strike);
-                    send(((contract.Right == RightType.UNDEFINED) ? "" : contract.Right.ToString()));
+                    send(((contract.Right == RightType.Undefined) ? "" : contract.Right.ToString()));
                     if (m_serverVersion >= 15)
                     {
                         send(contract.Multiplier);
@@ -679,7 +679,7 @@ namespace Krs.Ats.IBNet
                 try
                 {
                     // send req mkt data msg
-                    send((int)OutgoingMessage.REQ_MKT_DEPTH);
+                    send((int)OutgoingMessage.RequestMarketDepth);
                     send(VERSION);
                     send(tickerId);
 					
@@ -687,7 +687,7 @@ namespace Krs.Ats.IBNet
                     send(contract.SecType.ToString());
                     send(contract.Expiry);
                     send(contract.Strike);
-                    send(((contract.Right == RightType.UNDEFINED) ? "" : contract.Right.ToString()));
+                    send(((contract.Right == RightType.Undefined) ? "" : contract.Right.ToString()));
                     if (m_serverVersion >= 15)
                     {
                         send(contract.Multiplier);
@@ -726,7 +726,7 @@ namespace Krs.Ats.IBNet
                 // send cancel mkt data msg
                 try
                 {
-                    send((int)OutgoingMessage.CANCEL_MKT_DATA);
+                    send((int)OutgoingMessage.CancelMarketData);
                     send(VERSION);
                     send(tickerId);
                 }
@@ -763,7 +763,7 @@ namespace Krs.Ats.IBNet
                 // send cancel mkt data msg
                 try
                 {
-                    send((int)OutgoingMessage.CANCEL_MKT_DEPTH);
+                    send((int)OutgoingMessage.CancelMarketDepth);
                     send(VERSION);
                     send(tickerId);
                 }
@@ -798,14 +798,14 @@ namespace Krs.Ats.IBNet
                         return ;
                     }
 
-                    send((int)OutgoingMessage.EXERCISE_OPTIONS);
+                    send((int)OutgoingMessage.ExerciseOptions);
                     send(VERSION);
                     send(tickerId);
                     send(contract.Symbol);
                     send(contract.SecType.ToString());
                     send(contract.Expiry);
                     send(contract.Strike);
-                    send(((contract.Right == RightType.UNDEFINED) ? "" : contract.Right.ToString()));
+                    send(((contract.Right == RightType.Undefined) ? "" : contract.Right.ToString()));
                     send(contract.Multiplier);
                     send(contract.Exchange);
                     send(contract.Currency);
@@ -841,7 +841,7 @@ namespace Krs.Ats.IBNet
                 // send place order msg
                 try
                 {
-                    send((int)OutgoingMessage.PLACE_ORDER);
+                    send((int)OutgoingMessage.PlaceOrder);
                     send(VERSION);
                     send(id);
 					
@@ -850,7 +850,7 @@ namespace Krs.Ats.IBNet
                     send(contract.SecType.ToString());
                     send(contract.Expiry);
                     send(contract.Strike);
-                    send(((contract.Right == RightType.UNDEFINED) ? "" : contract.Right.ToString()));
+                    send(((contract.Right == RightType.Undefined) ? "" : contract.Right.ToString()));
                     if (m_serverVersion >= 15)
                     {
                         send(contract.Multiplier);
@@ -901,7 +901,7 @@ namespace Krs.Ats.IBNet
                     }
 					
                     // Send combo legs for BAG requests
-                    if (m_serverVersion >= 8 && contract.SecType == SecurityType.BAG)
+                    if (m_serverVersion >= 8 && contract.SecType == SecurityType.Bag)
                     {
                         if (contract.ComboLegs == null)
                         {
@@ -1047,7 +1047,7 @@ namespace Krs.Ats.IBNet
                 // send cancel order msg
                 try
                 {
-                    send((int)OutgoingMessage.REQ_ACCOUNT_DATA);
+                    send((int)OutgoingMessage.RequestAccountData);
                     send(VERSION);
                     send(subscribe);
 					
@@ -1083,7 +1083,7 @@ namespace Krs.Ats.IBNet
                 // send cancel order msg
                 try
                 {
-                    send((int)OutgoingMessage.REQ_EXECUTIONS);
+                    send((int)OutgoingMessage.RequestExecutions);
                     send(VERSION);
 					
                     // Send the execution rpt filter data
@@ -1126,7 +1126,7 @@ namespace Krs.Ats.IBNet
                 // send cancel order msg
                 try
                 {
-                    send((int)OutgoingMessage.CANCEL_ORDER);
+                    send((int)OutgoingMessage.CancelOrder);
                     send(VERSION);
                     send(id);
                 }
@@ -1156,7 +1156,7 @@ namespace Krs.Ats.IBNet
                 // send cancel order msg
                 try
                 {
-                    send((int)OutgoingMessage.REQ_OPEN_ORDERS);
+                    send((int)OutgoingMessage.RequestOpenOrders);
                     send(VERSION);
                 }
                 catch (Exception e)
@@ -1184,7 +1184,7 @@ namespace Krs.Ats.IBNet
 				
                 try
                 {
-                    send((int)OutgoingMessage.REQ_IDS);
+                    send((int)OutgoingMessage.RequestIds);
                     send(VERSION);
                     send(numIds);
                 }
@@ -1213,7 +1213,7 @@ namespace Krs.Ats.IBNet
 				
                 try
                 {
-                    send((int)OutgoingMessage.REQ_NEWS_BULLETINS);
+                    send((int)OutgoingMessage.RequestNewsBulletins);
                     send(VERSION);
                     send(allMsgs);
                 }
@@ -1243,7 +1243,7 @@ namespace Krs.Ats.IBNet
                 // send cancel order msg
                 try
                 {
-                    send((int)OutgoingMessage.CANCEL_NEWS_BULLETINS);
+                    send((int)OutgoingMessage.CancelNewsBulletins);
                     send(VERSION);
                 }
                 catch (Exception e)
@@ -1272,7 +1272,7 @@ namespace Krs.Ats.IBNet
                 // send req open orders msg
                 try
                 {
-                    send((int)OutgoingMessage.REQ_AUTO_OPEN_ORDERS);
+                    send((int)OutgoingMessage.RequestAutoOpenOrders);
                     send(VERSION);
                     send(bAutoBind);
                 }
@@ -1302,7 +1302,7 @@ namespace Krs.Ats.IBNet
                 // send req all open orders msg
                 try
                 {
-                    send((int)OutgoingMessage.REQ_ALL_OPEN_ORDERS);
+                    send((int)OutgoingMessage.RequestAllOpenOrders);
                     send(VERSION);
                 }
                 catch (Exception e)
@@ -1331,7 +1331,7 @@ namespace Krs.Ats.IBNet
                 // send req FA managed accounts msg
                 try
                 {
-                    send((int)OutgoingMessage.REQ_MANAGED_ACCTS);
+                    send((int)OutgoingMessage.RequestManagedAccounts);
                     send(VERSION);
                 }
                 catch (Exception e)
@@ -1366,7 +1366,7 @@ namespace Krs.Ats.IBNet
 				
                 try
                 {
-                    send((int)OutgoingMessage.REQ_FA);
+                    send((int)OutgoingMessage.RequestFA);
                     send(VERSION);
                     send(faDataType);
                 }
@@ -1402,7 +1402,7 @@ namespace Krs.Ats.IBNet
 				
                 try
                 {
-                    send((int)OutgoingMessage.REPLACE_FA);
+                    send((int)OutgoingMessage.ReplaceFA);
                     send(VERSION);
                     send(faDataType);
                     send(xml);

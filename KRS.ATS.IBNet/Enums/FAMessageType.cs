@@ -1,16 +1,29 @@
 using System;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Krs.Ats.IBNet
 {
     /// <summary>
-    /// FA msg data types
+    /// Financial Advisor Data Message
     /// </summary>
     public enum FAMessageType : int
     {
-        GROUPS = 1,
-        PROFILES = 2,
-        ALIASES = 3
+        /// <summary>
+        /// Financial Advisor Groups
+        /// </summary>
+        [Description("GROUPS")]
+        Groups = 1,
+        /// <summary>
+        /// Financial Advisor Profiles
+        /// </summary>
+        [Description("PROFILES")]
+        Profiles = 2,
+        /// <summary>
+        /// Financial Advisor Aliases
+        /// </summary>
+        [Description("ALIASES")]
+        Aliases = 3
     }
 }

@@ -1,10 +1,14 @@
 using System;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Krs.Ats.IBNet
 {
-    public enum OCAType : int
+    /// <summary>
+    /// OCA Type Options
+    /// </summary>
+    public enum OcaType : int
     {
         /// <summary>
         /// 1 = Cancel all remaining orders with block

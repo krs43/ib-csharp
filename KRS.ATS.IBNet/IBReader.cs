@@ -121,16 +121,16 @@ namespace Krs.Ats.IBNet
         #endregion
 
         #region Process Message
-        /// <summary>Overridden in subclass. </summary>
+        /// <summary>Overridden in subclass.</summary>
         protected internal virtual bool ProcessMsg(IncomingMessage msgId)
         {
-            if (msgId == IncomingMessage.ERROR)
+            if (msgId == IncomingMessage.Error)
                 return false;
 			
             switch (msgId)
             {
 				
-                case IncomingMessage.TICK_PRICE:  {
+                case IncomingMessage.TickPrice:  {
                     int version = ReadInt();
                     int tickerId = ReadInt();
                     int tickType = ReadInt();
@@ -173,7 +173,7 @@ namespace Krs.Ats.IBNet
                     break;
                 }
 
-            case IncomingMessage.TICK_SIZE:
+            case IncomingMessage.TickSize:
                 {
                     int version = ReadInt();
                     int tickerId = ReadInt();
@@ -185,7 +185,7 @@ namespace Krs.Ats.IBNet
                 }
 
 
-            case IncomingMessage.TICK_OPTION_COMPUTATION:
+            case IncomingMessage.TickOptionComputation:
                 {
                     int version = ReadInt();
                     int tickerId = ReadInt();
@@ -205,7 +205,7 @@ namespace Krs.Ats.IBNet
                         delta = System.Double.MaxValue;
                     }
                     double modelPrice, pvDividend;
-                    if (tickType == (int)TickType.MODEL_OPTION)
+                    if (tickType == (int)TickType.ModelOption)
                     {
                         // introduced in version == 5
                         modelPrice = ReadDouble();
@@ -221,7 +221,7 @@ namespace Krs.Ats.IBNet
                 }
 
 
-            case IncomingMessage.TICK_GENERIC:
+            case IncomingMessage.TickGeneric:
                 {
                     int version = ReadInt();
                     int tickerId = ReadInt();
@@ -233,7 +233,7 @@ namespace Krs.Ats.IBNet
                 }
 
 
-            case IncomingMessage.TICK_STRING:
+            case IncomingMessage.TickString:
                 {
                     int version = ReadInt();
                     int tickerId = ReadInt();
@@ -245,7 +245,7 @@ namespace Krs.Ats.IBNet
                 }
 
 
-            case IncomingMessage.TICK_EFP:
+            case IncomingMessage.TickEfp:
                 {
                     int version = ReadInt();
                     int tickerId = ReadInt();
@@ -262,7 +262,7 @@ namespace Krs.Ats.IBNet
                 }
 
 
-            case IncomingMessage.ORDER_STATUS:
+            case IncomingMessage.OrderStatus:
                 {
                     int version = ReadInt();
                     int id = ReadInt();
@@ -300,7 +300,7 @@ namespace Krs.Ats.IBNet
                 }
 
 
-            case IncomingMessage.ACCT_VALUE:
+            case IncomingMessage.AccountValue:
                 {
                     int version = ReadInt();
                     System.String key = ReadStr();
@@ -316,7 +316,7 @@ namespace Krs.Ats.IBNet
                 }
 
 
-            case IncomingMessage.PORTFOLIO_VALUE:
+            case IncomingMessage.PortfolioValue:
                 {
                     int version = ReadInt();
                     Contract contract = new Contract();
@@ -325,7 +325,7 @@ namespace Krs.Ats.IBNet
                     contract.Expiry = ReadStr();
                     contract.Strike = ReadDouble();
                     string rstr = ReadStr();
-                    contract.Right = (rstr.Length <= 0 ? RightType.UNDEFINED : (RightType)Enum.Parse(typeof(RightType), rstr));
+                    contract.Right = (rstr.Length <= 0 ? RightType.Undefined : (RightType)Enum.Parse(typeof(RightType), rstr));
                     contract.Currency = ReadStr();
                     if (version >= 2)
                     {
@@ -357,7 +357,7 @@ namespace Krs.Ats.IBNet
                 }
 
 
-            case IncomingMessage.ACCT_UPDATE_TIME:
+            case IncomingMessage.AccountUpdateTime:
                 {
                     int version = ReadInt();
                     System.String timeStamp = ReadStr();
@@ -366,7 +366,7 @@ namespace Krs.Ats.IBNet
                 }
 
 
-            case IncomingMessage.ERR_MSG:
+            case IncomingMessage.ErrorMessage:
                 {
                     int version = ReadInt();
                     if (version < 2)
@@ -385,7 +385,7 @@ namespace Krs.Ats.IBNet
                 }
 
 
-            case IncomingMessage.OPEN_ORDER:
+            case IncomingMessage.OpenOrder:
                 {
                     // read version
                     int version = ReadInt();
@@ -401,7 +401,7 @@ namespace Krs.Ats.IBNet
                     contract.Expiry = ReadStr();
                     contract.Strike = ReadDouble();
                     string rstr = ReadStr();
-                    contract.Right = (rstr.Length <= 0 ? RightType.UNDEFINED : (RightType)Enum.Parse(typeof(RightType), rstr));
+                    contract.Right = (rstr.Length <= 0 ? RightType.Undefined : (RightType)Enum.Parse(typeof(RightType), rstr));
                     contract.Exchange = ReadStr();
                     contract.Currency = ReadStr();
                     if (version >= 2)
@@ -414,7 +414,7 @@ namespace Krs.Ats.IBNet
                     order.Action = (ActionSide)Enum.Parse(typeof(ActionSide), ReadStr());
                     order.TotalQuantity = ReadInt();
                     // BUG: Parse may fail as the string may be empty...
-                    order.OrderType = (OrderType)Enum.Parse(typeof(ActionSide), ReadStr());
+                    order.OrderType = (OrderType)Enum.Parse(typeof(OrderType), ReadStr());
                     order.LmtPrice = ReadDouble();
                     order.AuxPrice = ReadDouble();
                     // BUG: Parse may fail as the string may be empty...
@@ -480,7 +480,7 @@ namespace Krs.Ats.IBNet
                         order.SweepToFill = ReadBoolFromInt();
                         order.AllOrNone = ReadBoolFromInt();
                         order.MinQty = ReadInt();
-                        order.OcaType = (OCAType)ReadInt();
+                        order.OcaType = (OcaType)ReadInt();
                         order.ETradeOnly = ReadBoolFromInt();
                         order.FirmQuoteOnly = ReadBoolFromInt();
                         order.NbboPriceCap = ReadDouble();
@@ -533,7 +533,7 @@ namespace Krs.Ats.IBNet
                 }
 
 
-            case IncomingMessage.NEXT_VALID_ID:
+            case IncomingMessage.NextValidID:
                 {
                     int version = ReadInt();
                     int orderId = ReadInt();
@@ -542,7 +542,7 @@ namespace Krs.Ats.IBNet
                 }
 
 
-            case IncomingMessage.SCANNER_DATA:
+            case IncomingMessage.ScannerData:
                 {
                     ContractDetails contract = new ContractDetails();
                     int version = ReadInt();
@@ -556,7 +556,7 @@ namespace Krs.Ats.IBNet
                         contract.Summary.Expiry = ReadStr();
                         contract.Summary.Strike = ReadDouble();
                         string rstr = ReadStr();
-                        contract.Summary.Right = (rstr.Length <= 0 ? RightType.UNDEFINED : (RightType)Enum.Parse(typeof(RightType), rstr));
+                        contract.Summary.Right = (rstr.Length <= 0 ? RightType.Undefined : (RightType)Enum.Parse(typeof(RightType), rstr));
                         contract.Summary.Exchange = ReadStr();
                         contract.Summary.Currency = ReadStr();
                         contract.Summary.LocalSymbol = ReadStr();
@@ -576,7 +576,7 @@ namespace Krs.Ats.IBNet
                 }
 
 
-            case IncomingMessage.CONTRACT_DATA:
+            case IncomingMessage.ContractData:
                 {
                     int version = ReadInt();
                     ContractDetails contract = new ContractDetails();
@@ -585,7 +585,7 @@ namespace Krs.Ats.IBNet
                     contract.Summary.Expiry = ReadStr();
                     contract.Summary.Strike = ReadDouble();
                     string rstr = ReadStr();
-                    contract.Summary.Right = (rstr.Length <= 0 ? RightType.UNDEFINED : (RightType)Enum.Parse(typeof(RightType), rstr));
+                    contract.Summary.Right = (rstr.Length <= 0 ? RightType.Undefined : (RightType)Enum.Parse(typeof(RightType), rstr));
                     contract.Summary.Exchange = ReadStr();
                     contract.Summary.Currency = ReadStr();
                     contract.Summary.LocalSymbol = ReadStr();
@@ -604,7 +604,7 @@ namespace Krs.Ats.IBNet
                     break;
                 }
 
-            case IncomingMessage.BOND_CONTRACT_DATA:
+            case IncomingMessage.BondContractData:
                 {
                     int version = ReadInt();
                     ContractDetails contract = new ContractDetails();
@@ -641,7 +641,7 @@ namespace Krs.Ats.IBNet
                     break;
                 }
 
-            case IncomingMessage.EXECUTION_DATA:
+            case IncomingMessage.ExecutionData:
                 {
                     int version = ReadInt();
                     int orderId = ReadInt();
@@ -652,7 +652,7 @@ namespace Krs.Ats.IBNet
                     contract.Expiry = ReadStr();
                     contract.Strike = ReadDouble();
                     string rstr = ReadStr();
-                    contract.Right = (rstr.Length <= 0 ? RightType.UNDEFINED : (RightType)Enum.Parse(typeof(RightType), rstr));
+                    contract.Right = (rstr.Length <= 0 ? RightType.Undefined : (RightType)Enum.Parse(typeof(RightType), rstr));
                     contract.Exchange = ReadStr();
                     contract.Currency = ReadStr();
                     contract.LocalSymbol = ReadStr();
@@ -683,7 +683,7 @@ namespace Krs.Ats.IBNet
                     break;
                 }
 
-            case IncomingMessage.MARKET_DEPTH:
+            case IncomingMessage.MarketDepth:
                 {
                     int version = ReadInt();
                     int id = ReadInt();
@@ -698,7 +698,7 @@ namespace Krs.Ats.IBNet
                     break;
                 }
 
-            case IncomingMessage.MARKET_DEPTH_L2:
+            case IncomingMessage.MarketDepthL2:
                 {
                     int version = ReadInt();
                     int id = ReadInt();
@@ -714,7 +714,7 @@ namespace Krs.Ats.IBNet
                     break;
                 }
 
-            case IncomingMessage.NEWS_BULLETINS:
+            case IncomingMessage.NewsBulletins:
                 {
                     int version = ReadInt();
                     int newsMsgId = ReadInt();
@@ -726,7 +726,7 @@ namespace Krs.Ats.IBNet
                     break;
                 }
 
-            case IncomingMessage.MANAGED_ACCTS:
+            case IncomingMessage.ManagedAccounts:
                 {
                     int version = ReadInt();
                     System.String accountsList = ReadStr();
@@ -735,7 +735,7 @@ namespace Krs.Ats.IBNet
                     break;
                 }
 
-            case IncomingMessage.RECEIVE_FA:
+            case IncomingMessage.ReceiveFA:
                 {
                     int version = ReadInt();
                     int faDataType = ReadInt();
@@ -745,7 +745,7 @@ namespace Krs.Ats.IBNet
                     break;
                 }
 
-            case IncomingMessage.HISTORICAL_DATA:
+            case IncomingMessage.HistoricalData:
                 {
                     int version = ReadInt();
                     int reqId = ReadInt();
@@ -782,7 +782,7 @@ namespace Krs.Ats.IBNet
                     break;
                 }
 
-            case IncomingMessage.SCANNER_PARAMETERS:
+            case IncomingMessage.ScannerParameters:
                 {
                     int version = ReadInt();
                     System.String xml = ReadStr();

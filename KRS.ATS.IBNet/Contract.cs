@@ -45,7 +45,7 @@ namespace Krs.Ats.IBNet
 
         #region Constructors
         public Contract() :
-            this(null, SecurityType.STK, null, null)
+            this(null, SecurityType.Undefined, null, null)
         {
             
         }
@@ -59,7 +59,7 @@ namespace Krs.Ats.IBNet
         /// <param name="Currency"></param>
         /// <param name="Expiry"></param>
         public Contract(string symbol, string exchange, SecurityType secType, string currency, string expiry) :
-            this(symbol, secType, expiry, 0, RightType.UNDEFINED, null, exchange, currency, null, null)
+            this(symbol, secType, expiry, 0, RightType.Undefined, null, exchange, currency, null, null)
         {
             
         }
@@ -75,7 +75,7 @@ namespace Krs.Ats.IBNet
         /// (IBM can trade in GBP or USD).  Given the existence of this kind of ambiguity,
         /// it is a good idea to always specify the currency.</param>
         public Contract(String localSymbol, SecurityType secType, String exchange, String currency) :
-            this(null, secType, null, 0, RightType.UNDEFINED, null, exchange, currency, localSymbol, null)
+            this(null, secType, null, 0, RightType.Undefined, null, exchange, currency, localSymbol, null)
         {
         }
 
@@ -385,7 +385,7 @@ namespace Krs.Ats.IBNet
 				
                 if (bContractEquals)
                 {
-                    if (secType == SecurityType.BOND)
+                    if (secType == SecurityType.Bond)
                     {
                         bContractEquals = (putable == other.putable) && (callable == other.callable) && (convertible == other.convertible) && (coupon == other.coupon) && (nextOptionPartial == other.nextOptionPartial);
                         if (bContractEquals)
@@ -414,12 +414,12 @@ namespace Krs.Ats.IBNet
                     else
                     {
                         String l_thisExpiry = expiry ?? "";
-                        String l_thisRight = ((right == RightType.UNDEFINED) ? "" : right.ToString());
+                        String l_thisRight = ((right == RightType.Undefined) ? "" : right.ToString());
                         String l_thisMultiplier = multiplier ?? "";
                         String l_thisLocalSymbol = localSymbol ?? "";
 						
                         String l_otherExpiry = other.expiry ?? "";
-                        String l_otherRight = ((other.right == RightType.UNDEFINED)?"" : right.ToString());
+                        String l_otherRight = ((other.right == RightType.Undefined) ? "" : right.ToString());
                         String l_otherMultiplier = other.multiplier ?? "";
                         String l_otherLocalSymbol = other.localSymbol ?? "";
 						

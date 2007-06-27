@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace Krs.Ats.IBNet
 {
@@ -7,7 +8,7 @@ namespace Krs.Ats.IBNet
         #region Private Variables
         private int conId;
         private int ratio;
-        private ActionType action; // BUY/SELL
+        private ActionSide action; // BUY/SELL
         private String exchange;
         private ComboOpenClose openClose;
         #endregion
@@ -15,18 +16,16 @@ namespace Krs.Ats.IBNet
         #region Constructors
         public ComboLeg()
         {
-            conId = 0;
-            ratio = 0;
-            openClose = 0;
+            
         }
 		
-        public ComboLeg(int ConId, int Ratio, ActionType Action, String Exchange, ComboOpenClose OpenClose)
+        public ComboLeg(int conId, int ratio, ActionSide action, String exchange, ComboOpenClose openClose)
         {
-            conId = ConId;
-            ratio = Ratio;
-            action = Action;
-            exchange = Exchange;
-            openClose = OpenClose;
+            this.conId = conId;
+            this.ratio = ratio;
+            this.action = action;
+            this.exchange = exchange;
+            this.openClose = openClose;
         }
 
         #endregion
@@ -53,7 +52,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// The side (buy or sell) for the leg you are constructing.
         /// </summary>
-        public ActionType Action
+        public ActionSide Action
         {
             get { return action; }
             set { action = value; }
@@ -82,25 +81,25 @@ namespace Krs.Ats.IBNet
         #endregion
 
         #region Object Overrides
-        public  override bool Equals(Object p_other)
+        public  override bool Equals(Object obj)
         {
-            if (this == p_other)
+            if (this == obj)
             {
                 return true;
             }
-            else if (p_other == null)
+            else if (obj == null)
             {
                 return false;
             }
 			
-            ComboLeg l_theOther = (ComboLeg) p_other;
-            String l_thisExchange = exchange ?? "";
+            ComboLeg other = (ComboLeg) obj;
+            String thisExchange = exchange ?? "";
 			
-            return (action == l_theOther.action &&
-                    String.Compare(l_thisExchange, l_theOther.exchange, true) == 0 &&
-                    conId == l_theOther.conId &&
-                    ratio == l_theOther.ratio &&
-                    openClose == l_theOther.openClose);
+            return (action == other.action &&
+                    String.Compare(thisExchange, other.exchange, true, CultureInfo.InvariantCulture) == 0 &&
+                    conId == other.conId &&
+                    ratio == other.ratio &&
+                    openClose == other.openClose);
         }
 
         public override int GetHashCode()

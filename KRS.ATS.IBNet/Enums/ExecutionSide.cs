@@ -1,12 +1,25 @@
 using System;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Krs.Ats.IBNet
 {
+    /// <summary>
+    /// Describes wether a security was bought or sold in an execution.
+    /// The past tense equivalent of ActionSide.
+    /// </summary>
     public enum ExecutionSide
     {
-        BOT,
-        SLD
+        /// <summary>
+        /// Securities were bought.
+        /// </summary>
+        [Description("BOT")]
+        Bought,
+        /// <summary>
+        /// Securities were sold.
+        /// </summary>
+        [Description("SLD")]
+        Sold
     }
 }
