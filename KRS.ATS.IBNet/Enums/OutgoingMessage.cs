@@ -11,6 +11,11 @@ namespace Krs.Ats.IBNet
     public enum OutgoingMessage
     {
         /// <summary>
+        /// Undefined Outgoing Message
+        /// </summary>
+        [Description("")]
+        Underfined = 0,
+        /// <summary>
         /// Request Market Data
         /// </summary>
         [Description("REQ_MKT_DATA")]

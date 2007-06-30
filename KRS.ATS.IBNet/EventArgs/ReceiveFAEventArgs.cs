@@ -7,7 +7,7 @@ namespace Krs.Ats.IBNet
     public class ReceiveFAEventArgs : EventArgs
     {
         private readonly int faDataType;
-        public int FaDataType
+        public int FADataType
         {
             get
             {

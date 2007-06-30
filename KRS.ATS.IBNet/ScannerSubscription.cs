@@ -4,12 +4,8 @@ namespace Krs.Ats.IBNet
 {
     public class ScannerSubscription
     {
-        #region Values
-        public const int NO_ROW_NUMBER_SPECIFIED = -1;
-        #endregion
-
         #region Private Variables
-        private int numberOfRows = NO_ROW_NUMBER_SPECIFIED;
+        private int numberOfRows = -1;  //No row number specified
         private String instrument;
         private String locationCode;
         private String scanCode;
@@ -152,7 +148,7 @@ namespace Krs.Ats.IBNet
         /// Filter out contracts with an S&P rating below this value.
         /// Can be left blank.
         /// </summary>
-        public string SpRatingAbove
+        public string SPRatingAbove
         {
             get { return spRatingAbove; }
             set { spRatingAbove = value; }
@@ -162,7 +158,7 @@ namespace Krs.Ats.IBNet
         /// Filter out contracts with an S&P rating above this value.
         /// Can be left blank.
         /// </summary>
-        public string SpRatingBelow
+        public string SPRatingBelow
         {
             get { return spRatingBelow; }
             set { spRatingBelow = value; }

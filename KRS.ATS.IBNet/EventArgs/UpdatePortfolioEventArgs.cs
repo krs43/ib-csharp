@@ -54,21 +54,21 @@ namespace Krs.Ats.IBNet
             }
         }
 
-        private readonly double unrealizedPNL;
-        public double UnrealizedPNL
+        private readonly double unrealizedPnl;
+        public double UnrealizedPnl
         {
             get
             {
-                return unrealizedPNL;
+                return unrealizedPnl;
             }
         }
 
-        private readonly double realizedPNL;
-        public double RealizedPNL
+        private readonly double realizedPnl;
+        public double RealizedPnl
         {
             get
             {
-                return realizedPNL;
+                return realizedPnl;
             }
         }
 
@@ -81,12 +81,12 @@ namespace Krs.Ats.IBNet
             }
         }
 
-        public UpdatePortfolioEventArgs(Contract contract, int position, double marketPrice, double marketValue, double averageCost, double unrealizedPNL, double realizedPNL, string accountName)
+        public UpdatePortfolioEventArgs(Contract contract, int position, double marketPrice, double marketValue, double averageCost, double unrealizedPnl, double realizedPnl, string accountName)
         {
             this.contract = contract;
             this.accountName = accountName;
-            this.realizedPNL = realizedPNL;
-            this.unrealizedPNL = unrealizedPNL;
+            this.realizedPnl = realizedPnl;
+            this.unrealizedPnl = unrealizedPnl;
             this.averageCost = averageCost;
             this.marketValue = marketValue;
             this.marketPrice = marketPrice;

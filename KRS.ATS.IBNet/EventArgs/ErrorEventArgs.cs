@@ -17,8 +17,8 @@ namespace Krs.Ats.IBNet
                 return tickerId;
             }
         }
-        private readonly ErrorMessages errorCode;
-        public ErrorMessages ErrorCode
+        private readonly ErrorMessage errorCode;
+        public ErrorMessage ErrorCode
         {
             get
             {
@@ -34,7 +34,7 @@ namespace Krs.Ats.IBNet
             }
         }
 
-        public ErrorEventArgs(int tickerId, ErrorMessages errorCode, string errorMsg)
+        public ErrorEventArgs(int tickerId, ErrorMessage errorCode, string errorMsg)
         {
             this.tickerId = tickerId;
             this.errorMsg = errorMsg;

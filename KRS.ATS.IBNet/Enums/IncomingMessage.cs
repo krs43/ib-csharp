@@ -8,6 +8,11 @@ namespace Krs.Ats.IBNet
     public enum IncomingMessage : int
     {
         /// <summary>
+        /// Undefined Incoming Message
+        /// </summary>
+        [Description("")]
+        Undefined = 0,
+        /// <summary>
         /// Error
         /// </summary>
         [Description("ERROR")]
@@ -56,7 +61,7 @@ namespace Krs.Ats.IBNet
         /// Next Valid ID
         /// </summary>
         [Description("NEXT_VALID_ID")]
-        NextValidID = 9,
+        NextValidId = 9,
         /// <summary>
         /// Contract Data
         /// </summary>

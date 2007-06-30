@@ -7,7 +7,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Tick EFP Event Arguments
     /// </summary>
-    public class TickEFPEventArgs : EventArgs
+    public class TickEfpEventArgs : EventArgs
     {
         private readonly int tickerId;
         public int TickerId
@@ -18,8 +18,8 @@ namespace Krs.Ats.IBNet
             }
         }
 
-        private readonly int tickType;
-        public int TickType
+        private readonly TickType tickType;
+        public TickType TickType
         {
             get
             {
@@ -89,7 +89,7 @@ namespace Krs.Ats.IBNet
             }
         }
 
-        public TickEFPEventArgs(int tickerId, int tickType, double basisPointsl, string formattedBasisPoints, double impliedFuture, int holdDays, string futureExpiry, double dividendImpact, double dividendsToExpiry)
+        public TickEfpEventArgs(int tickerId, TickType tickType, double basisPointsl, string formattedBasisPoints, double impliedFuture, int holdDays, string futureExpiry, double dividendImpact, double dividendsToExpiry)
         {
             this.tickerId = tickerId;
             this.dividendsToExpiry = dividendsToExpiry;

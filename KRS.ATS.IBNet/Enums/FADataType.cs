@@ -8,8 +8,13 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Financial Advisor Data Message
     /// </summary>
-    public enum FAMessageType : int
+    public enum FADataType : int
     {
+        /// <summary>
+        /// Undefined FA Message Type
+        /// </summary>
+        [Description("")]
+        Undefined = 0,
         /// <summary>
         /// Financial Advisor Groups
         /// </summary>

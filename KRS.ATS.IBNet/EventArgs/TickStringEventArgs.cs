@@ -14,27 +14,27 @@ namespace Krs.Ats.IBNet
                 return tickerId;
             }
         }
-        private readonly int tickType;
-        public int TickType
+        private readonly TickType tickType;
+        public TickType TickType
         {
             get
             {
                 return tickType;
             }
         }
-        private readonly string value_Renamed;
-        public string Value_Renamed
+        private readonly string valueRenamed;
+        public string ValueRenamed
         {
             get
             {
-                return value_Renamed;
+                return valueRenamed;
             }
         }
 
-        public TickStringEventArgs(int tickerId, int tickType, string value_Renamed)
+        public TickStringEventArgs(int tickerId, TickType tickType, string valueRenamed)
         {
             this.tickerId = tickerId;
-            this.value_Renamed = value_Renamed;
+            this.valueRenamed = valueRenamed;
             this.tickType = tickType;
         }
     }

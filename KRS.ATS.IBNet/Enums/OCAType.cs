@@ -11,6 +11,10 @@ namespace Krs.Ats.IBNet
     public enum OcaType : int
     {
         /// <summary>
+        /// Undefined Oca Type
+        /// </summary>
+        Undefined = 0,
+        /// <summary>
         /// 1 = Cancel all remaining orders with block
         /// </summary>
         CancelAll = 1,

@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace Krs.Ats.IBNet
 {
@@ -19,7 +20,7 @@ namespace Krs.Ats.IBNet
         #region Constructors
         public ExecutionFilter()
         {
-            clientId = 0;
+
         }
 		
         public ExecutionFilter(int clientId, String acctCode, DateTime time, String symbol, SecurityType secType, String exchange, ActionSide side)
@@ -106,26 +107,30 @@ namespace Krs.Ats.IBNet
         #endregion
 
         #region Object Overrides
-        public  override bool Equals(System.Object p_other)
+        public  override bool Equals(System.Object obj)
         {
-            bool l_bRetVal = false;
-			
-            if (p_other == null)
+            bool bRetVal;
+            ExecutionFilter other = obj as ExecutionFilter;
+
+            if (other == null)
             {
-                l_bRetVal = false;
+                bRetVal = false;
             }
-            else if (this == p_other)
+            else if (this == other)
             {
-                l_bRetVal = true;
+                bRetVal = true;
             }
             else
             {
-                ExecutionFilter l_theOther = (ExecutionFilter) p_other;
-                l_bRetVal = (clientId == l_theOther.clientId && acctCode.ToUpper().Equals(l_theOther.acctCode.ToUpper()) && time.Equals(l_theOther.time) && symbol.ToUpper().Equals(l_theOther.symbol.ToUpper()) && secType.Equals(l_theOther.secType) && exchange.ToUpper().Equals(l_theOther.exchange.ToUpper()) && side.Equals(l_theOther.side));
+                bRetVal = (clientId == other.clientId && (String.Compare(acctCode, other.acctCode, true, CultureInfo.InvariantCulture) == 0) && time.Equals(other.time) && (String.Compare(symbol, other.symbol, true, CultureInfo.InvariantCulture) == 0) && secType.Equals(other.secType) && (String.Compare(exchange, other.exchange, true, CultureInfo.InvariantCulture) == 0) && side.Equals(other.side));
             }
-            return l_bRetVal;
+            return bRetVal;
         }
 
+        /// <summary>
+        /// Note: Override the hash code functions with something meaningful
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             return base.GetHashCode();

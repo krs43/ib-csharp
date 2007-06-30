@@ -18,12 +18,12 @@ namespace Krs.Ats.IBNet
             }
         }
 
-        private readonly int field;
-        public int Field
+        private readonly TickType tickType;
+        public TickType TickType
         {
             get
             {
-                return this.field;
+                return this.tickType;
             }
         }
 
@@ -45,12 +45,12 @@ namespace Krs.Ats.IBNet
             }
         }
 
-        public TickPriceEventArgs(int tickerId, int field, double price, int canAutoExecute)
+        public TickPriceEventArgs(int tickerId, TickType tickType, double price, int canAutoExecute)
         {
             this.tickerId = tickerId;
             this.canAutoExecute = canAutoExecute;
             this.price = price;
-            this.field = field;
+            this.tickType = tickType;
         }
     }
 }

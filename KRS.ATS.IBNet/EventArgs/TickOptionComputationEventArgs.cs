@@ -18,12 +18,12 @@ namespace Krs.Ats.IBNet
             }
         }
 
-        private readonly int field;
-        public int Field
+        private readonly TickType tickType;
+        public TickType TickType
         {
             get
             {
-                return field;
+                return tickType;
             }
         }
 
@@ -55,7 +55,7 @@ namespace Krs.Ats.IBNet
         }
 
         private readonly double pvDividend;
-        public double PvDividend
+        public double PVDividend
         {
             get
             {
@@ -63,14 +63,14 @@ namespace Krs.Ats.IBNet
             }
         }
 
-        public TickOptionComputationEventArgs(int tickerId, int field, double impliedVol, double delta, double modelPrice, double pvDividend)
+        public TickOptionComputationEventArgs(int tickerId, TickType tickType, double impliedVol, double delta, double modelPrice, double pvDividend)
         {
             this.tickerId = tickerId;
             this.pvDividend = pvDividend;
             this.delta = delta;
             this.modelPrice = modelPrice;
             this.impliedVol = impliedVol;
-            this.field = field;
+            this.tickType = tickType;
         }
     }
 }

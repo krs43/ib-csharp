@@ -104,7 +104,7 @@ namespace Krs.Ats.IBNet
 
         public override int GetHashCode()
         {
-            return action.GetHashCode() ^ exchange.GetHashCode() ^ conId.GetHashCode() ^ ratio.GetHashCode() ^ openClose.GetHashCode();
+            return base.GetHashCode();
         }
         #endregion
     }

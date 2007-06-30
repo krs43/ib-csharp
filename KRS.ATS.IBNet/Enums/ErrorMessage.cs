@@ -4,8 +4,10 @@ using System;
 namespace Krs.Ats.IBNet
 {
     [System.ComponentModel.TypeConverter(typeof(Krs.Ats.IBNet.EnumDescConverter))]
-    public enum ErrorMessages : int
+    public enum ErrorMessage : int
     {
+        [Description("")]
+        Undefined = 0,
         [Description("Already connected.")]
         AlreadyConnected = 501,
         [Description("Couldn't connect to TWS.  Confirm that \"Enable ActiveX and Socket Clients\" is enabled on the TWS \"Configure->API\" menu.")]
@@ -15,7 +17,7 @@ namespace Krs.Ats.IBNet
         [Description("Not connected")]
         NotConnected = 504,
         [Description("Fatal Error: Unknown message id.")]
-        UnknownID = 505,
+        UnknownId = 505,
         [Description("Request Market Data Sending Error")]
         FailSendRequestMarket = 510,
         [Description("Cancel Market Data Sending Error")]

@@ -8,22 +8,6 @@ namespace Krs.Ats.IBNet
 {
     public class Order
     {
-        #region Values
-        public const int CUSTOMER = 0;
-        public const int FIRM = 1;
-        public const char OPT_UNKNOWN = '?';
-        public const char OPT_BROKER_DEALER = 'b';
-        public const char OPT_CUSTOMER = 'c';
-        public const char OPT_FIRM = 'f';
-        public const char OPT_ISEMM = 'm';
-        public const char OPT_FARMM = 'n';
-        public const char OPT_SPECIALIST = 'y';
-        public const int AUCTION_MATCH = 1;
-        public const int AUCTION_IMPROVEMENT = 2;
-        public const int AUCTION_TRANSPARENT = 3;
-        public const System.String EMPTY_STR = "";
-        #endregion
-
         #region Private Variables
         // main order fields
         private int orderId;
@@ -69,7 +53,7 @@ namespace Krs.Ats.IBNet
         private String account;
         private String settlingFirm;
         private String openClose; // O=Open, C=Close
-        private int origin; // 0=Customer, 1=Firm
+        private OrderOrigin origin; // 0=Customer, 1=Firm
         private int shortSaleSlot; // 1 if you hold the shares, 2 if they will be delivered from elsewhere.  Only for Action="SSHORT
         private String designatedLocation; // set when slot=2 only.
 		
@@ -80,7 +64,7 @@ namespace Krs.Ats.IBNet
         private double nbboPriceCap;
 		
         // BOX or VOL ORDERS ONLY
-        private int auctionStrategy; // 1=AUCTION_MATCH, 2=AUCTION_IMPROVEMENT, 3=AUCTION_TRANSPARENT
+        private AuctionStrategy auctionStrategy; // 1=AUCTION_MATCH, 2=AUCTION_IMPROVEMENT, 3=AUCTION_TRANSPARENT
 		
         // BOX ORDERS ONLY
         private double startingPrice;
@@ -96,7 +80,7 @@ namespace Krs.Ats.IBNet
         private int volatilityType; // 1=daily, 2=annual
         private int continuousUpdate;
         private int referencePriceType; // 1=Average, 2 = BidOrAsk
-        private String deltaNeutralOrderType;
+        private OrderType deltaNeutralOrderType;
         private double deltaNeutralAuxPrice;
 		
         // COMBO ORDERS ONLY
@@ -108,9 +92,9 @@ namespace Krs.Ats.IBNet
         public Order()
         {
             openClose = "O";
-            origin = CUSTOMER;
+            origin = OrderOrigin.Customer;
             transmit = true;
-            designatedLocation = EMPTY_STR;
+            designatedLocation = "";
             minQty = System.Int32.MaxValue;
             //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             percentOffset = System.Double.MaxValue;
@@ -129,7 +113,7 @@ namespace Krs.Ats.IBNet
             //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             volatility = System.Double.MaxValue;
             volatilityType = System.Int32.MaxValue;
-            deltaNeutralOrderType = EMPTY_STR;
+            deltaNeutralOrderType = IBNet.OrderType.None;
             //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             deltaNeutralAuxPrice = System.Double.MaxValue;
             referencePriceType = System.Int32.MaxValue;
@@ -200,6 +184,7 @@ namespace Krs.Ats.IBNet
         /// REL
         /// VWAP
         /// TRAILLIMIT
+        /// VOL
         /// </summary>
         public OrderType OrderType
         {
@@ -457,7 +442,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// The Financial Advisor group the trade will be allocated to -- use an empty String if not applicable.
         /// </summary>
-        public string FaGroup
+        public string FAGroup
         {
             get { return faGroup; }
             set { faGroup = value; }
@@ -466,7 +451,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// The Financial Advisor allocation profile the trade will be allocated to -- use an empty String if not applicable.
         /// </summary>
-        public string FaProfile
+        public string FAProfile
         {
             get { return faProfile; }
             set { faProfile = value; }
@@ -475,7 +460,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// The Financial Advisor allocation method the trade will be allocated with -- use an empty String if not applicable.
         /// </summary>
-        public string FaMethod
+        public string FAMethod
         {
             get { return faMethod; }
             set { faMethod = value; }
@@ -485,7 +470,7 @@ namespace Krs.Ats.IBNet
         /// The Financial Advisor percentage concerning the trade's allocation -- use an empty String if not applicable.
 
         /// </summary>
-        public string FaPercentage
+        public string FAPercentage
         {
             get { return faPercentage; }
             set { faPercentage = value; }
@@ -523,7 +508,7 @@ namespace Krs.Ats.IBNet
         /// The order origin. For institutional customers only.
         /// Valid values are 0 = customer, 1 = firm
         /// </summary>
-        public int Origin
+        public OrderOrigin Origin
         {
             get { return origin; }
             set { origin = value; }
@@ -591,7 +576,7 @@ namespace Krs.Ats.IBNet
         /// transparent = 3
         /// For BOX exchange only.
         /// </summary>
-        public int AuctionStrategy
+        public AuctionStrategy AuctionStrategy
         {
             get { return auctionStrategy; }
             set { auctionStrategy = value; }
@@ -697,7 +682,7 @@ namespace Krs.Ats.IBNet
         /// delta neutral trade on full or partial execution of the VOL order.
         /// For no hedge delta order to be sent, specify NONE.
         /// </summary>
-        public string DeltaNeutralOrderType
+        public OrderType DeltaNeutralOrderType
         {
             get { return deltaNeutralOrderType; }
             set { deltaNeutralOrderType = value; }
@@ -733,21 +718,21 @@ namespace Krs.Ats.IBNet
         #endregion
 
         #region Object Override
-        public  override bool Equals(System.Object p_other)
+        public  override bool Equals(System.Object obj)
         {
-            if (this == p_other)
+            if (this == obj)
                 return true;
-            else if (p_other == null)
+            else if (obj == null)
                 return false;
 			
-            Order l_theOther = (Order) p_other;
+            Order other = (Order) obj;
 			
-            if (permId == l_theOther.permId)
+            if (permId == other.permId)
             {
                 return true;
             }
 			
-            bool firstSetEquals = orderId == l_theOther.orderId && clientId == l_theOther.clientId && totalQuantity == l_theOther.totalQuantity && lmtPrice == l_theOther.lmtPrice && auxPrice == l_theOther.auxPrice && origin == l_theOther.origin && transmit == l_theOther.transmit && parentId == l_theOther.parentId && blockOrder == l_theOther.blockOrder && sweepToFill == l_theOther.sweepToFill && displaySize == l_theOther.displaySize && triggerMethod == l_theOther.triggerMethod && ignoreRth == l_theOther.ignoreRth && hidden == l_theOther.hidden && discretionaryAmt == l_theOther.discretionaryAmt && shortSaleSlot == l_theOther.shortSaleSlot && (System.Object) designatedLocation == (System.Object) l_theOther.designatedLocation && ocaType == l_theOther.ocaType && rthOnly == l_theOther.rthOnly && allOrNone == l_theOther.allOrNone && minQty == l_theOther.minQty && percentOffset == l_theOther.percentOffset && eTradeOnly == l_theOther.eTradeOnly && firmQuoteOnly == l_theOther.firmQuoteOnly && nbboPriceCap == l_theOther.nbboPriceCap && auctionStrategy == l_theOther.auctionStrategy && startingPrice == l_theOther.startingPrice && stockRefPrice == l_theOther.stockRefPrice && delta == l_theOther.delta && stockRangeLower == l_theOther.stockRangeLower && stockRangeUpper == l_theOther.stockRangeUpper && volatility == l_theOther.volatility && volatilityType == l_theOther.volatilityType && deltaNeutralAuxPrice == l_theOther.deltaNeutralAuxPrice && continuousUpdate == l_theOther.continuousUpdate && referencePriceType == l_theOther.referencePriceType && trailStopPrice == l_theOther.trailStopPrice;
+            bool firstSetEquals = orderId == other.orderId && clientId == other.clientId && totalQuantity == other.totalQuantity && lmtPrice == other.lmtPrice && auxPrice == other.auxPrice && origin == other.origin && transmit == other.transmit && parentId == other.parentId && blockOrder == other.blockOrder && sweepToFill == other.sweepToFill && displaySize == other.displaySize && triggerMethod == other.triggerMethod && ignoreRth == other.ignoreRth && hidden == other.hidden && discretionaryAmt == other.discretionaryAmt && shortSaleSlot == other.shortSaleSlot && (System.Object) designatedLocation == (System.Object) other.designatedLocation && ocaType == other.ocaType && rthOnly == other.rthOnly && allOrNone == other.allOrNone && minQty == other.minQty && percentOffset == other.percentOffset && eTradeOnly == other.eTradeOnly && firmQuoteOnly == other.firmQuoteOnly && nbboPriceCap == other.nbboPriceCap && auctionStrategy == other.auctionStrategy && startingPrice == other.startingPrice && stockRefPrice == other.stockRefPrice && delta == other.delta && stockRangeLower == other.stockRangeLower && stockRangeUpper == other.stockRangeUpper && volatility == other.volatility && volatilityType == other.volatilityType && deltaNeutralAuxPrice == other.deltaNeutralAuxPrice && continuousUpdate == other.continuousUpdate && referencePriceType == other.referencePriceType && trailStopPrice == other.trailStopPrice;
 			
             if (!firstSetEquals)
             {
@@ -755,28 +740,25 @@ namespace Krs.Ats.IBNet
             }
             else
             {
-                System.String l_thisOcaGroup = ocaGroup != null?ocaGroup:EMPTY_STR;
-                System.String l_thisAccount = account != null?account:EMPTY_STR;
-                System.String l_thisOpenClose = openClose != null?openClose:EMPTY_STR;
-                System.String l_thisOrderRef = orderRef != null?orderRef:EMPTY_STR;
-                System.String l_thisRule80A = rule80A != null?rule80A:EMPTY_STR;
-                System.String l_thisSettlingFirm = settlingFirm != null?settlingFirm:EMPTY_STR;
-                System.String l_thisDeltaNeutralOrderType = deltaNeutralOrderType != null?deltaNeutralOrderType:EMPTY_STR;
-				
-                System.String l_otherOcaGroup = l_theOther.ocaGroup != null?l_theOther.ocaGroup:EMPTY_STR;
-                System.String l_otherAccount = l_theOther.account != null?l_theOther.account:EMPTY_STR;
-                System.String l_otherOpenClose = l_theOther.openClose != null?l_theOther.openClose:EMPTY_STR;
-                System.String l_otherOrderRef = l_theOther.orderRef != null?l_theOther.orderRef:EMPTY_STR;
-                System.String l_otherOrderGoodAfterTime = l_theOther.goodAfterTime != null?l_theOther.goodAfterTime:EMPTY_STR;
-                System.String l_otherOrderGoodTillDate = l_theOther.goodTillDate != null?l_theOther.goodTillDate:EMPTY_STR;
-                System.String l_otherRule80A = l_theOther.rule80A != null?l_theOther.rule80A:EMPTY_STR;
-                System.String l_otherSettlingFirm = l_theOther.settlingFirm != null?l_theOther.settlingFirm:EMPTY_STR;
-                System.String l_otherDeltaNeutralOrderType = l_theOther.deltaNeutralOrderType != null?l_theOther.deltaNeutralOrderType:EMPTY_STR;
+                String thisOcaGroup = ocaGroup ?? "";
+                String thisAccount = account ?? "";
+                String thisOpenClose = openClose ?? "";
+                String thisOrderRef = orderRef ?? "";
+                String thisRule80A = rule80A ?? "";
+                String thisSettlingFirm = settlingFirm ?? "";
 
-                return action.Equals(l_theOther.action) && orderType.Equals(l_theOther.orderType) && tif.Equals(l_theOther.tif) && l_thisOcaGroup.Equals(l_otherOcaGroup) && l_thisAccount.Equals(l_otherAccount) && l_thisOpenClose.Equals(l_otherOpenClose) && l_thisOrderRef.Equals(l_otherOrderRef) && l_otherOrderGoodAfterTime.Equals(l_otherOrderGoodAfterTime) && l_otherOrderGoodTillDate.Equals(l_otherOrderGoodTillDate) && l_thisRule80A.Equals(l_otherRule80A) && l_thisSettlingFirm.Equals(l_otherSettlingFirm) && l_thisDeltaNeutralOrderType.Equals(l_otherDeltaNeutralOrderType);
+                String otherOcaGroup = other.ocaGroup ?? "";
+                String otherAccount = other.account ?? "";
+                String otherOpenClose = other.openClose ?? "";
+                String otherOrderRef = other.orderRef ?? "";
+                String otherOrderGoodAfterTime = other.goodAfterTime ?? "";
+                String otherOrderGoodTillDate = other.goodTillDate ?? "";
+                String otherRule80A = other.rule80A ?? "";
+                String otherSettlingFirm = other.settlingFirm ?? "";
+
+                return action.Equals(other.action) && orderType.Equals(other.orderType) && tif.Equals(other.tif) && thisOcaGroup.Equals(otherOcaGroup) && thisAccount.Equals(otherAccount) && thisOpenClose.Equals(otherOpenClose) && thisOrderRef.Equals(otherOrderRef) && otherOrderGoodAfterTime.Equals(otherOrderGoodAfterTime) && otherOrderGoodTillDate.Equals(otherOrderGoodTillDate) && thisRule80A.Equals(otherRule80A) && thisSettlingFirm.Equals(otherSettlingFirm) && deltaNeutralOrderType.Equals(other.deltaNeutralOrderType);
             }
         }
-        //UPGRADE_NOTE: The following method implementation was automatically added to preserve functionality. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1306'"
         public override int GetHashCode()
         {
             return base.GetHashCode();

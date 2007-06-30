@@ -18,12 +18,12 @@ namespace Krs.Ats.IBNet
             }
         }
 
-        private readonly string value_Renamed;
-        public string Value_Renamed
+        private readonly string valueRenamed;
+        public string ValueRenamed
         {
             get
             {
-                return value_Renamed;
+                return valueRenamed;
             }
         }
 
@@ -45,12 +45,12 @@ namespace Krs.Ats.IBNet
             }
         }
 
-        public UpdateAccountValueEventArgs(string key, string value_Renamed, string currency, string accountName)
+        public UpdateAccountValueEventArgs(string key, string valueRenamed, string currency, string accountName)
         {
             this.key = key;
             this.accountName = accountName;
             this.currency = currency;
-            this.value_Renamed = value_Renamed;
+            this.valueRenamed = valueRenamed;
         }
     }
 }

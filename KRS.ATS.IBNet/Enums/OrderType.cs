@@ -76,6 +76,23 @@ namespace Krs.Ats.IBNet
         /// Forex, Futures, Future Options, Options, Stocks, Warrants
         /// </summary>
         [Description("TRAILLIMIT")]
-        TrailingStopLimit
+        TrailingStopLimit,
+        /// <summary>
+        /// TWS Version 857 introduced volatility trading of options, and a new order type, "VOL." What happens with VOL orders is that the limit price that is sent to the exchange is computed by TWS as a function of a daily or annualized option volatility provided by the user. VOL orders can be placed for any US option that trades on the BOX exchange. VOL orders are eligible for dynamic management, a powerful new functionality wherein TWS can manage options orders in response to specifications set by the user.
+        /// </summary>
+        [Description("VOL")]
+        Volatility,
+        /// <summary>
+        /// VOL orders only. Enter an order type to instruct TWS to submit a
+        /// delta neutral trade on full or partial execution of the VOL order.
+        /// For no hedge delta order to be sent, specify NONE.
+        /// </summary>
+        [Description("NONE")]
+        None,
+        /// <summary>
+        /// Used to initialize the delta Order Field.
+        /// </summary>
+        [Description("")]
+        Empty
     }
 }

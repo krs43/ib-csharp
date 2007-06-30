@@ -71,7 +71,7 @@ namespace Krs.Ats.IBNet
             }
         }
         private readonly double wap;
-        public double WAP
+        public double Wap
         {
             get
             {

@@ -23,7 +23,6 @@ namespace Krs.Ats.IBNet
         // COMBOS
         private String comboLegsDescrip; // received in open order version 14 and up for all combos
         private ArrayList comboLegs = ArrayList.Synchronized(new ArrayList(10));
-        private object comboLegsSync = new object();
 		
         // BOND values
         private String cusip;
@@ -45,7 +44,7 @@ namespace Krs.Ats.IBNet
 
         #region Constructors
         public Contract() :
-            this(null, SecurityType.Undefined, null, null)
+            this(null, SecurityType.Undefined, null, null, null)
         {
             
         }
@@ -74,8 +73,8 @@ namespace Krs.Ats.IBNet
         /// for example, when SMART is the exchange and IBM is being requested
         /// (IBM can trade in GBP or USD).  Given the existence of this kind of ambiguity,
         /// it is a good idea to always specify the currency.</param>
-        public Contract(String localSymbol, SecurityType secType, String exchange, String currency) :
-            this(null, secType, null, 0, RightType.Undefined, null, exchange, currency, localSymbol, null)
+        public Contract(String localSymbol, SecurityType secType, String exchange, String currency, String expiry) :
+            this(null, secType, expiry, 0, RightType.Undefined, null, exchange, currency, localSymbol, null)
         {
         }
 
@@ -413,17 +412,17 @@ namespace Krs.Ats.IBNet
                     }
                     else
                     {
-                        String l_thisExpiry = expiry ?? "";
-                        String l_thisRight = ((right == RightType.Undefined) ? "" : right.ToString());
-                        String l_thisMultiplier = multiplier ?? "";
-                        String l_thisLocalSymbol = localSymbol ?? "";
+                        String thisExpiry = expiry ?? "";
+                        String thisRight = ((right == RightType.Undefined) ? "" : right.ToString());
+                        String thisMultiplier = multiplier ?? "";
+                        String thisLocalSymbol = localSymbol ?? "";
 						
-                        String l_otherExpiry = other.expiry ?? "";
-                        String l_otherRight = ((other.right == RightType.Undefined) ? "" : right.ToString());
-                        String l_otherMultiplier = other.multiplier ?? "";
-                        String l_otherLocalSymbol = other.localSymbol ?? "";
+                        String otherExpiry = other.expiry ?? "";
+                        String otherRight = ((other.right == RightType.Undefined) ? "" : right.ToString());
+                        String otherMultiplier = other.multiplier ?? "";
+                        String otherLocalSymbol = other.localSymbol ?? "";
 						
-                        bContractEquals = l_thisExpiry.Equals(l_otherExpiry) && strike == other.strike && l_thisRight.Equals(l_otherRight) && l_thisMultiplier.Equals(l_otherMultiplier) && l_thisLocalSymbol.Equals(l_otherLocalSymbol);
+                        bContractEquals = thisExpiry.Equals(otherExpiry) && strike == other.strike && thisRight.Equals(otherRight) && thisMultiplier.Equals(otherMultiplier) && thisLocalSymbol.Equals(otherLocalSymbol);
                     }
                 }
             }
@@ -434,21 +433,21 @@ namespace Krs.Ats.IBNet
                 bool[] alreadyMatchedSecondLeg = new bool[comboLegs.Count];
                 for (int ctr1 = 0; ctr1 < comboLegs.Count; ctr1++)
                 {
-                    ComboLeg l_thisComboLeg = (ComboLeg) comboLegs[ctr1];
-                    bool l_bLegsEqual = false;
+                    ComboLeg thisComboLeg = (ComboLeg) comboLegs[ctr1];
+                    bool bLegsEqual = false;
                     for (int ctr2 = 0; ctr2 < other.comboLegs.Count; ctr2++)
                     {
                         if (alreadyMatchedSecondLeg[ctr2])
                         {
                             continue;
                         }
-                        if (l_thisComboLeg.Equals(other.comboLegs[ctr2]))
+                        if (thisComboLeg.Equals(other.comboLegs[ctr2]))
                         {
-                            l_bLegsEqual = alreadyMatchedSecondLeg[ctr2] = true;
+                            bLegsEqual = alreadyMatchedSecondLeg[ctr2] = true;
                             break;
                         }
                     }
-                    if (!l_bLegsEqual)
+                    if (!bLegsEqual)
                     {
                         // leg on first not matched by any previously unmatched leg on second
                         return false;
@@ -461,9 +460,7 @@ namespace Krs.Ats.IBNet
 
         public override int GetHashCode()
         {
-            return symbol.GetHashCode() ^ secType.GetHashCode() ^ expiry.GetHashCode() ^ strike.GetHashCode() ^
-                   right.GetHashCode() ^ multiplier.GetHashCode() ^ exchange.GetHashCode() ^ currency.GetHashCode() ^
-                   localSymbol.GetHashCode() ^ primaryExch.GetHashCode() ^ includeExpired.GetHashCode();
+            return base.GetHashCode();
         }
         #endregion
     }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Krs.Ats.IBNet
 {
@@ -14,10 +12,10 @@ namespace Krs.Ats.IBNet
         {
             get { return tickerId; }
         }
-        private readonly int field;
-        public int Field
+        private readonly TickType tickerType;
+        public TickType TickerType
         {
-            get { return field; }
+            get { return tickerType; }
         }
         private readonly int size;
         public int Size
@@ -25,11 +23,11 @@ namespace Krs.Ats.IBNet
             get { return size; }
         }
 
-        public TickSizeEventArgs(int tickerId, int field, int size)
+        public TickSizeEventArgs(int tickerId, TickType tickerType, int size)
         {
             this.tickerId = tickerId;
             this.size = size;
-            this.field = field;
+            this.tickerType = tickerType;
         }
     }
 }

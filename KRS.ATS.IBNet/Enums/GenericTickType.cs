@@ -11,6 +11,11 @@ namespace Krs.Ats.IBNet
     public enum GenericTickType : int
     {
         /// <summary>
+        /// Undefined Generic Tick Type
+        /// </summary>
+        [Description("")]
+        Undefined = 0,
+        /// <summary>
         /// Option Volume
         /// For stocks only.
         /// Returns TickType.OptionCallVolume and TickType.OptionPutVolume 
