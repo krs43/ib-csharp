@@ -17,19 +17,34 @@ namespace Krs.Ats.IBNet
     {
         #region IB Wrapper to Events
 
+        /// <summary>
+        /// This event is called when the market data changes. Prices are updated immediately with no delay.
+        /// </summary>
         public event EventHandler<TickPriceEventArgs> TickPrice;
+        /// <summary>
+        /// Called internally when the receive thread receives a tick price event.
+        /// </summary>
+        /// <param name="e">Tick Price event arguments</param>
         protected virtual void OnTickPrice(TickPriceEventArgs e)
         {
             if(TickPrice!=null)
                 TickPrice(this, e);
         }
+
         private void tickPrice(int tickerId, TickType tickType, double price, bool canAutoExecute)
         {
             TickPriceEventArgs e = new TickPriceEventArgs(tickerId, tickType, price, canAutoExecute);
             OnTickPrice(e);
         }
 
+        /// <summary>
+        /// This event is called when the market data changes. Sizes are updated immediately with no delay.
+        /// </summary>
         public event EventHandler<TickSizeEventArgs> TickSize;
+        /// <summary>
+        /// Called internally when the receive thread receives a tick size event.
+        /// </summary>
+        /// <param name="e">Tick Size Event Arguments</param>
         protected virtual void OnTickSize(TickSizeEventArgs e)
         {
             if(TickSize!=null)
@@ -41,7 +56,16 @@ namespace Krs.Ats.IBNet
             OnTickSize(e);
         }
 
+        /// <summary>
+        /// This method is called when the market in an option or its underlier moves.
+        /// TWS’s option model volatilities, prices, and deltas, along with the present
+        /// value of dividends expected on that option’s underlier are received.
+        /// </summary>
         public event EventHandler<TickOptionComputationEventArgs> TickOptionComputation;
+        /// <summary>
+        /// Called internally when the receive thread receives a tick option computation event.
+        /// </summary>
+        /// <param name="e">Tick Option Computation Arguments</param>
         protected virtual void OnTickOptionComputation(TickOptionComputationEventArgs e)
         {
             if (TickOptionComputation != null)
@@ -54,7 +78,14 @@ namespace Krs.Ats.IBNet
             OnTickOptionComputation(e);
         }
 
+        /// <summary>
+        /// This method is called when the market data changes. Values are updated immediately with no delay.
+        /// </summary>
         public event EventHandler<TickGenericEventArgs> TickGeneric;
+        /// <summary>
+        /// Called internally when the receive thread receives a generic tick event.
+        /// </summary>
+        /// <param name="e">Tick Generic Event Arguments</param>
         protected virtual void OnTickGeneric(TickGenericEventArgs e)
         {
             if (TickGeneric != null)
@@ -66,7 +97,14 @@ namespace Krs.Ats.IBNet
             OnTickGeneric(e);
         }
 
+        /// <summary>
+        /// This method is called when the market data changes. Values are updated immediately with no delay.
+        /// </summary>
         public event EventHandler<TickStringEventArgs> TickString;
+        /// <summary>
+        /// Called internally when the receive thread receives a Tick String  event.
+        /// </summary>
+        /// <param name="e">Tick String Event Arguments</param>
         protected virtual void OnTickString(TickStringEventArgs e)
         {
             if (TickString != null)
@@ -78,7 +116,14 @@ namespace Krs.Ats.IBNet
             OnTickString(e);
         }
 
+        /// <summary>
+        /// This method is called when the market data changes. Values are updated immediately with no delay.
+        /// </summary>
         public event EventHandler<TickEfpEventArgs> TickEfp;
+        /// <summary>
+        /// Called internally when the receive thread receives a tick EFP event.
+        /// </summary>
+        /// <param name="e">Tick Efp Arguments</param>
         protected virtual void OnTickEfp(TickEfpEventArgs e)
         {
             if(TickEfp!=null)
@@ -93,7 +138,15 @@ namespace Krs.Ats.IBNet
             OnTickEfp(e);
         }
 
+        /// <summary>
+        /// This methodis called whenever the status of an order changes. It is also fired after reconnecting
+        /// to TWS if the client has any open orders.
+        /// </summary>
         public event EventHandler<OrderStatusEventArgs> OrderStatus;
+        /// <summary>
+        /// Called internally when the receive thread receives an order status event.
+        /// </summary>
+        /// <param name="e"></param>
         protected virtual void OnOrderStatus(OrderStatusEventArgs e)
         {
             if (OrderStatus != null)
@@ -107,7 +160,14 @@ namespace Krs.Ats.IBNet
             OnOrderStatus(e);
         }
 
+        /// <summary>
+        /// This method is called to feed in open orders.
+        /// </summary>
         public event EventHandler<OpenOrderEventArgs> OpenOrder;
+        /// <summary>
+        /// Called internally when the receive thread receives an open order event.
+        /// </summary>
+        /// <param name="e">Open Order Event Arguments</param>
         protected virtual void OnOpenOrder(OpenOrderEventArgs e)
         {
             if (OpenOrder != null)
@@ -119,7 +179,14 @@ namespace Krs.Ats.IBNet
             OnOpenOrder(e);
         }
 
+        /// <summary>
+        /// This method is called only when reqAccountUpdates() method on the EClientSocket object has been called.
+        /// </summary>
         public event EventHandler<UpdateAccountValueEventArgs> UpdateAccountValue;
+        /// <summary>
+        /// Called internally when the receive thread receives an Update Account Value event.
+        /// </summary>
+        /// <param name="e">Update Account Value Event Arguments</param>
         protected virtual void OnUpdateAccountValue(UpdateAccountValueEventArgs e)
         {
             if (UpdateAccountValue != null)
@@ -131,7 +198,14 @@ namespace Krs.Ats.IBNet
             OnUpdateAccountValue(e);
         }
 
+        /// <summary>
+        /// This method is called only when reqAccountUpdates() method on the EClientSocket object has been called.
+        /// </summary>
         public event EventHandler<UpdatePortfolioEventArgs> UpdatePortfolio;
+        /// <summary>
+        /// Called Internally when the receive thread receives an Update Portfolio event.
+        /// </summary>
+        /// <param name="e">Update Portfolio Event Arguments</param>
         protected virtual void OnUpdatePortfolio(UpdatePortfolioEventArgs e)
         {
             if (UpdatePortfolio != null)
@@ -144,7 +218,14 @@ namespace Krs.Ats.IBNet
             OnUpdatePortfolio(e);
         }
 
+        /// <summary>
+        /// This method is called only when reqAccountUpdates() method on the EClientSocket object has been called.
+        /// </summary>
         public event EventHandler<UpdateAccountTimeEventArgs> UpdateAccountTime;
+        /// <summary>
+        /// Called internally when the receive thread receives an Update Account Time event.
+        /// </summary>
+        /// <param name="e">Update Account Time Event Arguments</param>
         protected virtual void OnUpdateAccountTime(UpdateAccountTimeEventArgs e)
         {
             if(UpdateAccountTime != null)
@@ -156,7 +237,14 @@ namespace Krs.Ats.IBNet
             OnUpdateAccountTime(e);
         }
 
+        /// <summary>
+        /// This method is called after a successful connection to TWS.
+        /// </summary>
         public event EventHandler<NextValidIdEventArgs> NextValidId;
+        /// <summary>
+        /// Called internally when the receive thread receives a Next Valid Id event.
+        /// </summary>
+        /// <param name="e">Next Valid Id Event Arguments</param>
         protected virtual void OnNextValidId(NextValidIdEventArgs e)
         {
             if (NextValidId != null)
@@ -171,6 +259,10 @@ namespace Krs.Ats.IBNet
         /// This event fires in response to the <see cref="ReqContractDetails"/> method.
         /// </summary>
         public event EventHandler<ContractDetailsEventArgs> ContractDetails;
+        /// <summary>
+        /// Called internally when the receive thread receives a contract details event.
+        /// </summary>
+        /// <param name="e">Contract Details Event Arguments</param>
         protected virtual void OnContractDetails(ContractDetailsEventArgs e)
         {
             if (ContractDetails != null)
@@ -185,6 +277,10 @@ namespace Krs.Ats.IBNet
         /// This event fires in response to the <see cref="ReqContractDetails"/> method called on a bond contract.
         /// </summary>
         public event EventHandler<BondContractDetailsEventArgs> BondContractDetails;
+        /// <summary>
+        /// Called internally when the receive thread receives a Bond Contract Details Event.
+        /// </summary>
+        /// <param name="e">Bond Contract Details Event Arguments</param>
         protected virtual void OnBondContractDetails(BondContractDetailsEventArgs e)
         {
             if (BondContractDetails != null)
@@ -200,6 +296,10 @@ namespace Krs.Ats.IBNet
         /// This event fires in response to the <see cref="ReqExecutions"/> method or after an order is placed.
         /// </summary>
         public event EventHandler<ExecDetailsEventArgs> ExecDetails;
+        /// <summary>
+        /// Called internally when the receive thread receives an execution details event.
+        /// </summary>
+        /// <param name="e">Execution Details Event Arguments</param>
         protected virtual void OnExecDetails(ExecDetailsEventArgs e)
         {
             if(ExecDetails!= null)
@@ -213,7 +313,14 @@ namespace Krs.Ats.IBNet
             OnExecDetails(e);
         }
 
+        /// <summary>
+        /// This method is called when the market depth changes.
+        /// </summary>
         public event EventHandler<UpdateMktDepthEventArgs> UpdateMktDepth;
+        /// <summary>
+        /// Called internally when the receive thread receives an update market depth event.
+        /// </summary>
+        /// <param name="e"></param>
         protected virtual void OnUpdateMktDepth(UpdateMktDepthEventArgs e)
         {
             if (UpdateMktDepth != null)
@@ -225,7 +332,14 @@ namespace Krs.Ats.IBNet
             OnUpdateMktDepth(e);
         }
 
+        /// <summary>
+        /// This method is called when the Level II market depth changes.
+        /// </summary>
         public event EventHandler<UpdateMktDepthL2EventArgs> UpdateMktDepthL2;
+        /// <summary>
+        /// Called internally when the receive thread receives an update market depth level 2 event.
+        /// </summary>
+        /// <param name="e">Update Market Depth L2 Event Arguments</param>
         protected virtual void OnUpdateMktDepthL2(UpdateMktDepthL2EventArgs e)
         {
             if (UpdateMktDepthL2 != null)
@@ -238,7 +352,14 @@ namespace Krs.Ats.IBNet
             OnUpdateMktDepthL2(e);
         }
 
+        /// <summary>
+        /// This methodis triggered for each new bulletin if the client has subscribed (i.e. by calling the reqNewsBulletins() method.
+        /// </summary>
         public event EventHandler<UpdateNewsBulletinEventArgs> UpdateNewsBulletin;
+        /// <summary>
+        /// Called internally when the receive thread receives an update news bulletin event.
+        /// </summary>
+        /// <param name="e">Update News Bulletin Event Arguments</param>
         protected virtual void OnUpdateNewsBulletin(UpdateNewsBulletinEventArgs e)
         {
             if (UpdateNewsBulletin != null)
@@ -250,7 +371,15 @@ namespace Krs.Ats.IBNet
             OnUpdateNewsBulletin(e);
         }
 
+        /// <summary>
+        /// This method is called when a successful connection is made to a Financial Advisor account.
+        /// It is also called when the reqManagedAccts() method is invoked.
+        /// </summary>
         public event EventHandler<ManagedAccountsEventArgs> ManagedAccounts;
+        /// <summary>
+        /// Called internally when the receive thread receives a managed accounts event.
+        /// </summary>
+        /// <param name="e">Managed Accounts Event Arguments</param>
         protected virtual void OnManagedAccounts(ManagedAccountsEventArgs e)
         {
             if (ManagedAccounts != null)
@@ -262,7 +391,14 @@ namespace Krs.Ats.IBNet
             OnManagedAccounts(e);
         }
 
+        /// <summary>
+        /// This method receives previously requested FA configuration information from TWS.
+        /// </summary>
         public event EventHandler<ReceiveFAEventArgs> ReceiveFA;
+        /// <summary>
+        /// Called internally when the receive thread receives a Receive Finanvial Advisor event.
+        /// </summary>
+        /// <param name="e">Receive FA Event Arguments</param>
         protected virtual void OnReceiveFA(ReceiveFAEventArgs e)
         {
             if (ReceiveFA != null)
@@ -274,7 +410,14 @@ namespace Krs.Ats.IBNet
             OnReceiveFA(e);
         }
 
+        /// <summary>
+        /// This method receives the requested historical data results
+        /// </summary>
         public event EventHandler<HistoricalDataEventArgs> HistoricalData;
+        /// <summary>
+        /// Called internally when the receive thread receives a tick price event.
+        /// </summary>
+        /// <param name="e">Historical Data Event Arguments</param>
         protected virtual void OnHistoricalData(HistoricalDataEventArgs e)
         {
             if (HistoricalData != null)
@@ -287,7 +430,14 @@ namespace Krs.Ats.IBNet
             OnHistoricalData(e);
         }
 
+        /// <summary>
+        /// This method receives an XML document that describes the valid parameters that a scanner subscription can have
+        /// </summary>
         public event EventHandler<ScannerParametersEventArgs> ScannerParameters;
+        /// <summary>
+        /// Called internally when the receive thread receives a scanner parameters event.
+        /// </summary>
+        /// <param name="e">Scanner Parameters Event Arguments</param>
         protected virtual void OnScannerParameters(ScannerParametersEventArgs e)
         {
             if (ScannerParameters != null)
@@ -299,7 +449,14 @@ namespace Krs.Ats.IBNet
             OnScannerParameters(e);
         }
 
+        /// <summary>
+        /// This method receives the requested market scanner data results
+        /// </summary>
         public event EventHandler<ScannerDataEventArgs> ScannerData;
+        /// <summary>
+        /// Called internally when the receive thread receives a tick price event.
+        /// </summary>
+        /// <param name="e">Scanner Data Event Arguments</param>
         protected virtual void OnScannerData(ScannerDataEventArgs e)
         {
             if (ScannerData != null)
@@ -316,6 +473,10 @@ namespace Krs.Ats.IBNet
         /// This event is fired when there is an error with the communication or when TWS wants to send a message to the client.
         /// </summary>
         public event EventHandler<ErrorEventArgs> Error;
+        /// <summary>
+        /// Called internally when the receive thread receives an error event.
+        /// </summary>
+        /// <param name="e">Error Event Arguments</param>
         protected virtual void OnError(ErrorEventArgs e)
         {
             if (Error != null)
@@ -366,7 +527,14 @@ namespace Krs.Ats.IBNet
             error((int)ErrorMessage.NoValidId, errorCode, tail);
         }
 
+        /// <summary>
+        /// This method is called when TWS closes the sockets connection, or when TWS is shut down.
+        /// </summary>
         public event EventHandler<ConnectionClosedEventArgs> ConnectionClosed;
+        /// <summary>
+        /// Called internally when the receive thread receives a connection closed event.
+        /// </summary>
+        /// <param name="e">Connection Closed Event Arguments</param>
         protected virtual void OnConnectionClosed(ConnectionClosedEventArgs e)
         {
             if(ConnectionClosed!=null)
@@ -380,11 +548,16 @@ namespace Krs.Ats.IBNet
         #endregion
 
         #region Constructor / Destructor
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
         public IBClient()
         {
             readThread = new Thread(Run);
         }
-        // Dispose() calls Dispose(true)
+        /// <summary>
+        /// Dispose() calls Dispose(true)
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
@@ -392,7 +565,10 @@ namespace Krs.Ats.IBNet
         }
 
 
-        // The bulk of the clean-up code is implemented in Dispose(bool)
+        /// <summary>
+        /// The bulk of the clean-up code is implemented in Dispose(bool)
+        /// </summary>
+        /// <param name="disposing">Allows the ondispose method to override the dispose action.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -420,6 +596,9 @@ namespace Krs.Ats.IBNet
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Returns the status of the connection to TWS.
+        /// </summary>
         public bool Connected
         {
             get
@@ -1261,7 +1440,7 @@ namespace Krs.Ats.IBNet
         {
             if(contract == null)
                 throw new ArgumentNullException("contract");
-            /// Note: Lookinto synchronization with "lock this"
+            // Note: Lookinto synchronization with "lock this"
             lock (this)
             {
                 // not connected?
@@ -2177,7 +2356,10 @@ namespace Krs.Ats.IBNet
         #endregion
 
         #region General Code
-        public void  Run()
+        /// <summary>
+        /// Contains the reader thread.
+        /// </summary>
+        internal void Run()
         {
             try
             {
@@ -2192,6 +2374,9 @@ namespace Krs.Ats.IBNet
             }
         }
 
+        /// <summary>
+        /// Forks the reading thread
+        /// </summary>
         internal void Start()
         {
             if(!Stopping)
@@ -2876,7 +3061,7 @@ namespace Krs.Ats.IBNet
         #endregion
 
         #region Helper Methods
-        protected internal virtual String ReadStr()
+        private string ReadStr()
         {
             System.Text.StringBuilder buf = new System.Text.StringBuilder();
             while (true)
@@ -2892,26 +3077,26 @@ namespace Krs.Ats.IBNet
             System.String str = buf.ToString();
             return str.Length == 0?null:str;
         }
-		
-        internal virtual bool ReadBoolFromInt()
+
+        private bool ReadBoolFromInt()
         {
             System.String str = ReadStr();
             return str == null?false:(System.Int32.Parse(str, CultureInfo.InvariantCulture) != 0);
         }
-		
-        protected internal virtual int ReadInt()
+
+        private int ReadInt()
         {
             System.String str = ReadStr();
             return str == null ? 0 : System.Int32.Parse(str, CultureInfo.InvariantCulture);
         }
-		
-        protected internal virtual long ReadLong()
+
+        private long ReadLong()
         {
             System.String str = ReadStr();
             return str == null ? 0L : System.Int64.Parse(str, CultureInfo.InvariantCulture);
         }
-		
-        protected internal virtual double ReadDouble()
+
+        private double ReadDouble()
         {
             System.String str = ReadStr();
             return str == null?0:System.Double.Parse(str, CultureInfo.InvariantCulture);

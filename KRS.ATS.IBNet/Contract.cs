@@ -249,7 +249,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// For Bonds. Identifies the credit rating of the issuer. A higher credit
         /// rating generally indicates a less risky investment. Bond ratings
-        /// are from Moody's and S&P respectively.
+        /// are from Moody's and SP respectively.
         /// </summary>
         public string Ratings
         {

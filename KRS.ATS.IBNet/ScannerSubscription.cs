@@ -148,7 +148,7 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Filter out contracts with an S&P rating below this value.
+        /// Filter out contracts with an SP rating below this value.
         /// Can be left blank.
         /// </summary>
         public string SPRatingAbove
@@ -158,7 +158,7 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Filter out contracts with an S&P rating above this value.
+        /// Filter out contracts with an SP rating above this value.
         /// Can be left blank.
         /// </summary>
         public string SPRatingBelow

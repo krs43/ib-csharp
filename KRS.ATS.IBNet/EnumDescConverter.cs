@@ -22,10 +22,8 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// EnumConverter supporting System.ComponentModel.DescriptionAttribute
     /// </summary>
-    public class EnumDescConverter : EnumConverter
+    public class EnumDescConverter
     {
-        private readonly Type myVal;
-
         /// <summary>
         /// Gets Enum Value's Description Attribute
         /// </summary>
@@ -93,64 +91,6 @@ namespace Krs.Ats.IBNet
                 }
             }
             return description;
-        }
-
-        public EnumDescConverter(Type type) : base(type)
-        {
-            if(type==null)
-                throw new ArgumentNullException("type");
-            else
-                myVal = type;
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value,
-                                         Type destinationType)
-        {
-            Enum enumVal = value as Enum;
-            if (enumVal != null && destinationType == typeof (string))
-            {
-                return GetEnumDescription(enumVal);
-            }
-            string strVal = value as string;
-            if (strVal != null && destinationType == typeof(string))
-            {
-                return GetEnumDescription(myVal, strVal);
-            }
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
-        {
-            string strVal = value as string;
-            if (strVal != null)
-            {
-                return GetEnumValue(myVal, strVal);
-            }
-            Enum enumVal = value as Enum;
-            if (enumVal != null)
-            {
-                return GetEnumDescription(enumVal);
-            }
-            return base.ConvertFrom(context, culture, value);
-        }
-
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
-        {
-            ArrayList values = new ArrayList();
-            FieldInfo[] fis = myVal.GetFields();
-            foreach (FieldInfo fi in fis)
-            {
-                DescriptionAttribute[] attributes = (DescriptionAttribute[]) fi.GetCustomAttributes(
-                                                                                 typeof (DescriptionAttribute), false);
-                if (attributes.Length > 0)
-                    values.Add(fi.GetValue(fi.Name));
-            }
-            return new StandardValuesCollection(values);
         }
     }
 }

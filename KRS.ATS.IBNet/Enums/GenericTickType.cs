@@ -57,7 +57,7 @@ namespace Krs.Ats.IBNet
         MiscellaneousStats = 165,
         /// <summary>
         /// Mark Price
-        /// Used in TWS P&L Computations
+        /// Used in TWS P/L Computations
         /// Returns TickType.MarkPrice
         /// </summary>
         [Description("MarkPrice")]

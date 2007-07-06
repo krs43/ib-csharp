@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Krs.Ats.IBNet
 {
+    /// <summary>
+    /// Tick Generic Event Arguments
+    /// </summary>
     public class TickGenericEventArgs : EventArgs
     {
         private readonly int tickerId;
