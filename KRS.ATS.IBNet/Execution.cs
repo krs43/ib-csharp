@@ -2,15 +2,18 @@ using System;
 
 namespace Krs.Ats.IBNet
 {
+    /// <summary>
+    /// Execution details returned by Interactive Brokers
+    /// </summary>
     public class Execution
     {
         #region Private Variables
 
         private int orderId;
         private int clientId;
-        private String execId;
+        private String executionId;
         private String time;
-        private String acctNumber;
+        private String accountNumber;
         private String exchange;
         private ExecutionSide side;
         private int shares;
@@ -20,18 +23,35 @@ namespace Krs.Ats.IBNet
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
         public Execution()
         {
 
         }
 		
-        public Execution(int orderId, int clientId, String execId, String time, String acctNumber, String exchange, ExecutionSide side, int shares, double price, int permId, int liquidation)
+        /// <summary>
+        /// Full Constructor
+        /// </summary>
+        /// <param name="orderId">The order id.</param>
+        /// <param name="clientId">TWS orders have a fixed client id of "0."</param>
+        /// <param name="executionId">Unique order execution id.</param>
+        /// <param name="time">The order execution time.</param>
+        /// <param name="accountNumber">The customer account number.</param>
+        /// <param name="exchange">Exchange that executed the order.</param>
+        /// <param name="side">Specifies if the transaction was a sale or a purchase.</param>
+        /// <param name="shares">The number of shares filled.</param>
+        /// <param name="price">The order execution price.</param>
+        /// <param name="permId">The TWS id used to identify orders, remains the same over TWS sessions.</param>
+        /// <param name="liquidation">Identifies the position as one to be liquidated last should the need arise.</param>
+        public Execution(int orderId, int clientId, String executionId, String time, String accountNumber, String exchange, ExecutionSide side, int shares, double price, int permId, int liquidation)
         {
             this.orderId = orderId;
             this.clientId = clientId;
-            this.execId = execId;
+            this.executionId = executionId;
             this.time = time;
-            this.acctNumber = acctNumber;
+            this.accountNumber = accountNumber;
             this.exchange = exchange;
             this.side = side;
             this.shares = shares;
@@ -45,9 +65,9 @@ namespace Krs.Ats.IBNet
         #region Properties
 
         /// <summary>
-        /// The order id.
-        /// Note: TWS orders have a fixed order id of "0."
+        /// The order id. 
         /// </summary>
+        /// <remarks>TWS orders have a fixed order id of "0."</remarks>
         public int OrderId
         {
             get { return orderId; }
@@ -56,8 +76,8 @@ namespace Krs.Ats.IBNet
 
         /// <summary>
         /// The id of the client that placed the order.
-        /// Note: TWS orders have a fixed client id of "0."
         /// </summary>
+        /// <remarks>TWS orders have a fixed client id of "0."</remarks>
         public int ClientId
         {
             get { return clientId; }
@@ -67,10 +87,10 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Unique order execution id.
         /// </summary>
-        public string ExecId
+        public string ExecutionId
         {
-            get { return execId; }
-            set { execId = value; }
+            get { return executionId; }
+            set { executionId = value; }
         }
 
         /// <summary>
@@ -85,10 +105,10 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// The customer account number.
         /// </summary>
-        public string AcctNumber
+        public string AccountNumber
         {
-            get { return acctNumber; }
-            set { acctNumber = value; }
+            get { return accountNumber; }
+            set { accountNumber = value; }
         }
 
         /// <summary>
@@ -101,15 +121,20 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Specifies if the transaction was a sale or a purchase. Valid values are:
-        /// BOT
-        /// SLD
+        /// Specifies if the transaction was a sale or a purchase.
         /// </summary>
+        /// <remarks>Valid values are:
+        /// <list type="bullet">
+        /// <item>Bought</item>
+        /// <item>Sold</item>
+        /// </list>
+        /// </remarks>
         public ExecutionSide Side
         {
             get { return side; }
             set { side = value; }
         }
+
         /// <summary>
         /// The number of shares filled.
         /// </summary>
@@ -148,30 +173,5 @@ namespace Krs.Ats.IBNet
 
         #endregion
 
-        #region Object Overrides
-        public  override bool Equals(Object obj)
-        {
-            bool retVal = false;
-			
-            if (obj == null)
-            {
-                retVal = false;
-            }
-            else if (this == obj)
-            {
-                retVal = true;
-            }
-            else
-            {
-                Execution other = (Execution) obj;
-                retVal = execId.Equals(other.execId);
-            }
-            return retVal;
-        }
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-        #endregion
     }
 }

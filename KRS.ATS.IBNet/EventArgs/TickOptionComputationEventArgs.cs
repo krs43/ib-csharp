@@ -10,6 +10,9 @@ namespace Krs.Ats.IBNet
     public class TickOptionComputationEventArgs : EventArgs
     {
         private readonly int tickerId;
+        /// <summary>
+        /// The ticker Id that was specified previously in the call to reqMktData().
+        /// </summary>
         public int TickerId
         {
             get
@@ -19,6 +22,10 @@ namespace Krs.Ats.IBNet
         }
 
         private readonly TickType tickType;
+        /// <summary>
+        /// Specifies the type of option computation.
+        /// </summary>
+        /// <seealso cref="TickType"/>
         public TickType TickType
         {
             get
@@ -28,6 +35,9 @@ namespace Krs.Ats.IBNet
         }
 
         private readonly double impliedVol;
+        /// <summary>
+        /// The implied volatility calculated by the TWS option modeler, using the specificed ticktype value.
+        /// </summary>
         public double ImpliedVol
         {
             get
@@ -37,6 +47,9 @@ namespace Krs.Ats.IBNet
         }
 
         private readonly double delta;
+        /// <summary>
+        /// The option delta calculated by the TWS option modeler.
+        /// </summary>
         public double Delta
         {
             get
@@ -46,6 +59,9 @@ namespace Krs.Ats.IBNet
         }
 
         private readonly double modelPrice;
+        /// <summary>
+        /// The model price.
+        /// </summary>
         public double ModelPrice
         {
             get
@@ -55,6 +71,9 @@ namespace Krs.Ats.IBNet
         }
 
         private readonly double pvDividend;
+        /// <summary>
+        /// Present value of dividends expected on the option’s underlier.
+        /// </summary>
         public double PVDividend
         {
             get
@@ -63,6 +82,15 @@ namespace Krs.Ats.IBNet
             }
         }
 
+        /// <summary>
+        /// Full Constructor
+        /// </summary>
+        /// <param name="tickerId">The ticker Id that was specified previously in the call to reqMktData().</param>
+        /// <param name="tickType">Specifies the type of option computation.</param>
+        /// <param name="impliedVol">The implied volatility calculated by the TWS option modeler, using the specificed ticktype value.</param>
+        /// <param name="delta">The option delta calculated by the TWS option modeler.</param>
+        /// <param name="modelPrice">The model price.</param>
+        /// <param name="pvDividend">Present value of dividends expected on the option’s underlier.</param>
         public TickOptionComputationEventArgs(int tickerId, TickType tickType, double impliedVol, double delta, double modelPrice, double pvDividend)
         {
             this.tickerId = tickerId;

@@ -7,6 +7,9 @@ namespace Krs.Ats.IBNet
     public class TickGenericEventArgs : EventArgs
     {
         private readonly int tickerId;
+        /// <summary>
+        /// The ticker Id that was specified previously in the call to reqMktData().
+        /// </summary>
         public int TickerId
         {
             get
@@ -14,7 +17,12 @@ namespace Krs.Ats.IBNet
                 return tickerId;
             }
         }
+
         private readonly TickType tickType;
+        /// <summary>
+        /// Specifies the type of price.
+        /// </summary>
+        /// <seealso cref="TickType"/>
         public TickType TickType
         {
             get
@@ -22,19 +30,29 @@ namespace Krs.Ats.IBNet
                 return tickType;
             }
         }
-        private readonly double valueRenamed;
-        public double ValueRenamed
+
+        private readonly double value;
+        /// <summary>
+        /// The value of the specified field.
+        /// </summary>
+        public double Value
         {
             get
             {
-                return valueRenamed;
+                return value;
             }
         }
 
-        public TickGenericEventArgs(int tickerId, TickType tickType, double valueRenamed)
+        /// <summary>
+        /// Full Constructor
+        /// </summary>
+        /// <param name="tickerId">The ticker Id that was specified previously in the call to reqMktData().</param>
+        /// <param name="tickType">Specifies the type of price.</param>
+        /// <param name="value">The value of the specified field.</param>
+        public TickGenericEventArgs(int tickerId, TickType tickType, double value)
         {
             this.tickerId = tickerId;
-            this.valueRenamed = valueRenamed;
+            this.value = value;
             this.tickType = tickType;
         }
     }

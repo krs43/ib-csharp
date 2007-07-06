@@ -1,14 +1,19 @@
 using System;
+using System.Collections.Generic;
 using Krs.Ats.IBNet;
 using System.Collections;
 
 namespace Krs.Ats.IBNet
 {
-    public class Contract : ICloneable
+    /// <summary>
+    /// Class to describe a financial security.
+    /// </summary>
+    /// <seealso href="http://www.interactivebrokers.com/php/webhelp/Interoperability/Socket_Client_Java/java_properties.htm#Contract">Interactive Brokers Contract Documentation</seealso>
+    public class Contract
     {
         #region Private Variables
         private String symbol;
-        private SecurityType secType;
+        private SecurityType securityType;
         private String expiry;
         private double strike;
         private RightType right;
@@ -22,12 +27,12 @@ namespace Krs.Ats.IBNet
 		
         // COMBOS
         private String comboLegsDescrip; // received in open order version 14 and up for all combos
-        private ArrayList comboLegs = ArrayList.Synchronized(new ArrayList(10));
+        private readonly List<ComboLeg> comboLegs = new List<ComboLeg>();
 		
         // BOND values
         private String cusip;
         private String ratings;
-        private String descAppend;
+        private String descriptionAppend;
         private String bondType;
         private String couponType;
         private bool callable;
@@ -43,8 +48,11 @@ namespace Krs.Ats.IBNet
         #endregion
 
         #region Constructors
+        ///<summary>
+        /// Undefined Contract Constructor
+        ///</summary>
         public Contract() :
-            this(null, SecurityType.Undefined, null, null, null)
+            this(null, IBNet.SecurityType.Undefined, null, 0, RightType.Undefined, null, null, null, null, null)
         {
             
         }
@@ -52,37 +60,36 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Futures Contract Constructor
         /// </summary>
-        /// <param name="Symbol"></param>
-        /// <param name="Exchange"></param>
-        /// <param name="SecType"></param>
-        /// <param name="Currency"></param>
-        /// <param name="Expiry"></param>
-        public Contract(string symbol, string exchange, SecurityType secType, string currency, string expiry) :
-            this(symbol, secType, expiry, 0, RightType.Undefined, null, exchange, currency, null, null)
+        /// <param name="symbol">This is the symbol of the underlying asset.</param>
+        /// <param name="exchange">The order destination, such as Smart.</param>
+        /// <param name="securityType">This is the security type.</param>
+        /// <param name="currency">Specifies the currency.</param>
+        /// <param name="expiry">The expiration date. Use the format YYYYMM.</param>
+        public Contract(string symbol, string exchange, SecurityType securityType, string currency, string expiry) :
+            this(symbol, securityType, expiry, 0, RightType.Undefined, null, exchange, currency, null, null)
         {
             
         }
 
         /// <summary>
-        /// Constructor for Futures Contracts
+        /// Default Contract Constructor
         /// </summary>
-        /// <param name="localSymbol">This is the local exchange symbol of the underlying asset.</param>
-        /// <param name="secType">This is the security type.</param>
+        /// <param name="symbol">This is the symbol of the underlying asset.</param>
+        /// <param name="securityType">This is the security type.</param>
+        /// <param name="expiry">The expiration date. Use the format YYYYMM.</param>
+        /// <param name="strike">The strike price.</param>
+        /// <param name="right">Specifies a Put or Call.</param>
+        /// <param name="multiplier">Allows you to specify a future or option contract multiplier.
+        /// This is only necessary when multiple possibilities exist.</param>
         /// <param name="exchange">The order destination, such as Smart.</param>
-        /// <param name="currency">Specifies the currency. Ambiguities may require that this field be specified,
-        /// for example, when SMART is the exchange and IBM is being requested
-        /// (IBM can trade in GBP or USD).  Given the existence of this kind of ambiguity,
-        /// it is a good idea to always specify the currency.</param>
-        public Contract(String localSymbol, SecurityType secType, String exchange, String currency, String expiry) :
-            this(null, secType, expiry, 0, RightType.Undefined, null, exchange, currency, localSymbol, null)
-        {
-        }
-
-        public Contract(String symbol, SecurityType secType, String expiry, double strike, RightType right,
+        /// <param name="currency">Specifies the currency.</param>
+        /// <param name="localSymbol">This is the local exchange symbol of the underlying asset.</param>
+        /// <param name="primaryExch">Identifies the listing exchange for the contract (do not list SMART).</param>
+        public Contract(String symbol, SecurityType securityType, String expiry, double strike, RightType right,
                         String multiplier, string exchange, string currency, string localSymbol, string primaryExch)
         {
             this.symbol = symbol;
-            this.secType = secType;
+            this.securityType = securityType;
             this.expiry = expiry;
             this.strike = strike;
             this.right = right;
@@ -105,19 +112,25 @@ namespace Krs.Ats.IBNet
             set { symbol = value; }
         }
         /// <summary>
-        /// This is the security type. Valid values are:
-        /// STK
-        /// OPT
-        /// FUT
-        /// IND
-        /// FOP
-        /// CASH
-        /// BAG
+        /// This is the security type.
         /// </summary>
-        public SecurityType SecType
+        /// <remarks>Valid security types are:
+        /// <list type="bullet">
+        /// <item>Stock</item>
+        /// <item>Option</item>
+        /// <item>Future</item>
+        /// <item>Indice</item>
+        /// <item>Option on Future</item>
+        /// <item>Cash</item>
+        /// <item>Bag</item>
+        /// <item>Bond</item>
+        /// </list>
+        /// </remarks>
+        /// <seealso cref="IBNet.SecurityType"/>
+        public SecurityType SecurityType
         {
-            get { return secType; }
-            set { secType = value; }
+            get { return securityType; }
+            set { securityType = value; }
         }
         /// <summary>
         /// The expiration date. Use the format YYYYMM.
@@ -136,8 +149,15 @@ namespace Krs.Ats.IBNet
             set { strike = value; }
         }
         /// <summary>
-        /// Specifies a Put or Call. Valid values are: P, PUT, C, CALL.
+        /// Specifies a Put or Call.
         /// </summary>
+        /// <remarks>Valid values are:
+        /// <list type="bullet">
+        /// <item>Put - the right to sell a security.</item>
+        /// <item>Call - the right to buy a security.</item>
+        /// </list>
+        /// </remarks>
+        /// <seealso cref="RightType"/>
         public RightType Right
         {
             get { return right; }
@@ -161,11 +181,14 @@ namespace Krs.Ats.IBNet
             set { exchange = value; }
         }
         /// <summary>
-        /// Specifies the currency. Ambiguities may require that this field be specified,
+        /// Specifies the currency.
+        /// </summary>
+        /// <remarks>
+        /// Ambiguities may require that this field be specified,
         /// for example, when SMART is the exchange and IBM is being requested
         /// (IBM can trade in GBP or USD).  Given the existence of this kind of ambiguity,
         /// it is a good idea to always specify the currency.
-        /// </summary>
+        /// </remarks>
         public string Currency
         {
             get { return currency; }
@@ -211,7 +234,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Dynamic memory structure used to store the leg definitions for this contract.
         /// </summary>
-        public ArrayList ComboLegs
+        public List<ComboLeg> ComboLegs
         {
             get { return comboLegs; }
         }
@@ -236,10 +259,10 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// For Bonds. A description string containing further descriptive information about the bond.
         /// </summary>
-        public string DescAppend
+        public string DescriptionAppend
         {
-            get { return descAppend; }
-            set { descAppend = value; }
+            get { return descriptionAppend; }
+            set { descriptionAppend = value; }
         }
         /// <summary>
         /// For Bonds. The type of bond, such as "CORP."
@@ -340,127 +363,6 @@ namespace Krs.Ats.IBNet
         {
             get { return notes; }
             set { notes = value; }
-        }
-        #endregion
-
-        #region Object Overrides
-        public virtual Object Clone()
-        {
-            Contract retval = (Contract) MemberwiseClone();
-            retval.comboLegs = (ArrayList) retval.comboLegs.Clone();
-            return retval;
-        }
-		
-        public  override bool Equals(Object obj)
-        {
-            Contract other = obj as Contract;
-            if (other == null || comboLegs.Count != other.comboLegs.Count)
-            {
-                return false;
-            }
-            else if (this == obj)
-            {
-                return true;
-            }
-            bool bContractEquals;
-						
-            if (secType != other.secType)
-            {
-                bContractEquals = false;
-            }
-            else
-            {
-                String thisSymbol = symbol ?? "";
-                String thisExchange = exchange ?? "";
-                String thisPrimaryExch = primaryExch ?? "";
-                String thisCurrency = currency ?? "";
-				
-                String otherSymbol = other.symbol ?? "";
-                String otherExchange = other.exchange ?? "";
-                String otherPrimaryExch = other.primaryExch ?? "";
-                String otherCurrency = other.currency ?? "";
-				
-                bContractEquals = thisSymbol.Equals(otherSymbol) && thisExchange.Equals(otherExchange) && thisPrimaryExch.Equals(otherPrimaryExch) && thisCurrency.Equals(otherCurrency);
-				
-                if (bContractEquals)
-                {
-                    if (secType == SecurityType.Bond)
-                    {
-                        bContractEquals = (putable == other.putable) && (callable == other.callable) && (convertible == other.convertible) && (coupon == other.coupon) && (nextOptionPartial == other.nextOptionPartial);
-                        if (bContractEquals)
-                        {
-                            String thisCusip = cusip ?? "";
-                            String thisRatings = ratings ?? "";
-                            String thisDescAppend = descAppend ?? "";
-                            String thisBondType = bondType ?? "";
-                            String thisCouponType = couponType ?? "";
-                            String thisMaturity = maturity ?? "";
-                            String thisIssueDate = issueDate ?? "";
-							
-                            String otherCusip = other.cusip ?? "";
-                            String otherRatings = other.ratings ?? "";
-                            String otherDescAppend = other.descAppend ?? "";
-                            String otherBondType = other.bondType ?? "";
-                            String otherCouponType = other.couponType ?? "";
-                            String otherMaturity = other.maturity ?? "";
-                            String otherIssueDate = other.issueDate ?? "";
-                            String otherOptionDate = other.nextOptionDate ?? "";
-                            String otherOptionType = other.nextOptionType ?? "";
-                            String otherNotes = other.notes ?? "";
-                            bContractEquals = thisCusip.Equals(otherCusip) && thisRatings.Equals(otherRatings) && thisDescAppend.Equals(otherDescAppend) && thisBondType.Equals(otherBondType) && thisCouponType.Equals(otherCouponType) && thisMaturity.Equals(otherMaturity) && thisIssueDate.Equals(otherIssueDate) && otherOptionDate.Equals(otherOptionDate) && otherOptionType.Equals(otherOptionType) && otherNotes.Equals(otherNotes);
-                        }
-                    }
-                    else
-                    {
-                        String thisExpiry = expiry ?? "";
-                        String thisRight = ((right == RightType.Undefined) ? "" : right.ToString());
-                        String thisMultiplier = multiplier ?? "";
-                        String thisLocalSymbol = localSymbol ?? "";
-						
-                        String otherExpiry = other.expiry ?? "";
-                        String otherRight = ((other.right == RightType.Undefined) ? "" : right.ToString());
-                        String otherMultiplier = other.multiplier ?? "";
-                        String otherLocalSymbol = other.localSymbol ?? "";
-						
-                        bContractEquals = thisExpiry.Equals(otherExpiry) && strike == other.strike && thisRight.Equals(otherRight) && thisMultiplier.Equals(otherMultiplier) && thisLocalSymbol.Equals(otherLocalSymbol);
-                    }
-                }
-            }
-			
-            if (bContractEquals && comboLegs.Count > 0)
-            {
-                // compare the combo legs
-                bool[] alreadyMatchedSecondLeg = new bool[comboLegs.Count];
-                for (int ctr1 = 0; ctr1 < comboLegs.Count; ctr1++)
-                {
-                    ComboLeg thisComboLeg = (ComboLeg) comboLegs[ctr1];
-                    bool bLegsEqual = false;
-                    for (int ctr2 = 0; ctr2 < other.comboLegs.Count; ctr2++)
-                    {
-                        if (alreadyMatchedSecondLeg[ctr2])
-                        {
-                            continue;
-                        }
-                        if (thisComboLeg.Equals(other.comboLegs[ctr2]))
-                        {
-                            bLegsEqual = alreadyMatchedSecondLeg[ctr2] = true;
-                            break;
-                        }
-                    }
-                    if (!bLegsEqual)
-                    {
-                        // leg on first not matched by any previously unmatched leg on second
-                        return false;
-                    }
-                }
-            }
-			
-            return bContractEquals;
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
         }
         #endregion
     }

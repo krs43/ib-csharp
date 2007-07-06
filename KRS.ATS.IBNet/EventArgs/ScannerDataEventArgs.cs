@@ -10,6 +10,9 @@ namespace Krs.Ats.IBNet
     public class ScannerDataEventArgs : EventArgs
     {
         private readonly int reqId;
+        /// <summary>
+        /// The ticker ID of the request to which this row is responding.
+        /// </summary>
         public int ReqId
         {
             get
@@ -19,6 +22,9 @@ namespace Krs.Ats.IBNet
         }
 
         private readonly int rank;
+        /// <summary>
+        /// The ranking within the response of this bar.
+        /// </summary>
         public int Rank
         {
             get
@@ -28,6 +34,9 @@ namespace Krs.Ats.IBNet
         }
 
         private readonly ContractDetails contractDetails;
+        /// <summary>
+        /// This structure contains a full description of the contract that was executed.
+        /// </summary>
         public ContractDetails ContractDetails
         {
             get
@@ -37,6 +46,9 @@ namespace Krs.Ats.IBNet
         }
 
         private readonly string distance;
+        /// <summary>
+        /// Meaning varies based on query.
+        /// </summary>
         public string Distance
         {
             get
@@ -46,6 +58,9 @@ namespace Krs.Ats.IBNet
         }
 
         private readonly string benchmark;
+        /// <summary>
+        /// Meaning varies based on query.
+        /// </summary>
         public string Benchmark
         {
             get
@@ -53,7 +68,11 @@ namespace Krs.Ats.IBNet
                 return benchmark;
             }
         }
+
         private readonly string projection;
+        /// <summary>
+        /// Meaning varies based on query.
+        /// </summary>
         public string Projection
         {
             get
@@ -61,7 +80,11 @@ namespace Krs.Ats.IBNet
                 return projection;
             }
         }
+
         private readonly string legsStr;
+        /// <summary>
+        /// Describes combo legs when scan is returning EFP.
+        /// </summary>
         public string LegsStr
         {
             get
@@ -70,6 +93,16 @@ namespace Krs.Ats.IBNet
             }
         }
 
+        /// <summary>
+        /// Full Constructor
+        /// </summary>
+        /// <param name="reqId">The ticker ID of the request to which this row is responding.</param>
+        /// <param name="rank">The ranking within the response of this bar.</param>
+        /// <param name="contractDetails">This structure contains a full description of the contract that was executed.</param>
+        /// <param name="distance">Meaning varies based on query.</param>
+        /// <param name="benchmark">Meaning varies based on query.</param>
+        /// <param name="projection">Meaning varies based on query.</param>
+        /// <param name="legsStr">Describes combo legs when scan is returning EFP.</param>
         public ScannerDataEventArgs(int reqId, int rank, ContractDetails contractDetails, string distance, string benchmark, string projection, string legsStr)
         {
             this.reqId = reqId;

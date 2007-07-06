@@ -10,6 +10,9 @@ namespace Krs.Ats.IBNet
     public class ExecDetailsEventArgs : EventArgs
     {
         private readonly int orderId;
+        /// <summary>
+        /// The order Id that was specified previously in the call to placeOrder().
+        /// </summary>
         public int OrderId
         {
             get
@@ -17,7 +20,12 @@ namespace Krs.Ats.IBNet
                 return orderId;
             }
         }
+
         private readonly Contract contract;
+        /// <summary>
+        /// This structure contains a full description of the contract that was executed.
+        /// </summary>
+        /// <seealso cref="Contract"/>
         public Contract Contract
         {
             get
@@ -27,6 +35,10 @@ namespace Krs.Ats.IBNet
         }
 
         private readonly Execution execution;
+        /// <summary>
+        /// This structure contains addition order execution details.
+        /// </summary>
+        /// <seealso cref="Execution"/>
         public Execution Execution
         {
             get
@@ -35,6 +47,12 @@ namespace Krs.Ats.IBNet
             }
         }
 
+        /// <summary>
+        /// Full Constructor
+        /// </summary>
+        /// <param name="orderId">The order Id that was specified previously in the call to placeOrder().</param>
+        /// <param name="contract">This structure contains a full description of the contract that was executed.</param>
+        /// <param name="execution">This structure contains addition order execution details.</param>
         public ExecDetailsEventArgs(int orderId, Contract contract, Execution execution)
         {
             this.orderId = orderId;

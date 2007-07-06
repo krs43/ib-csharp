@@ -3,6 +3,11 @@ using System.Globalization;
 
 namespace Krs.Ats.IBNet
 {
+    /// <summary>
+    /// Used to manage the legs of a combination order.
+    /// </summary>
+    /// <seealso cref="Contract.ComboLegs"/>
+    /// <seealso href="http://www.interactivebrokers.com/php/webhelp/Interoperability/Socket_Client_Java/java_properties.htm#ComboLeg"/>
     public class ComboLeg
     {
         #region Private Variables
@@ -14,11 +19,22 @@ namespace Krs.Ats.IBNet
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Initialize the ComboLeg
+        /// </summary>
         public ComboLeg()
         {
             
         }
 		
+        /// <summary>
+        /// Initialize the ComboLeg
+        /// </summary>
+        /// <param name="conId">The unique contract identifier specifying the security. See property <see cref="ComboLeg.ConId"/>.</param>
+        /// <param name="ratio">Select the relative number of contracts for the leg you are constructing. See property <see cref="ComboLeg.Ratio"/>.</param>
+        /// <param name="action">The side (buy or sell) for the leg you are constructing. See property <see cref="ComboLeg.Action"/></param>
+        /// <param name="exchange">The exchange to which the complete combination order will be routed. See property <see cref="ComboLeg.Exchange"/>.</param>
+        /// <param name="openClose">Specifies whether the order is an open or close order. Retail customers must use <see cref="ComboOpenClose.Same"/>. See property <see cref="ComboLeg.OpenClose"/></param>
         public ComboLeg(int conId, int ratio, ActionSide action, String exchange, ComboOpenClose openClose)
         {
             this.conId = conId;
@@ -27,7 +43,6 @@ namespace Krs.Ats.IBNet
             this.exchange = exchange;
             this.openClose = openClose;
         }
-
         #endregion
 
         #region Properties
@@ -39,6 +54,7 @@ namespace Krs.Ats.IBNet
             get { return conId; }
             set { conId = value; }
         }
+
         /// <summary>
         /// Select the relative number of contracts for the leg you are constructing.
         /// To help determine the ratio for a specific combination order, refer to the
@@ -49,6 +65,7 @@ namespace Krs.Ats.IBNet
             get { return ratio; }
             set { ratio = value; }
         }
+
         /// <summary>
         /// The side (buy or sell) for the leg you are constructing.
         /// </summary>
@@ -57,6 +74,7 @@ namespace Krs.Ats.IBNet
             get { return action; }
             set { action = value; }
         }
+
         /// <summary>
         /// The exchange to which the complete combination order will be routed.
         /// </summary>
@@ -65,47 +83,18 @@ namespace Krs.Ats.IBNet
             get { return exchange; }
             set { exchange = value; }
         }
+
         /// <summary>
-        /// openClose - Specifies whether the order is an open or close order. Valid values are:
-        /// Same - (0) same as the parent security. This is the only option for retail customers.
-        /// Open - (1) this option is only valid for institutional customers.
-        /// Close - (2) this option is only valid for institutional customers.
-        /// Unknown - (3) ??
+        /// Specifies whether the order is an open or close order.
+        /// Retail customers must use <see cref="ComboOpenClose.Same"/>.
         /// </summary>
+        /// <seealso cref="ComboOpenClose"/>
         public ComboOpenClose OpenClose
         {
             get { return openClose; }
             set { openClose = value; }
         }
 
-        #endregion
-
-        #region Object Overrides
-        public  override bool Equals(Object obj)
-        {
-            if (this == obj)
-            {
-                return true;
-            }
-            else if (obj == null)
-            {
-                return false;
-            }
-			
-            ComboLeg other = (ComboLeg) obj;
-            String thisExchange = exchange ?? "";
-			
-            return (action == other.action &&
-                    String.Compare(thisExchange, other.exchange, true, CultureInfo.InvariantCulture) == 0 &&
-                    conId == other.conId &&
-                    ratio == other.ratio &&
-                    openClose == other.openClose);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
         #endregion
     }
 }

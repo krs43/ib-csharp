@@ -1,11 +1,10 @@
-/*
-* Order.java
-*
-*/
 using System;
 
 namespace Krs.Ats.IBNet
 {
+    /// <summary>
+    /// Order class passed to Interactive Brokers to place an order.
+    /// </summary>
     public class Order
     {
         #region Private Variables
@@ -29,14 +28,14 @@ namespace Krs.Ats.IBNet
         private bool blockOrder;
         private bool sweepToFill;
         private int displaySize;
-        private int triggerMethod; // 0=Default, 1=Double_Bid_Ask, 2=Last, 3=Double_Last, 4=Bid_Ask, 7=Last_or_Bid_Ask, 8=Mid-point
+        private TriggerMethod triggerMethod; // 0=Default, 1=Double_Bid_Ask, 2=Last, 3=Double_Last, 4=Bid_Ask, 7=Last_or_Bid_Ask, 8=Mid-point
         private bool ignoreRth;
         private bool hidden;
         private String goodAfterTime; // FORMAT: 20060505 08:00:00 {time zone}
         private String goodTillDate; // FORMAT: 20060505 08:00:00 {time zone}
         private bool rthOnly;
         private bool overridePercentageConstraints;
-        private String rule80A; // Individual = 'I', Agency = 'A', AgentOtherMember = 'W', IndividualPTIA = 'J', AgencyPTIA = 'U', AgentOtherMemberPTIA = 'M', IndividualPT = 'K', AgencyPT = 'Y', AgentOtherMemberPT = 'N'
+        private AgentDescription rule80A; // Individual = 'I', Agency = 'A', AgentOtherMember = 'W', IndividualPTIA = 'J', AgencyPTIA = 'U', AgentOtherMemberPTIA = 'M', IndividualPT = 'K', AgencyPT = 'Y', AgentOtherMemberPT = 'N'
         private bool allOrNone;
         private int minQty;
         private double percentOffset; // REL orders only
@@ -77,7 +76,7 @@ namespace Krs.Ats.IBNet
 		
         // VOLATILITY ORDERS ONLY
         private double volatility;
-        private int volatilityType; // 1=daily, 2=annual
+        private VolatilityType volatilityType; // 1=daily, 2=annual
         private int continuousUpdate;
         private int referencePriceType; // 1=Average, 2 = BidOrAsk
         private OrderType deltaNeutralOrderType;
@@ -89,6 +88,9 @@ namespace Krs.Ats.IBNet
         #endregion
 
         #region Constructor
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
         public Order()
         {
             openClose = "O";
@@ -96,30 +98,19 @@ namespace Krs.Ats.IBNet
             transmit = true;
             designatedLocation = "";
             minQty = System.Int32.MaxValue;
-            //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             percentOffset = System.Double.MaxValue;
-            //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             nbboPriceCap = System.Double.MaxValue;
-            //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             startingPrice = System.Double.MaxValue;
-            //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             stockRefPrice = System.Double.MaxValue;
-            //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             delta = System.Double.MaxValue;
-            //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             stockRangeLower = System.Double.MaxValue;
-            //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             stockRangeUpper = System.Double.MaxValue;
-            //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             volatility = System.Double.MaxValue;
-            volatilityType = System.Int32.MaxValue;
+            volatilityType = IBNet.VolatilityType.Undefined;
             deltaNeutralOrderType = IBNet.OrderType.None;
-            //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             deltaNeutralAuxPrice = System.Double.MaxValue;
             referencePriceType = System.Int32.MaxValue;
-            //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             trailStopPrice = System.Double.MaxValue;
-            //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Double.MAX_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             basisPoints = System.Double.MaxValue;
             basisPointsType = System.Int32.MaxValue;
         }
@@ -172,20 +163,9 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// The order type. identifies the order type. Valid values are:
-        /// MKT
-        /// MKTCLS
-        /// LMT
-        /// LMTCLS
-        /// PEGMKT
-        /// STP
-        /// STPLMT
-        /// TRAIL
-        /// REL
-        /// VWAP
-        /// TRAILLIMIT
-        /// VOL
+        /// The order type.
         /// </summary>
+        /// <seealso cref="OrderType"/>
         public OrderType OrderType
         {
             get { return orderType; }
@@ -214,8 +194,10 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// The time in force. Valid values are: DAY, GTC, IOC, GTD.
+        /// The time in force.
         /// </summary>
+        /// <remarks>Valid values are: DAY, GTC, IOC, GTD.</remarks>
+        /// <seealso cref="TimeInForce"/>
         public TimeInForce Tif
         {
             get { return tif; }
@@ -232,12 +214,18 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Tells how to handle remaining orders in an OCA group when one order or part of an order executes. Valid values include:
-        /// 1 = Cancel all remaining orders with block
-        /// 2 = Remaining orders are proportionately reduced in size with block
-        /// 3 = Remaining orders are proportionately reduced in size with no block
-        /// If you use a value "with block"gives your order has overfill protection. This means  that only one order in the group will be routed at a time to remove the possibility of an overfill.
+        /// Tells how to handle remaining orders in an OCA group when one order or part of an order executes.
         /// </summary>
+        /// <remarks>
+        /// Valid values include:
+        /// <list type="bullet">
+        /// <item>1 = Cancel all remaining orders with block.</item>
+        /// <item>2 = Remaining orders are proportionately reduced in size with block.</item>
+        /// <item>3 = Remaining orders are proportionately reduced in size with no block.</item>
+        /// </list>
+        /// If you use a value "with block"gives your order has overfill protection. This means  that only one order in the group will be routed at a time to remove the possibility of an overfill.
+        /// </remarks>
+        /// <seealso cref="OcaType"/>
         public OcaType OcaType
         {
             get { return ocaType; }
@@ -300,16 +288,22 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Specifies how Simulated Stop, Stop-Limit and Trailing Stop orders are triggered. Valid values are:
-        /// 0 - the default value. The "double bid/ask" method will be used for orders for OTC stocks and US options. All other orders will used the "last" method.
-        /// 1 - use "double bid/ask" method, where stop orders are triggered based on two consecutive bid or ask prices.
-        /// 2 - "last" method, where stop orders are triggered based on the last price.
-        /// 3 double last method.
-        /// 4 bid/ask method.
-        /// 7 last or bid/ask method.
-        /// 8 mid-point method.
+        /// Specifies how Simulated Stop, Stop-Limit and Trailing Stop orders are triggered.
         /// </summary>
-        public int TriggerMethod
+        /// <remarks>
+        /// Valid values are:
+        /// <list type="bullet">
+        /// <item>0 - the default value. The "double bid/ask" method will be used for orders for OTC stocks and US options. All other orders will used the "last" method.</item>
+        /// <item>1 - use "double bid/ask" method, where stop orders are triggered based on two consecutive bid or ask prices.</item>
+        /// <item>2 - "last" method, where stop orders are triggered based on the last price.</item>
+        /// <item>3 - double last method.</item>
+        /// <item>4 - bid/ask method.</item>
+        /// <item>7 - last or bid/ask method.</item>
+        /// <item>8 - mid-point method.</item>
+        /// </list>
+        /// </remarks>
+        /// <seealso cref="TriggerMethod"/>
+        public TriggerMethod TriggerMethod
         {
             get { return triggerMethod; }
             set { triggerMethod = value; }
@@ -335,10 +329,10 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// The trade's "Good After Time,"
-        /// format "YYYYMMDD hh:mm:ss (optional time zone)" 
-        /// Use an empty String if not applicable.
+        /// The trade's "Good After Time"
         /// </summary>
+        /// <remarks>format "YYYYMMDD hh:mm:ss (optional time zone)" 
+        /// Use an empty String if not applicable.</remarks>
         public string GoodAfterTime
         {
             get { return goodAfterTime; }
@@ -346,10 +340,11 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// You must enter a tif value of GTD. The trade's "Good Till Date," format is:
-        /// YYYYMMDD hh:mm:ss (optional time zone)
-        /// Use an empty String if not applicable.
+        /// You must enter a Time in Force value of Good Till Date.
         /// </summary>
+        /// <remarks>The trade's "Good Till Date," format is:
+        /// YYYYMMDD hh:mm:ss (optional time zone)
+        /// Use an empty String if not applicable.</remarks>
         public string GoodTillDate
         {
             get { return goodTillDate; }
@@ -358,8 +353,8 @@ namespace Krs.Ats.IBNet
 
         /// <summary>
         /// Regular trading hours only.
-        /// yes=1, no=0
         /// </summary>
+        /// <remarks>yes=1, no=0</remarks>
         public bool RthOnly
         {
             get { return rthOnly; }
@@ -378,17 +373,11 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Individual = 'I'
-        /// Agency = 'A',
-        /// AgentOtherMember = 'W'
-        /// IndividualPTIA = 'J'
-        /// AgencyPTIA = 'U'
-        /// AgentOtherMemberPTIA = 'M'
-        /// IndividualPT = 'K'
-        /// AgencyPT = 'Y'
-        /// AgentOtherMemberPT = 'N' 
+        /// This identifies what type of trader you are.
         /// </summary>
-        public string Rule80A
+        /// <remarks>Rule80A required you to identify which type of trader you are.</remarks>
+        /// <seealso cref="AgentDescription"/>
+        public AgentDescription Rule80A
         {
             get { return rule80A; }
             set { rule80A = value; }
@@ -468,7 +457,6 @@ namespace Krs.Ats.IBNet
 
         /// <summary>
         /// The Financial Advisor percentage concerning the trade's allocation -- use an empty String if not applicable.
-
         /// </summary>
         public string FAPercentage
         {
@@ -505,9 +493,9 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// The order origin. For institutional customers only.
-        /// Valid values are 0 = customer, 1 = firm
+        /// The order origin.
         /// </summary>
+        /// <remarks>For institutional customers only.</remarks>
         public OrderOrigin Origin
         {
             get { return origin; }
@@ -543,7 +531,6 @@ namespace Krs.Ats.IBNet
 
         /// <summary>
         /// Trade with electronic quotes.
-        /// yes = 1, no = 0
         /// </summary>
         public bool ETradeOnly
         {
@@ -553,7 +540,6 @@ namespace Krs.Ats.IBNet
 
         /// <summary>
         /// Trade with firm quotes.
-        /// yes = 1, no = 0
         /// </summary>
         public bool FirmQuoteOnly
         {
@@ -571,11 +557,10 @@ namespace Krs.Ats.IBNet
         }
         
         /// <summary>
-        /// match = 1
-        /// improvement = 2
-        /// transparent = 3
-        /// For BOX exchange only.
+        /// The auction strategy.
         /// </summary>
+        /// <remarks>For BOX exchange only.</remarks>
+        /// <seealso cref="AuctionStrategy"/>
         public AuctionStrategy AuctionStrategy
         {
             get { return auctionStrategy; }
@@ -583,8 +568,9 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// The starting price. Valid on BOX orders only.
+        /// The starting price.
         /// </summary>
+        /// <remarks>Valid on BOX orders only.</remarks>
         public double StartingPrice
         {
             get { return startingPrice; }
@@ -592,10 +578,11 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// The stock reference price. The reference price is used for VOL orders
-        /// to compute the limit price sent to an exchange (whether or not Continuous
-        /// Update is selected), and for price range monitoring.
+        /// The stock reference price.
         /// </summary>
+        /// <remarks>The reference price is used for VOL orders
+        /// to compute the limit price sent to an exchange (whether or not Continuous
+        /// Update is selected), and for price range monitoring.</remarks>
         public double StockRefPrice
         {
             get { return stockRefPrice; }
@@ -603,8 +590,9 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// The stock delta. Valid on BOX orders only.
+        /// The stock delta.
         /// </summary>
+        /// <remarks>Valid on BOX orders only.</remarks>
         public double Delta
         {
             get { return delta; }
@@ -613,8 +601,8 @@ namespace Krs.Ats.IBNet
 
         /// <summary>
         /// The lower value for the acceptable underlying stock price range.
-        /// For price improvement option orders on BOX and VOL orders with dynamic management.
         /// </summary>
+        /// <remarks>For price improvement option orders on BOX and VOL orders with dynamic management.</remarks>
         public double StockRangeLower
         {
             get { return stockRangeLower; }
@@ -623,8 +611,8 @@ namespace Krs.Ats.IBNet
 
         /// <summary>
         /// The upper value for the acceptable underlying stock price range.
-        /// For price improvement option orders on BOX and VOL orders with dynamic management.
         /// </summary>
+        /// <remarks>For price improvement option orders on BOX and VOL orders with dynamic management.</remarks>
         public double StockRangeUpper
         {
             get { return stockRangeUpper; }
@@ -632,10 +620,10 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// What the price is, computed via TWSs Options Analytics.
-        /// For VOL orders, the limit price sent to an exchange is not editable,
-        /// as it is the output of a function.  Volatility is expressed as a percentage.
+        /// What the price is, computed via TWS's Options Analytics.
         /// </summary>
+        /// <remarks>For VOL orders, the limit price sent to an exchange is not editable,
+        /// as it is the output of a function.  Volatility is expressed as a percentage.</remarks>
         public double Volatility
         {
             get { return volatility; }
@@ -643,23 +631,23 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// How the volatility is calculated.
-        /// Daily = 1
-        /// Annual = 2
+        /// How the volatility is calculated. 
         /// </summary>
-        public int VolatilityType
+        /// <seealso cref="VolatilityType"/>
+        public VolatilityType VolatilityType
         {
             get { return volatilityType; }
             set { volatilityType = value; }
         }
 
         /// <summary>
-        /// Used for dynamic management of volatility orders. Determines whether TWS is
+        /// Used for dynamic management of volatility orders. 
+        /// </summary>
+        /// <remarks>Determines whether TWS is
         /// supposed to update the order price as the underlying moves.  If selected,
         /// the limit price sent to an exchange is modified by TWS if the computed price
         /// of the option changes enough to warrant doing so.  This is very helpful in
-        /// keeping the limit price sent to the exchange up to date as the underlying price changes.
-        /// </summary>
+        /// keeping the limit price sent to the exchange up to date as the underlying price changes.</remarks>
         public int ContinuousUpdate
         {
             get { return continuousUpdate; }
@@ -717,52 +705,5 @@ namespace Krs.Ats.IBNet
         }
         #endregion
 
-        #region Object Override
-        public  override bool Equals(System.Object obj)
-        {
-            if (this == obj)
-                return true;
-            else if (obj == null)
-                return false;
-			
-            Order other = (Order) obj;
-			
-            if (permId == other.permId)
-            {
-                return true;
-            }
-			
-            bool firstSetEquals = orderId == other.orderId && clientId == other.clientId && totalQuantity == other.totalQuantity && lmtPrice == other.lmtPrice && auxPrice == other.auxPrice && origin == other.origin && transmit == other.transmit && parentId == other.parentId && blockOrder == other.blockOrder && sweepToFill == other.sweepToFill && displaySize == other.displaySize && triggerMethod == other.triggerMethod && ignoreRth == other.ignoreRth && hidden == other.hidden && discretionaryAmt == other.discretionaryAmt && shortSaleSlot == other.shortSaleSlot && (System.Object) designatedLocation == (System.Object) other.designatedLocation && ocaType == other.ocaType && rthOnly == other.rthOnly && allOrNone == other.allOrNone && minQty == other.minQty && percentOffset == other.percentOffset && eTradeOnly == other.eTradeOnly && firmQuoteOnly == other.firmQuoteOnly && nbboPriceCap == other.nbboPriceCap && auctionStrategy == other.auctionStrategy && startingPrice == other.startingPrice && stockRefPrice == other.stockRefPrice && delta == other.delta && stockRangeLower == other.stockRangeLower && stockRangeUpper == other.stockRangeUpper && volatility == other.volatility && volatilityType == other.volatilityType && deltaNeutralAuxPrice == other.deltaNeutralAuxPrice && continuousUpdate == other.continuousUpdate && referencePriceType == other.referencePriceType && trailStopPrice == other.trailStopPrice;
-			
-            if (!firstSetEquals)
-            {
-                return false;
-            }
-            else
-            {
-                String thisOcaGroup = ocaGroup ?? "";
-                String thisAccount = account ?? "";
-                String thisOpenClose = openClose ?? "";
-                String thisOrderRef = orderRef ?? "";
-                String thisRule80A = rule80A ?? "";
-                String thisSettlingFirm = settlingFirm ?? "";
-
-                String otherOcaGroup = other.ocaGroup ?? "";
-                String otherAccount = other.account ?? "";
-                String otherOpenClose = other.openClose ?? "";
-                String otherOrderRef = other.orderRef ?? "";
-                String otherOrderGoodAfterTime = other.goodAfterTime ?? "";
-                String otherOrderGoodTillDate = other.goodTillDate ?? "";
-                String otherRule80A = other.rule80A ?? "";
-                String otherSettlingFirm = other.settlingFirm ?? "";
-
-                return action.Equals(other.action) && orderType.Equals(other.orderType) && tif.Equals(other.tif) && thisOcaGroup.Equals(otherOcaGroup) && thisAccount.Equals(otherAccount) && thisOpenClose.Equals(otherOpenClose) && thisOrderRef.Equals(otherOrderRef) && otherOrderGoodAfterTime.Equals(otherOrderGoodAfterTime) && otherOrderGoodTillDate.Equals(otherOrderGoodTillDate) && thisRule80A.Equals(otherRule80A) && thisSettlingFirm.Equals(otherSettlingFirm) && deltaNeutralOrderType.Equals(other.deltaNeutralOrderType);
-            }
-        }
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-        #endregion
     }
 }

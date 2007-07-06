@@ -10,6 +10,9 @@ namespace Krs.Ats.IBNet
     public class UpdateAccountTimeEventArgs : EventArgs
     {
         private readonly string timeStamp;
+        /// <summary>
+        /// Current system time on the server side.
+        /// </summary>
         public string TimeStamp
         {
             get
@@ -18,6 +21,10 @@ namespace Krs.Ats.IBNet
             }
         }
 
+        /// <summary>
+        /// Full Constructor
+        /// </summary>
+        /// <param name="timeStamp">Current system time on the server side.</param>
         public UpdateAccountTimeEventArgs(string timeStamp)
         {
             this.timeStamp = timeStamp;

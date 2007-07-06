@@ -2,13 +2,16 @@ using System;
 
 namespace Krs.Ats.IBNet
 {
+    /// <summary>
+    /// Contract details returned from Interactive Brokers
+    /// </summary>
     public class ContractDetails
     {
         #region Private Variables
         private Contract summary;
         private String marketName;
         private String tradingClass;
-        private int conid;
+        private int contractId;
         private double minTick;
         private String multiplier;
         private int priceMagnifier;
@@ -17,19 +20,32 @@ namespace Krs.Ats.IBNet
         #endregion
 
         #region Constructors
-
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public ContractDetails() :
             this(new Contract(), null, null, 0, 0, null, null, null)
         {
             
         }
 		
-        public ContractDetails(Contract summary, System.String marketName, String tradingClass, int conid, double minTick, System.String multiplier, System.String orderTypes, System.String validExchanges)
+        /// <summary>
+        /// Full Constructor
+        /// </summary>
+        /// <param name="summary">A contract summary.</param>
+        /// <param name="marketName">The market name for this contract.</param>
+        /// <param name="tradingClass">The trading class name for this contract.</param>
+        /// <param name="contractId">The unique contract identifier.</param>
+        /// <param name="minTick">The minimum price tick.</param>
+        /// <param name="multiplier">The order size multiplier.</param>
+        /// <param name="orderTypes">The list of valid order types for this contract.</param>
+        /// <param name="validExchanges">The list of exchanges this contract is traded on.</param>
+        public ContractDetails(Contract summary, System.String marketName, String tradingClass, int contractId, double minTick, System.String multiplier, System.String orderTypes, System.String validExchanges)
         {
             this.summary = summary;
             this.marketName = marketName;
             this.tradingClass = tradingClass;
-            this.conid = conid;
+            this.contractId = contractId;
             this.minTick = minTick;
             this.multiplier = multiplier;
             this.orderTypes = orderTypes;
@@ -65,10 +81,10 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// The unique contract identifier.
         /// </summary>
-        public int Conid
+        public int ContractId
         {
-            get { return conid; }
-            set { conid = value; }
+            get { return contractId; }
+            set { contractId = value; }
         }
         /// <summary>
         /// The minimum price tick.

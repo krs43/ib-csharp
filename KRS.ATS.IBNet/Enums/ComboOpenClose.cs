@@ -11,11 +11,11 @@ namespace Krs.Ats.IBNet
     /// </summary>
     public enum ComboOpenClose : int
     {
-        [Description("SAME")]
         /// <summary>
         /// open/close leg value is same as combo
         /// This value is always used for retail accounts
         /// </summary>
+        [Description("SAME")]
         Same = 0,
         /// <summary>
         /// Institutional Accounts Only
@@ -31,6 +31,6 @@ namespace Krs.Ats.IBNet
         /// Institutional Accounts Only
         /// </summary>
         [Description("UNKNOWN")]
-        Unknown = 3,
+        Unknown = 3
     }
 }

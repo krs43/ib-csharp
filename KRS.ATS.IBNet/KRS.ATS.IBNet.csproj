@@ -36,15 +36,21 @@
   <ItemGroup>
     <Compile Include="EnumDescConverter.cs" />
     <Compile Include="Enums\ActionSide.cs" />
+    <Compile Include="Enums\AgentDescription.cs" />
     <Compile Include="Enums\AuctionStrategy.cs" />
     <Compile Include="Enums\ComboOpenClose.cs" />
     <Compile Include="Enums\ExecutionSide.cs" />
     <Compile Include="Enums\LogLevel.cs" />
+    <Compile Include="Enums\MarketDepthOperation.cs" />
+    <Compile Include="Enums\MarketDepthSide.cs" />
+    <Compile Include="Enums\NewsType.cs" />
     <Compile Include="Enums\OcaType.cs" />
     <Compile Include="Enums\OrderOrigin.cs" />
+    <Compile Include="Enums\OrderStatus.cs" />
     <Compile Include="Enums\OrderType.cs" />
     <Compile Include="Enums\TimeInForce.cs" />
     <Compile Include="Enums\TriggerMethod.cs" />
+    <Compile Include="Enums\VolatilityType.cs" />
     <Compile Include="EventArgs\BondContractDetailsEventArgs.cs" />
     <Compile Include="EventArgs\ConnectionClosedEventArgs.cs" />
     <Compile Include="EventArgs\ErrorEventArgs.cs" />

@@ -3,6 +3,9 @@ using System.Globalization;
 
 namespace Krs.Ats.IBNet
 {
+    /// <summary>
+    /// Argument passed to interactive brokers when requesting execution history.
+    /// </summary>
     public class ExecutionFilter
     {
         #region Private Variables
@@ -11,25 +14,38 @@ namespace Krs.Ats.IBNet
         private String acctCode;
         private DateTime time;
         private String symbol;
-        private SecurityType secType;
+        private SecurityType securityType;
         private String exchange;
         private ActionSide side;
 
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
         public ExecutionFilter()
         {
 
         }
 		
-        public ExecutionFilter(int clientId, String acctCode, DateTime time, String symbol, SecurityType secType, String exchange, ActionSide side)
+        /// <summary>
+        /// Full Constructor
+        /// </summary>
+        /// <param name="clientId">Filter the results of the ReqExecutions() method based on the clientId.</param>
+        /// <param name="acctCode">Filter the results of the ReqExecutions() method based on an account code.</param>
+        /// <param name="time">Filter the results of the ReqExecutions() method based on execution reports received after the specified time.</param>
+        /// <param name="symbol">Filter the results of the ReqExecutions() method based on the order symbol.</param>
+        /// <param name="securityType">Refer to the Contract struct for the list of valid security types.</param>
+        /// <param name="exchange">Filter the results of the ReqExecutions() method based on the order exchange.</param>
+        /// <param name="side">Filter the results of the ReqExecutions() method based on the order action.</param>
+        public ExecutionFilter(int clientId, String acctCode, DateTime time, String symbol, SecurityType securityType, String exchange, ActionSide side)
         {
             this.clientId = clientId;
             this.acctCode = acctCode;
             this.time = time;
             this.symbol = symbol;
-            this.secType = secType;
+            this.securityType = securityType;
             this.exchange = exchange;
             this.side = side;
         }
@@ -48,8 +64,8 @@ namespace Krs.Ats.IBNet
 
         /// <summary>
         /// Filter the results of the ReqExecutions() method based on an account code.
-        /// Note: this is only relevant for Financial Advisor (FA) accounts.
         /// </summary>
+        /// <remarks>This is only relevant for Financial Advisor (FA) accounts.</remarks>
         public string AcctCode
         {
             get { return acctCode; }
@@ -57,9 +73,9 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Filter the results of the ReqExecutions() method based on execution reports received after the specified time.
-        /// The format for timeFilter is "yyyymmdd-hh:mm:ss"
+        /// Filter the results of the ReqExecutions() method based on execution reports received after the specified time. 
         /// </summary>
+        /// <remarks>The format for timeFilter is "yyyymmdd-hh:mm:ss"</remarks>
         public DateTime Time
         {
             get { return time; }
@@ -76,17 +92,17 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Filter the results of the ReqExecutions() method based on the order security type.
-        /// Note: Refer to the Contract struct for the list of valid security types.
+        /// Filter the results of the ReqExecutions() method based on the order security type. 
         /// </summary>
-        public SecurityType SecType
+        /// <remarks>Refer to the Contract struct for the list of valid security types.</remarks>
+        public SecurityType SecurityType
         {
-            get { return secType; }
-            set { secType = value; }
+            get { return securityType; }
+            set { securityType = value; }
         }
 
         /// <summary>
-        /// Filter the results of the ReqExecutions() method based on theorder exchange.
+        /// Filter the results of the ReqExecutions() method based on the order exchange.
         /// </summary>
         public string Exchange
         {
@@ -95,46 +111,15 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Filter the results of the ReqExecutions() method based on the order action.
-        /// Note: Refer to the Order struct for the list of valid order actions.
+        /// Filter the results of the ReqExecutions() method based on the order action. 
         /// </summary>
+        /// <remarks>Refer to the Order struct for the list of valid order actions.</remarks>
         public ActionSide Side
         {
             get { return side; }
             set { side = value; }
         }
 
-        #endregion
-
-        #region Object Overrides
-        public  override bool Equals(System.Object obj)
-        {
-            bool bRetVal;
-            ExecutionFilter other = obj as ExecutionFilter;
-
-            if (other == null)
-            {
-                bRetVal = false;
-            }
-            else if (this == other)
-            {
-                bRetVal = true;
-            }
-            else
-            {
-                bRetVal = (clientId == other.clientId && (String.Compare(acctCode, other.acctCode, true, CultureInfo.InvariantCulture) == 0) && time.Equals(other.time) && (String.Compare(symbol, other.symbol, true, CultureInfo.InvariantCulture) == 0) && secType.Equals(other.secType) && (String.Compare(exchange, other.exchange, true, CultureInfo.InvariantCulture) == 0) && side.Equals(other.side));
-            }
-            return bRetVal;
-        }
-
-        /// <summary>
-        /// Note: Override the hash code functions with something meaningful
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
         #endregion
     }
 }

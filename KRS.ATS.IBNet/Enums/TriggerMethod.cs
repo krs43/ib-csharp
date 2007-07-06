@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Krs.Ats.IBNet
 {
+    /// <summary>
+    /// Trigger method for actions.
+    /// </summary>
     public enum TriggerMethod
     {
         /// <summary>

@@ -10,7 +10,9 @@ namespace Krs.Ats.IBNet
     public class ScannerParametersEventArgs : EventArgs
     {
         private readonly string xml;
-
+        /// <summary>
+        /// Document describing available scanner subscription parameters.
+        /// </summary>
         public string Xml
         {
             get
@@ -19,6 +21,10 @@ namespace Krs.Ats.IBNet
             }
         }
 
+        /// <summary>
+        /// Full Constructor
+        /// </summary>
+        /// <param name="xml">Document describing available scanner subscription parameters.</param>
         public ScannerParametersEventArgs(string xml)
         {
             this.xml = xml;

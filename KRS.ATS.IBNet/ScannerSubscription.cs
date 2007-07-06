@@ -2,6 +2,9 @@ using System;
 
 namespace Krs.Ats.IBNet
 {
+    /// <summary>
+    /// Scanner Subscription details to pass to Interactive Brokers
+    /// </summary>
     public class ScannerSubscription
     {
         #region Private Variables
