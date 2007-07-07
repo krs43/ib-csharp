@@ -19,7 +19,12 @@ namespace Krs.Ats.IBNet
         /// Security is to be sold.
         /// </summary>
         [Description("SELL")]
-        Sell
+        Sell,
+        /// <summary>
+        /// Undefined
+        /// </summary>
+        [Description("")]
+        Undefined
         /* DEPRECATED
          * [Description("SSHORT")]
          * SShort*/

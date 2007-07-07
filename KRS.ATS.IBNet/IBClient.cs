@@ -704,7 +704,8 @@ namespace Krs.Ats.IBNet
         /// </summary>
         /// <param name="host">host name or IP address of the machine where TWS is running. Leave blank to connect to the local host.</param>
         /// <param name="port">must match the port specified in TWS on the Configure>API>Socket Port field.</param>
-        /// <param name="clientId">A number used to identify this client connection. All orders placed/modified from this client will be associated with this client identifier. Note: Each client MUST connect with a unique clientId.</param>
+        /// <param name="clientId">A number used to identify this client connection. All orders placed/modified from this client will be associated with this client identifier.
+        /// Each client MUST connect with a unique clientId.</param>
         public void Connect(String host, int port, int clientId)
         {
             if(host == null)
@@ -1045,7 +1046,7 @@ namespace Krs.Ats.IBNet
         /// W (weeks)
         /// M (months)
         /// Y (years)
-        /// Note, if no unit is specified, seconds are used.  Also, note "years" is currently limited to one.
+        /// If no unit is specified, seconds are used. "years" is currently limited to one.
         /// </param>
         /// <param name="barSizeSetting">
         /// specifies the size of the bars that will be returned (within IB/TWS limits). Valid values include:
@@ -1418,7 +1419,7 @@ namespace Krs.Ats.IBNet
 		
         /// <summary>
         /// Call the exerciseOptions() method to exercise options. 
-        /// Please note that “SMART” is not an allowed exchange in exerciseOptions() calls, and that TWS does a moneyness request for the position in question whenever any API initiated exercise or lapse is attempted.
+        /// “SMART” is not an allowed exchange in exerciseOptions() calls, and that TWS does a moneyness request for the position in question whenever any API initiated exercise or lapse is attempted.
         /// </summary>
         /// <param name="tickerId">the Id for the exercise request.</param>
         /// <param name="contract">this structure contains a description of the contract to be exercised.  If no multiplier is specified, a default of 100 is assumed.</param>
@@ -1440,7 +1441,6 @@ namespace Krs.Ats.IBNet
         {
             if(contract == null)
                 throw new ArgumentNullException("contract");
-            // Note: Lookinto synchronization with "lock this"
             lock (this)
             {
                 // not connected?
@@ -1493,7 +1493,8 @@ namespace Krs.Ats.IBNet
         /// </summary>
         /// <param name="orderId">the order Id. You must specify a unique value. When the order status returns, it will be identified by this tag. This tag is also used when canceling the order.</param>
         /// <param name="contract">this structure contains a description of the contract which is being traded.</param>
-        /// <param name="order">this structure contains the details of the order. Note: Each client MUST connect with a unique clientId.</param>
+        /// <param name="order">this structure contains the details of the order.
+        /// Each client MUST connect with a unique clientId.</param>
         public void  PlaceOrder(int orderId, Contract contract, Order order)
         {
             if(contract == null)
@@ -1774,7 +1775,7 @@ namespace Krs.Ats.IBNet
                         send(filter.ClientId);
                         send(filter.AcctCode);
 						
-                        // Note that the valid format for time is "yyyymmdd-hh:mm:ss"
+                        // The valid format for time is "yyyymmdd-hh:mm:ss"
                         send(filter.Time.ToString("yyyymmdd-hh:mm:ss", CultureInfo.InvariantCulture));
                         send(filter.Symbol);
                         send(filter.SecurityType.ToString());
@@ -1829,7 +1830,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Call this method to request the open orders that were placed from this client. Each open order will be fed back through the openOrder() and orderStatus() functions on the EWrapper.
         /// 
-        /// Note: The client with a clientId of "0" will also receive the TWS-owned open orders. These orders will be associated with the client and a new orderId will be generated. This association will persist over multiple API and TWS sessions.
+        /// The client with a clientId of "0" will also receive the TWS-owned open orders. These orders will be associated with the client and a new orderId will be generated. This association will persist over multiple API and TWS sessions.
         /// </summary>
         public void  ReqOpenOrders()
         {
@@ -1889,7 +1890,6 @@ namespace Krs.Ats.IBNet
                     if (!(e is ObjectDisposedException || e is IOException))
                         throw;
 
-                    //BUG: Wrong error message
                     error(ErrorMessage.FailSendCancelOrder, e);
                     close();
                 }
@@ -1924,7 +1924,6 @@ namespace Krs.Ats.IBNet
                     if (!(e is ObjectDisposedException || e is IOException))
                         throw;
 
-                    //BUG: Wrong error message
                     error(ErrorMessage.FailSendCancelOrder, e);
                     close();
                 }
@@ -1958,7 +1957,6 @@ namespace Krs.Ats.IBNet
                     if (!(e is ObjectDisposedException || e is IOException))
                         throw;
 
-                    // BUG: This is a failure to cancel an order?
                     error(ErrorMessage.FailSendCancelOrder, e);
                     close();
                 }
@@ -1968,7 +1966,7 @@ namespace Krs.Ats.IBNet
 		/// <summary>
 		/// Call this method to request that newly created TWS orders be implicitly associated with the client. When a new TWS order is created, the order will be associated with the client and fed back through the openOrder() and orderStatus() methods on the EWrapper.
 		/// 
-		/// Note: TWS orders can only be bound to clients with a clientId of “0”.
+		/// TWS orders can only be bound to clients with a clientId of “0”.
 		/// </summary>
         /// <param name="autoBind">If set to TRUE, newly created TWS orders will be implicitly associated with the client. If set to FALSE, no association will be made.</param>
         public void  ReqAutoOpenOrders(bool autoBind)
@@ -1996,7 +1994,6 @@ namespace Krs.Ats.IBNet
                     if (!(e is ObjectDisposedException || e is IOException))
                         throw;
 
-                    //BUG: This is an auto opn order not an open order
                     error(ErrorMessage.FailSendOpenOrder, e);
                     close();
                 }
@@ -2006,7 +2003,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Call this method to request the open orders that were placed from all clients and also from TWS. Each open order will be fed back through the openOrder() and orderStatus() functions on the EWrapper.
         /// 
-        /// Note: No association is made between the returned orders and the requesting client.
+        /// No association is made between the returned orders and the requesting client.
         /// </summary>
         public void  ReqAllOpenOrders()
         {
@@ -2032,7 +2029,6 @@ namespace Krs.Ats.IBNet
                     if (!(e is ObjectDisposedException || e is IOException))
                         throw;
 
-                    //BUG: Wrong error message
                     error(ErrorMessage.FailSendOpenOrder, e);
                     close();
                 }
@@ -2042,7 +2038,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Call this method to request the list of managed accounts. The list will be returned by the managedAccounts() function on the EWrapper.
         /// 
-        /// Note: This request can only be made when connected to a Financial Advisor (FA) account.
+        /// This request can only be made when connected to a Financial Advisor (FA) account.
         /// </summary>
         public void  ReqManagedAccts()
         {
@@ -2068,7 +2064,6 @@ namespace Krs.Ats.IBNet
                     if (!(e is ObjectDisposedException || e is IOException))
                         throw;
 
-                    //Bug: Wrong error message
                     error(ErrorMessage.FailSendOpenOrder, e);
                     close();
                 }
@@ -2671,14 +2666,11 @@ namespace Krs.Ats.IBNet
                     }
 						
                     // read order fields
-                    // BUG: Parse may fail as the string may be empty...
                     order.Action = (ActionSide)EnumDescConverter.GetEnumValue(typeof(ActionSide), ReadStr());
                     order.TotalQuantity = ReadInt();
-                    // BUG: Parse may fail as the string may be empty...
                     order.OrderType = (OrderType)EnumDescConverter.GetEnumValue(typeof(OrderType), ReadStr());
                     order.LmtPrice = ReadDouble();
                     order.AuxPrice = ReadDouble();
-                    // BUG: Parse may fail as the string may be empty...
                     order.Tif = (TimeInForce)EnumDescConverter.GetEnumValue(typeof(TimeInForce), ReadStr());
                     order.OcaGroup = ReadStr();
                     order.Account = ReadStr();

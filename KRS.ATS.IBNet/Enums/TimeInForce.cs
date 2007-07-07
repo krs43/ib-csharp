@@ -29,6 +29,11 @@ namespace Krs.Ats.IBNet
         /// Good Till Date
         /// </summary>
         [Description("GTD")]
-        GoodTillDate
+        GoodTillDate,
+        /// <summary>
+        /// Undefined
+        /// </summary>
+        [Description("")]
+        Undefined
     }
 }

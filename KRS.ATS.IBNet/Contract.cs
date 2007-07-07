@@ -214,7 +214,7 @@ namespace Krs.Ats.IBNet
         /// If set to true, contract details requests and historical data queries
         /// can be performed pertaining to expired contracts.
         /// 
-        /// Note: Historical data queries on expired contracts are limited to the
+        /// Historical data queries on expired contracts are limited to the
         /// last year of the contracts life, and are initially only supported for
         /// expired futures contracts,
         /// </summary>
