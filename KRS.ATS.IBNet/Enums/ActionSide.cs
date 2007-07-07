@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.ComponentModel;
 
 namespace Krs.Ats.IBNet
@@ -13,18 +10,15 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Security is to be bought.
         /// </summary>
-        [Description("BUY")]
-        Buy,
+        [Description("BUY")] Buy,
         /// <summary>
         /// Security is to be sold.
         /// </summary>
-        [Description("SELL")]
-        Sell,
+        [Description("SELL")] Sell,
         /// <summary>
         /// Undefined
         /// </summary>
-        [Description("")]
-        Undefined
+        [Description("")] Undefined
         /* DEPRECATED
          * [Description("SSHORT")]
          * SShort*/

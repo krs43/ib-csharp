@@ -9,28 +9,29 @@ namespace Krs.Ats.IBNet
     {
         #region Private Variables
 
-        private int orderId;
-        private int clientId;
-        private String executionId;
-        private String time;
         private String accountNumber;
+        private int clientId;
         private String exchange;
-        private ExecutionSide side;
-        private int shares;
-        private double price;
-        private int permId;
+        private String executionId;
         private int liquidation;
+        private int orderId;
+        private int permId;
+        private double price;
+        private int shares;
+        private ExecutionSide side;
+        private String time;
+
         #endregion
 
         #region Constructors
+
         /// <summary>
         /// Default Constructor
         /// </summary>
         public Execution()
         {
-
         }
-		
+
         /// <summary>
         /// Full Constructor
         /// </summary>
@@ -45,7 +46,8 @@ namespace Krs.Ats.IBNet
         /// <param name="price">The order execution price.</param>
         /// <param name="permId">The TWS id used to identify orders, remains the same over TWS sessions.</param>
         /// <param name="liquidation">Identifies the position as one to be liquidated last should the need arise.</param>
-        public Execution(int orderId, int clientId, String executionId, String time, String accountNumber, String exchange, ExecutionSide side, int shares, double price, int permId, int liquidation)
+        public Execution(int orderId, int clientId, String executionId, String time, String accountNumber,
+                         String exchange, ExecutionSide side, int shares, double price, int permId, int liquidation)
         {
             this.orderId = orderId;
             this.clientId = clientId;
@@ -172,6 +174,5 @@ namespace Krs.Ats.IBNet
         }
 
         #endregion
-
     }
 }

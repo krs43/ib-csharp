@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Krs.Ats.IBNet
 {
@@ -9,43 +7,9 @@ namespace Krs.Ats.IBNet
     /// </summary>
     public class ExecDetailsEventArgs : EventArgs
     {
-        private readonly int orderId;
-        /// <summary>
-        /// The order Id that was specified previously in the call to placeOrder().
-        /// </summary>
-        public int OrderId
-        {
-            get
-            {
-                return orderId;
-            }
-        }
-
         private readonly Contract contract;
-        /// <summary>
-        /// This structure contains a full description of the contract that was executed.
-        /// </summary>
-        /// <seealso cref="Contract"/>
-        public Contract Contract
-        {
-            get
-            {
-                return contract;
-            }
-        }
-
         private readonly Execution execution;
-        /// <summary>
-        /// This structure contains addition order execution details.
-        /// </summary>
-        /// <seealso cref="Execution"/>
-        public Execution Execution
-        {
-            get
-            {
-                return execution;
-            }
-        }
+        private readonly int orderId;
 
         /// <summary>
         /// Full Constructor
@@ -58,6 +22,32 @@ namespace Krs.Ats.IBNet
             this.orderId = orderId;
             this.execution = execution;
             this.contract = contract;
+        }
+
+        /// <summary>
+        /// The order Id that was specified previously in the call to placeOrder().
+        /// </summary>
+        public int OrderId
+        {
+            get { return orderId; }
+        }
+
+        /// <summary>
+        /// This structure contains a full description of the contract that was executed.
+        /// </summary>
+        /// <seealso cref="Contract"/>
+        public Contract Contract
+        {
+            get { return contract; }
+        }
+
+        /// <summary>
+        /// This structure contains addition order execution details.
+        /// </summary>
+        /// <seealso cref="Execution"/>
+        public Execution Execution
+        {
+            get { return execution; }
         }
     }
 }

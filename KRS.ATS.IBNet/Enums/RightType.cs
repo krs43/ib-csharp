@@ -1,7 +1,4 @@
-using System;
 using System.ComponentModel;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Krs.Ats.IBNet
 {
@@ -13,17 +10,14 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Option type is a Put (Right to sell)
         /// </summary>
-        [Description("PUT")]
-        Put,
+        [Description("PUT")] Put,
         /// <summary>
         /// Option type is a Call (Right to buy)
         /// </summary>
-        [Description("CALL")]
-        Call,
+        [Description("CALL")] Call,
         /// <summary>
         /// Option type is not defined (contract is not an option).
         /// </summary>
-        [Description("")]
-        Undefined
+        [Description("")] Undefined
     }
 }

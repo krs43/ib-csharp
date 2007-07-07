@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Krs.Ats.IBNet
 {
@@ -9,53 +7,11 @@ namespace Krs.Ats.IBNet
     /// </summary>
     public class UpdateAccountValueEventArgs : EventArgs
     {
+        private readonly string accountName;
+        private readonly string currency;
         private readonly string key;
-        /// <summary>
-        /// A string that indicates one type of account value.
-        /// </summary>
-        public string Key
-        {
-            get
-            {
-                return key;
-            }
-        }
 
         private readonly string value;
-        /// <summary>
-        /// The value associated with the key.
-        /// </summary>
-        public string Value
-        {
-            get
-            {
-                return value;
-            }
-        }
-
-        private readonly string currency;
-        /// <summary>
-        /// Defines the currency type, in case the value is a currency type.
-        /// </summary>
-        public string Currency
-        {
-            get
-            {
-                return currency;
-            }
-        }
-
-        private readonly string accountName;
-        /// <summary>
-        /// States the account the message applies to. Useful for Financial Advisor sub-account messages.
-        /// </summary>
-        public string AccountName
-        {
-            get
-            {
-                return accountName;
-            }
-        }
 
         /// <summary>
         /// Full Constructor
@@ -70,6 +26,38 @@ namespace Krs.Ats.IBNet
             this.accountName = accountName;
             this.currency = currency;
             this.value = value;
+        }
+
+        /// <summary>
+        /// A string that indicates one type of account value.
+        /// </summary>
+        public string Key
+        {
+            get { return key; }
+        }
+
+        /// <summary>
+        /// The value associated with the key.
+        /// </summary>
+        public string Value
+        {
+            get { return value; }
+        }
+
+        /// <summary>
+        /// Defines the currency type, in case the value is a currency type.
+        /// </summary>
+        public string Currency
+        {
+            get { return currency; }
+        }
+
+        /// <summary>
+        /// States the account the message applies to. Useful for Financial Advisor sub-account messages.
+        /// </summary>
+        public string AccountName
+        {
+            get { return accountName; }
         }
     }
 }

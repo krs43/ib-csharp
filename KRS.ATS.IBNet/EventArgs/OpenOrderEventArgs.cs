@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Krs.Ats.IBNet
 {
@@ -9,41 +7,9 @@ namespace Krs.Ats.IBNet
     /// </summary>
     public class OpenOrderEventArgs : EventArgs
     {
-        private readonly int orderId;
-        /// <summary>
-        /// The order Id assigned by TWS. Used to cancel or update the order.
-        /// </summary>
-        public int OrderId
-        {
-            get
-            {
-                return orderId;
-            }
-        }
-
         private readonly Contract contract;
-        /// <summary>
-        /// Describes the contract for the open order.
-        /// </summary>
-        public Contract Contract
-        {
-            get
-            {
-                return contract;
-            }
-        }
-
         private readonly Order order;
-        /// <summary>
-        /// Gives the details of the open order.
-        /// </summary>
-        public Order Order
-        {
-            get
-            {
-                return order;
-            }
-        }
+        private readonly int orderId;
 
         /// <summary>
         /// Full Constructor
@@ -56,6 +22,30 @@ namespace Krs.Ats.IBNet
             this.orderId = orderId;
             this.order = order;
             this.contract = contract;
+        }
+
+        /// <summary>
+        /// The order Id assigned by TWS. Used to cancel or update the order.
+        /// </summary>
+        public int OrderId
+        {
+            get { return orderId; }
+        }
+
+        /// <summary>
+        /// Describes the contract for the open order.
+        /// </summary>
+        public Contract Contract
+        {
+            get { return contract; }
+        }
+
+        /// <summary>
+        /// Gives the details of the open order.
+        /// </summary>
+        public Order Order
+        {
+            get { return order; }
         }
     }
 }

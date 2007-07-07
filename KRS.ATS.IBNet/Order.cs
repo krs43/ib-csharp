@@ -8,86 +8,92 @@ namespace Krs.Ats.IBNet
     public class Order
     {
         #region Private Variables
+
         // main order fields
-        private int orderId;
-        private int clientId;
-        private int permId;
-        private ActionSide action;
-        private int totalQuantity;
-        private OrderType orderType;
-        private double lmtPrice;
-        private double auxPrice;
-		
-        // extended order fields
-        private TimeInForce tif; // "Time in Force" - DAY, GTC, etc.
-        private String ocaGroup; // one cancels all group name
-        private OcaType ocaType; // 1 = CANCEL_WITH_BLOCK, 2 = REDUCE_WITH_BLOCK, 3 = REDUCE_NON_BLOCK
-        private String orderRef;
-        private bool transmit; // if false, order will be created but not transmited
-        private int parentId; // Parent order Id, to associate Auto STP or TRAIL orders with the original order.
-        private bool blockOrder;
-        private bool sweepToFill;
-        private int displaySize;
-        private TriggerMethod triggerMethod; // 0=Default, 1=Double_Bid_Ask, 2=Last, 3=Double_Last, 4=Bid_Ask, 7=Last_or_Bid_Ask, 8=Mid-point
-        private bool ignoreRth;
-        private bool hidden;
-        private String goodAfterTime; // FORMAT: 20060505 08:00:00 {time zone}
-        private String goodTillDate; // FORMAT: 20060505 08:00:00 {time zone}
-        private bool rthOnly;
-        private bool overridePercentageConstraints;
-        private AgentDescription rule80A; // Individual = 'I', Agency = 'A', AgentOtherMember = 'W', IndividualPTIA = 'J', AgencyPTIA = 'U', AgentOtherMemberPTIA = 'M', IndividualPT = 'K', AgencyPT = 'Y', AgentOtherMemberPT = 'N'
-        private bool allOrNone;
-        private int minQty;
-        private double percentOffset; // REL orders only
-        private double trailStopPrice; // for TRAILLIMIT orders only
-        private String sharesAllocation; // deprecated
-		
-        // Financial advisors only 
-        private String faGroup;
-        private String faProfile;
-        private String faMethod;
-        private String faPercentage;
-		
-        // Institutional orders only
         private String account;
-        private String settlingFirm;
-        private String openClose; // O=Open, C=Close
-        private OrderOrigin origin; // 0=Customer, 1=Firm
-        private int shortSaleSlot; // 1 if you hold the shares, 2 if they will be delivered from elsewhere.  Only for Action="SSHORT
+        private ActionSide action;
+        private bool allOrNone;
+        private AuctionStrategy auctionStrategy; // 1=AUCTION_MATCH, 2=AUCTION_IMPROVEMENT, 3=AUCTION_TRANSPARENT
+        private double auxPrice;
+        private double basisPoints; // EFP orders only
+        private int basisPointsType; // EFP orders only
+
+        // extended order fields
+        private bool blockOrder;
+        private int clientId;
+        private int continuousUpdate;
+        private double delta;
+        private double deltaNeutralAuxPrice;
+        private OrderType deltaNeutralOrderType;
         private String designatedLocation; // set when slot=2 only.
-		
+
         // SMART routing only
         private double discretionaryAmt;
+        private int displaySize;
         private bool eTradeOnly;
+
+        // Financial advisors only 
+        private String faGroup;
+        private String faMethod;
+        private String faPercentage;
+        private String faProfile;
         private bool firmQuoteOnly;
+        private String goodAfterTime; // FORMAT: 20060505 08:00:00 {time zone}
+        private String goodTillDate; // FORMAT: 20060505 08:00:00 {time zone}
+        private bool hidden;
+        private bool ignoreRth;
+        private double lmtPrice;
+        private int minQty;
         private double nbboPriceCap;
-		
-        // BOX or VOL ORDERS ONLY
-        private AuctionStrategy auctionStrategy; // 1=AUCTION_MATCH, 2=AUCTION_IMPROVEMENT, 3=AUCTION_TRANSPARENT
-		
+        private String ocaGroup; // one cancels all group name
+        private OcaType ocaType; // 1 = CANCEL_WITH_BLOCK, 2 = REDUCE_WITH_BLOCK, 3 = REDUCE_NON_BLOCK
+
+        // Institutional orders only
+        private String openClose; // O=Open, C=Close
+        private int orderId;
+        private String orderRef;
+        private OrderType orderType;
+        private OrderOrigin origin; // 0=Customer, 1=Firm
+        private bool overridePercentageConstraints;
+        private int parentId; // Parent order Id, to associate Auto STP or TRAIL orders with the original order.
+        private double percentOffset; // REL orders only
+        private int permId;
+        private int referencePriceType; // 1=Average, 2 = BidOrAsk
+        private bool rthOnly;
+
+        private AgentDescription rule80A;
+                                 // Individual = 'I', Agency = 'A', AgentOtherMember = 'W', IndividualPTIA = 'J', AgencyPTIA = 'U', AgentOtherMemberPTIA = 'M', IndividualPT = 'K', AgencyPT = 'Y', AgentOtherMemberPT = 'N'
+
+        private String settlingFirm;
+        private String sharesAllocation; // deprecated
+
+        private int shortSaleSlot;
+                    // 1 if you hold the shares, 2 if they will be delivered from elsewhere.  Only for Action="SSHORT
+
         // BOX ORDERS ONLY
         private double startingPrice;
-        private double stockRefPrice;
-        private double delta;
-		
+
         // pegged to stock or VOL orders
         private double stockRangeLower;
         private double stockRangeUpper;
-		
+        private double stockRefPrice;
+        private bool sweepToFill;
+        private TimeInForce tif; // "Time in Force" - DAY, GTC, etc.
+        private int totalQuantity;
+        private double trailStopPrice; // for TRAILLIMIT orders only
+        private bool transmit; // if false, order will be created but not transmited
+
+        private TriggerMethod triggerMethod;
+                              // 0=Default, 1=Double_Bid_Ask, 2=Last, 3=Double_Last, 4=Bid_Ask, 7=Last_or_Bid_Ask, 8=Mid-point
+
         // VOLATILITY ORDERS ONLY
         private double volatility;
         private VolatilityType volatilityType; // 1=daily, 2=annual
-        private int continuousUpdate;
-        private int referencePriceType; // 1=Average, 2 = BidOrAsk
-        private OrderType deltaNeutralOrderType;
-        private double deltaNeutralAuxPrice;
-		
-        // COMBO ORDERS ONLY
-        private double basisPoints; // EFP orders only
-        private int basisPointsType; // EFP orders only
+
         #endregion
 
         #region Constructor
+
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -97,26 +103,28 @@ namespace Krs.Ats.IBNet
             origin = OrderOrigin.Customer;
             transmit = true;
             designatedLocation = "";
-            minQty = System.Int32.MaxValue;
-            percentOffset = System.Double.MaxValue;
-            nbboPriceCap = System.Double.MaxValue;
-            startingPrice = System.Double.MaxValue;
-            stockRefPrice = System.Double.MaxValue;
-            delta = System.Double.MaxValue;
-            stockRangeLower = System.Double.MaxValue;
-            stockRangeUpper = System.Double.MaxValue;
-            volatility = System.Double.MaxValue;
-            volatilityType = IBNet.VolatilityType.Undefined;
-            deltaNeutralOrderType = IBNet.OrderType.None;
-            deltaNeutralAuxPrice = System.Double.MaxValue;
-            referencePriceType = System.Int32.MaxValue;
-            trailStopPrice = System.Double.MaxValue;
-            basisPoints = System.Double.MaxValue;
-            basisPointsType = System.Int32.MaxValue;
+            minQty = Int32.MaxValue;
+            percentOffset = Double.MaxValue;
+            nbboPriceCap = Double.MaxValue;
+            startingPrice = Double.MaxValue;
+            stockRefPrice = Double.MaxValue;
+            delta = Double.MaxValue;
+            stockRangeLower = Double.MaxValue;
+            stockRangeUpper = Double.MaxValue;
+            volatility = Double.MaxValue;
+            volatilityType = VolatilityType.Undefined;
+            deltaNeutralOrderType = OrderType.None;
+            deltaNeutralAuxPrice = Double.MaxValue;
+            referencePriceType = Int32.MaxValue;
+            trailStopPrice = Double.MaxValue;
+            basisPoints = Double.MaxValue;
+            basisPointsType = Int32.MaxValue;
         }
+
         #endregion
 
         #region Properties
+
         /// <summary>
         /// The id for this order.
         /// </summary>
@@ -555,7 +563,7 @@ namespace Krs.Ats.IBNet
             get { return nbboPriceCap; }
             set { nbboPriceCap = value; }
         }
-        
+
         /// <summary>
         /// The auction strategy.
         /// </summary>
@@ -703,7 +711,7 @@ namespace Krs.Ats.IBNet
             get { return basisPointsType; }
             set { basisPointsType = value; }
         }
-        #endregion
 
+        #endregion
     }
 }

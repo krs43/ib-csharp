@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Krs.Ats.IBNet
 {
@@ -9,51 +7,10 @@ namespace Krs.Ats.IBNet
     /// </summary>
     public class UpdateNewsBulletinEventArgs : EventArgs
     {
-        private readonly int msgId;
-        /// <summary>
-        /// The bulletin ID, incrementing for each new bulletin.
-        /// </summary>
-        public int MsgId
-        {
-            get
-            {
-                return msgId;
-            }
-        }
-        private readonly NewsType msgType;
-        /// <summary>
-        /// Specifies the type of bulletin.
-        /// </summary>
-        /// <seealso cref="NewsType"/>
-        public NewsType MsgType
-        {
-            get
-            {
-                return msgType;
-            }
-        }
         private readonly string message;
-        /// <summary>
-        /// The bulletin's message text.
-        /// </summary>
-        public string Message
-        {
-            get
-            {
-                return message;
-            }
-        }
+        private readonly int msgId;
+        private readonly NewsType msgType;
         private readonly string origExchange;
-        /// <summary>
-        /// The exchange from which this message originated.
-        /// </summary>
-        public string OrigExchange
-        {
-            get
-            {
-                return origExchange;
-            }
-        }
 
         /// <summary>
         /// Full Constructor
@@ -68,6 +25,39 @@ namespace Krs.Ats.IBNet
             this.origExchange = origExchange;
             this.message = message;
             this.msgType = msgType;
+        }
+
+        /// <summary>
+        /// The bulletin ID, incrementing for each new bulletin.
+        /// </summary>
+        public int MsgId
+        {
+            get { return msgId; }
+        }
+
+        /// <summary>
+        /// Specifies the type of bulletin.
+        /// </summary>
+        /// <seealso cref="NewsType"/>
+        public NewsType MsgType
+        {
+            get { return msgType; }
+        }
+
+        /// <summary>
+        /// The bulletin's message text.
+        /// </summary>
+        public string Message
+        {
+            get { return message; }
+        }
+
+        /// <summary>
+        /// The exchange from which this message originated.
+        /// </summary>
+        public string OrigExchange
+        {
+            get { return origExchange; }
         }
     }
 }

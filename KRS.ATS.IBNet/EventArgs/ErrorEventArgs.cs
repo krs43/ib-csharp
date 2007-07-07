@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Krs.Ats.IBNet
 {
@@ -9,43 +7,9 @@ namespace Krs.Ats.IBNet
     /// </summary>
     public class ErrorEventArgs : EventArgs
     {
-        private readonly int tickerId;
-        /// <summary>
-        /// This is the orderId or tickerId of the request that generated the error.
-        /// </summary>
-        public int TickerId
-        {
-            get
-            {
-                return tickerId;
-            }
-        }
-
         private readonly ErrorMessage errorCode;
-        /// <summary>
-        /// Error codes are documented in the Error Codes topic.
-        /// </summary>
-        /// <seealso cref="ErrorMessage"/>
-        public ErrorMessage ErrorCode
-        {
-            get
-            {
-                return errorCode;
-            }
-        }
-
         private readonly string errorMsg;
-        /// <summary>
-        /// This is the textual description of the error, also documented in the Error Codes topic.
-        /// </summary>
-        /// <seealso cref="ErrorMessage"/>
-        public string ErrorMsg
-        {
-            get
-            {
-                return errorMsg;
-            }
-        }
+        private readonly int tickerId;
 
         /// <summary>
         /// Full Constructor
@@ -58,6 +22,32 @@ namespace Krs.Ats.IBNet
             this.tickerId = tickerId;
             this.errorMsg = errorMsg;
             this.errorCode = errorCode;
+        }
+
+        /// <summary>
+        /// This is the orderId or tickerId of the request that generated the error.
+        /// </summary>
+        public int TickerId
+        {
+            get { return tickerId; }
+        }
+
+        /// <summary>
+        /// Error codes are documented in the Error Codes topic.
+        /// </summary>
+        /// <seealso cref="ErrorMessage"/>
+        public ErrorMessage ErrorCode
+        {
+            get { return errorCode; }
+        }
+
+        /// <summary>
+        /// This is the textual description of the error, also documented in the Error Codes topic.
+        /// </summary>
+        /// <seealso cref="ErrorMessage"/>
+        public string ErrorMsg
+        {
+            get { return errorMsg; }
         }
     }
 }

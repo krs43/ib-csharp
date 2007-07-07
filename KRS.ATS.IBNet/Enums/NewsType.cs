@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Krs.Ats.IBNet
 {
     /// <summary>
     /// News Message Type
     /// </summary>
-    public enum NewsType : int 
+    public enum NewsType : int
     {
         /// <summary>
         /// Reqular news bulletin
@@ -20,6 +16,6 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Exchange is available for trading
         /// </summary>
-        ExchangeAvailable = 3 
+        ExchangeAvailable = 3
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 
 namespace Krs.Ats.IBNet
 {
@@ -10,25 +9,25 @@ namespace Krs.Ats.IBNet
     {
         #region Private Variables
 
-        private int clientId;
         private String acctCode;
-        private DateTime time;
-        private String symbol;
-        private SecurityType securityType;
+        private int clientId;
         private String exchange;
+        private SecurityType securityType;
         private ActionSide side;
+        private String symbol;
+        private DateTime time;
 
         #endregion
 
         #region Constructors
+
         /// <summary>
         /// Default Constructor
         /// </summary>
         public ExecutionFilter()
         {
-
         }
-		
+
         /// <summary>
         /// Full Constructor
         /// </summary>
@@ -39,7 +38,8 @@ namespace Krs.Ats.IBNet
         /// <param name="securityType">Refer to the Contract struct for the list of valid security types.</param>
         /// <param name="exchange">Filter the results of the ReqExecutions() method based on the order exchange.</param>
         /// <param name="side">Filter the results of the ReqExecutions() method based on the order action.</param>
-        public ExecutionFilter(int clientId, String acctCode, DateTime time, String symbol, SecurityType securityType, String exchange, ActionSide side)
+        public ExecutionFilter(int clientId, String acctCode, DateTime time, String symbol, SecurityType securityType,
+                               String exchange, ActionSide side)
         {
             this.clientId = clientId;
             this.acctCode = acctCode;
@@ -53,6 +53,7 @@ namespace Krs.Ats.IBNet
         #endregion
 
         #region Properties
+
         /// <summary>
         /// Filter the results of the ReqExecutions() method based on the clientId.
         /// </summary>

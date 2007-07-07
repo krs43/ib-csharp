@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 
 namespace Krs.Ats.IBNet
 {
@@ -11,22 +10,24 @@ namespace Krs.Ats.IBNet
     public class ComboLeg
     {
         #region Private Variables
-        private int conId;
-        private int ratio;
+
         private ActionSide action; // BUY/SELL
+        private int conId;
         private String exchange;
         private ComboOpenClose openClose;
+        private int ratio;
+
         #endregion
 
         #region Constructors
+
         /// <summary>
         /// Initialize the ComboLeg
         /// </summary>
         public ComboLeg()
         {
-            
         }
-		
+
         /// <summary>
         /// Initialize the ComboLeg
         /// </summary>
@@ -43,9 +44,11 @@ namespace Krs.Ats.IBNet
             this.exchange = exchange;
             this.openClose = openClose;
         }
+
         #endregion
 
         #region Properties
+
         /// <summary>
         /// The unique contract identifier specifying the security.
         /// </summary>

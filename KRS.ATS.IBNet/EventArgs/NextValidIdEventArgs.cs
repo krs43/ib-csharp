@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Krs.Ats.IBNet
 {
@@ -12,18 +10,6 @@ namespace Krs.Ats.IBNet
         private readonly int orderId;
 
         /// <summary>
-        /// The next available order Id received from TWS upon connection.
-        /// Increment all successive orders by one based on this Id.
-        /// </summary>
-        public int OrderId
-        {
-            get
-            {
-                return orderId;
-            }
-        }
-
-        /// <summary>
         /// Full Constructor
         /// </summary>
         /// <param name="orderId">The next available order Id received from TWS upon connection.
@@ -31,6 +17,15 @@ namespace Krs.Ats.IBNet
         public NextValidIdEventArgs(int orderId)
         {
             this.orderId = orderId;
+        }
+
+        /// <summary>
+        /// The next available order Id received from TWS upon connection.
+        /// Increment all successive orders by one based on this Id.
+        /// </summary>
+        public int OrderId
+        {
+            get { return orderId; }
         }
     }
 }

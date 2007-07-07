@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Krs.Ats.IBNet
 {
@@ -10,16 +8,6 @@ namespace Krs.Ats.IBNet
     public class UpdateAccountTimeEventArgs : EventArgs
     {
         private readonly string timeStamp;
-        /// <summary>
-        /// Current system time on the server side.
-        /// </summary>
-        public string TimeStamp
-        {
-            get
-            {
-                return timeStamp;
-            }
-        }
 
         /// <summary>
         /// Full Constructor
@@ -28,6 +16,14 @@ namespace Krs.Ats.IBNet
         public UpdateAccountTimeEventArgs(string timeStamp)
         {
             this.timeStamp = timeStamp;
+        }
+
+        /// <summary>
+        /// Current system time on the server side.
+        /// </summary>
+        public string TimeStamp
+        {
+            get { return timeStamp; }
         }
     }
 }

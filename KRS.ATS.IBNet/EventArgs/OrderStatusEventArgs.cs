@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Krs.Ats.IBNet
 {
@@ -9,19 +7,55 @@ namespace Krs.Ats.IBNet
     /// </summary>
     public class OrderStatusEventArgs : EventArgs
     {
+        private readonly double avgFillPrice;
+        private readonly int clientId;
+        private readonly int filled;
+        private readonly double lastFillPrice;
         private readonly int orderId;
+        private readonly int parentId;
+        private readonly int permId;
+        private readonly int remaining;
+
+        private readonly OrderStatus status;
+
+        /// <summary>
+        /// Full Constructor
+        /// </summary>
+        /// <param name="orderId">The order Id that was specified previously in the call to placeOrder().</param>
+        /// <param name="status">The order status.</param>
+        /// <param name="filled">Specifies the number of shares that have been executed.</param>
+        /// <param name="remaining">Specifies the number of shares still outstanding.</param>
+        /// <param name="avgFillPrice">The average price of the shares that have been executed.
+        /// This parameter is valid only if the filled parameter value
+        /// is greater than zero. Otherwise, the price parameter will be zero.</param>
+        /// <param name="permId">The TWS id used to identify orders. Remains the same over TWS sessions.</param>
+        /// <param name="parentId">The order ID of the parent order, used for bracket and auto trailing stop orders.</param>
+        /// <param name="lastFillPrice">The last price of the shares that have been executed. This parameter is valid
+        /// only if the filled parameter value is greater than zero. Otherwise, the price parameter will be zero.</param>
+        /// <param name="clientId">The ID of the client (or TWS) that placed the order.
+        /// The TWS orders have a fixed clientId and orderId of 0 that distinguishes them from API orders.</param>
+        public OrderStatusEventArgs(int orderId, OrderStatus status, int filled, int remaining, double avgFillPrice,
+                                    int permId, int parentId, double lastFillPrice, int clientId)
+        {
+            this.orderId = orderId;
+            this.clientId = clientId;
+            this.lastFillPrice = lastFillPrice;
+            this.parentId = parentId;
+            this.permId = permId;
+            this.avgFillPrice = avgFillPrice;
+            this.remaining = remaining;
+            this.filled = filled;
+            this.status = status;
+        }
+
         /// <summary>
         /// The order Id that was specified previously in the call to placeOrder().
         /// </summary>
         public int OrderId
         {
-            get
-            {
-                return orderId;
-            }
+            get { return orderId; }
         }
 
-        private readonly OrderStatus status;
         /// <summary>
         /// The order status.
         /// </summary>
@@ -60,37 +94,25 @@ namespace Krs.Ats.IBNet
         /// <seealso cref="OrderStatus"/>
         public OrderStatus Status
         {
-            get
-            {
-                return status;
-            }
+            get { return status; }
         }
 
-        private readonly int filled;
         /// <summary>
         /// Specifies the number of shares that have been executed.
         /// </summary>
         public int Filled
         {
-            get
-            {
-                return filled;
-            }
+            get { return filled; }
         }
 
-        private readonly int remaining;
         /// <summary>
         /// Specifies the number of shares still outstanding.
         /// </summary>
         public int Remaining
         {
-            get
-            {
-                return remaining;
-            }
+            get { return remaining; }
         }
 
-        private readonly double avgFillPrice;
         /// <summary>
         /// The average price of the shares that have been executed.
         /// This parameter is valid only if the filled parameter value
@@ -98,89 +120,41 @@ namespace Krs.Ats.IBNet
         /// </summary>
         public double AvgFillPrice
         {
-            get
-            {
-                return avgFillPrice;
-            }
+            get { return avgFillPrice; }
         }
 
-        private readonly int permId;
         /// <summary>
         /// The TWS id used to identify orders. Remains the same over TWS sessions.
         /// </summary>
         public int PermId
         {
-            get
-            {
-                return permId;
-            }
+            get { return permId; }
         }
 
-        private readonly int parentId;
         /// <summary>
         /// The order ID of the parent order, used for bracket and auto trailing stop orders.
         /// </summary>
         public int ParentId
         {
-            get
-            {
-                return parentId;
-            }
+            get { return parentId; }
         }
 
-        private readonly double lastFillPrice;
         /// <summary>
         /// The last price of the shares that have been executed. This parameter is valid
         /// only if the filled parameter value is greater than zero. Otherwise, the price parameter will be zero.
         /// </summary>
         public double LastFillPrice
         {
-            get
-            {
-                return lastFillPrice;
-            }
+            get { return lastFillPrice; }
         }
 
-        private readonly int clientId;
         /// <summary>
         /// The ID of the client (or TWS) that placed the order.
         /// The TWS orders have a fixed clientId and orderId of 0 that distinguishes them from API orders.
         /// </summary>
         public int ClientId
         {
-            get
-            {
-                return clientId;
-            }
-        }
-
-        /// <summary>
-        /// Full Constructor
-        /// </summary>
-        /// <param name="orderId">The order Id that was specified previously in the call to placeOrder().</param>
-        /// <param name="status">The order status.</param>
-        /// <param name="filled">Specifies the number of shares that have been executed.</param>
-        /// <param name="remaining">Specifies the number of shares still outstanding.</param>
-        /// <param name="avgFillPrice">The average price of the shares that have been executed.
-        /// This parameter is valid only if the filled parameter value
-        /// is greater than zero. Otherwise, the price parameter will be zero.</param>
-        /// <param name="permId">The TWS id used to identify orders. Remains the same over TWS sessions.</param>
-        /// <param name="parentId">The order ID of the parent order, used for bracket and auto trailing stop orders.</param>
-        /// <param name="lastFillPrice">The last price of the shares that have been executed. This parameter is valid
-        /// only if the filled parameter value is greater than zero. Otherwise, the price parameter will be zero.</param>
-        /// <param name="clientId">The ID of the client (or TWS) that placed the order.
-        /// The TWS orders have a fixed clientId and orderId of 0 that distinguishes them from API orders.</param>
-        public OrderStatusEventArgs(int orderId, OrderStatus status, int filled, int remaining, double avgFillPrice, int permId, int parentId, double lastFillPrice, int clientId)
-        {
-            this.orderId = orderId;
-            this.clientId = clientId;
-            this.lastFillPrice = lastFillPrice;
-            this.parentId = parentId;
-            this.permId = permId;
-            this.avgFillPrice = avgFillPrice;
-            this.remaining = remaining;
-            this.filled = filled;
-            this.status = status;
+            get { return clientId; }
         }
     }
 }

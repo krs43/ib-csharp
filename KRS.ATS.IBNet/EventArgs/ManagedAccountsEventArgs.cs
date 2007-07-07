@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Krs.Ats.IBNet
 {
@@ -10,16 +8,6 @@ namespace Krs.Ats.IBNet
     public class ManagedAccountsEventArgs : EventArgs
     {
         private readonly string accountsList;
-        /// <summary>
-        /// The comma delimited list of FA managed accounts.
-        /// </summary>
-        public string AccountsList
-        {
-            get
-            {
-                return accountsList;
-            }
-        }
 
         /// <summary>
         /// Full Constructor
@@ -28,6 +16,14 @@ namespace Krs.Ats.IBNet
         public ManagedAccountsEventArgs(string accountsList)
         {
             this.accountsList = accountsList;
+        }
+
+        /// <summary>
+        /// The comma delimited list of FA managed accounts.
+        /// </summary>
+        public string AccountsList
+        {
+            get { return accountsList; }
         }
     }
 }

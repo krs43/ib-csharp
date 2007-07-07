@@ -1,7 +1,4 @@
-using System;
 using System.ComponentModel;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Krs.Ats.IBNet
 {
@@ -15,22 +12,18 @@ namespace Krs.Ats.IBNet
         /// open/close leg value is same as combo
         /// This value is always used for retail accounts
         /// </summary>
-        [Description("SAME")]
-        Same = 0,
+        [Description("SAME")] Same = 0,
         /// <summary>
         /// Institutional Accounts Only
         /// </summary>
-        [Description("OPEN")]
-        Open = 1,
+        [Description("OPEN")] Open = 1,
         /// <summary>
         /// Institutional Accounts Only
         /// </summary>
-        [Description("CLOSE")]
-        Close = 2,
+        [Description("CLOSE")] Close = 2,
         /// <summary>
         /// Institutional Accounts Only
         /// </summary>
-        [Description("UNKNOWN")]
-        Unknown = 3
+        [Description("UNKNOWN")] Unknown = 3
     }
 }

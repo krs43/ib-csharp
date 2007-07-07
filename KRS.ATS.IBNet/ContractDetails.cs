@@ -8,27 +8,29 @@ namespace Krs.Ats.IBNet
     public class ContractDetails
     {
         #region Private Variables
-        private Contract summary;
-        private String marketName;
-        private String tradingClass;
+
         private int contractId;
+        private String marketName;
         private double minTick;
         private String multiplier;
-        private int priceMagnifier;
         private String orderTypes;
+        private int priceMagnifier;
+        private Contract summary;
+        private String tradingClass;
         private String validExchanges;
+
         #endregion
 
         #region Constructors
+
         /// <summary>
         /// Default constructor
         /// </summary>
         public ContractDetails() :
             this(new Contract(), null, null, 0, 0, null, null, null)
         {
-            
         }
-		
+
         /// <summary>
         /// Full Constructor
         /// </summary>
@@ -40,7 +42,8 @@ namespace Krs.Ats.IBNet
         /// <param name="multiplier">The order size multiplier.</param>
         /// <param name="orderTypes">The list of valid order types for this contract.</param>
         /// <param name="validExchanges">The list of exchanges this contract is traded on.</param>
-        public ContractDetails(Contract summary, System.String marketName, String tradingClass, int contractId, double minTick, System.String multiplier, System.String orderTypes, System.String validExchanges)
+        public ContractDetails(Contract summary, String marketName, String tradingClass, int contractId, double minTick,
+                               String multiplier, String orderTypes, String validExchanges)
         {
             this.summary = summary;
             this.marketName = marketName;
@@ -51,9 +54,11 @@ namespace Krs.Ats.IBNet
             this.orderTypes = orderTypes;
             this.validExchanges = validExchanges;
         }
+
         #endregion
 
         #region Properties
+
         /// <summary>
         /// A contract summary.
         /// </summary>
@@ -62,6 +67,7 @@ namespace Krs.Ats.IBNet
             get { return summary; }
             set { summary = value; }
         }
+
         /// <summary>
         /// The market name for this contract.
         /// </summary>
@@ -70,6 +76,7 @@ namespace Krs.Ats.IBNet
             get { return marketName; }
             set { marketName = value; }
         }
+
         /// <summary>
         /// The trading class name for this contract.
         /// </summary>
@@ -78,6 +85,7 @@ namespace Krs.Ats.IBNet
             get { return tradingClass; }
             set { tradingClass = value; }
         }
+
         /// <summary>
         /// The unique contract identifier.
         /// </summary>
@@ -86,6 +94,7 @@ namespace Krs.Ats.IBNet
             get { return contractId; }
             set { contractId = value; }
         }
+
         /// <summary>
         /// The minimum price tick.
         /// </summary>
@@ -94,6 +103,7 @@ namespace Krs.Ats.IBNet
             get { return minTick; }
             set { minTick = value; }
         }
+
         /// <summary>
         /// The order size multiplier.
         /// </summary>
@@ -102,6 +112,7 @@ namespace Krs.Ats.IBNet
             get { return multiplier; }
             set { multiplier = value; }
         }
+
         /// <summary>
         /// Allows execution and strike prices to be reported consistently with
         /// market data, historical data and the order price, i.e. Z on LIFFE is
@@ -112,6 +123,7 @@ namespace Krs.Ats.IBNet
             get { return priceMagnifier; }
             set { priceMagnifier = value; }
         }
+
         /// <summary>
         /// The list of valid order types for this contract.
         /// </summary>
@@ -120,6 +132,7 @@ namespace Krs.Ats.IBNet
             get { return orderTypes; }
             set { orderTypes = value; }
         }
+
         /// <summary>
         /// The list of exchanges this contract is traded on.
         /// </summary>
@@ -128,6 +141,7 @@ namespace Krs.Ats.IBNet
             get { return validExchanges; }
             set { validExchanges = value; }
         }
+
         #endregion
     }
 }

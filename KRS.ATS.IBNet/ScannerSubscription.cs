@@ -8,30 +8,33 @@ namespace Krs.Ats.IBNet
     public class ScannerSubscription
     {
         #region Private Variables
-        private int numberOfRows = -1;  //No row number specified
-        private String instrument;
-        private String locationCode;
-        private String scanCode;
+
         private double abovePrice = Double.MaxValue;
-        private double belowPrice = Double.MaxValue;
         private int aboveVolume = Int32.MaxValue;
         private int averageOptionVolumeAbove = Int32.MaxValue;
-        private double marketCapAbove = Double.MaxValue;
-        private double marketCapBelow = Double.MaxValue;
-        private String moodyRatingAbove;
-        private String moodyRatingBelow;
-        private String spRatingAbove;
-        private String spRatingBelow;
-        private String maturityDateAbove;
-        private String maturityDateBelow;
+        private double belowPrice = Double.MaxValue;
         private double couponRateAbove = Double.MaxValue;
         private double couponRateBelow = Double.MaxValue;
         private String excludeConvertible;
+        private String instrument;
+        private String locationCode;
+        private double marketCapAbove = Double.MaxValue;
+        private double marketCapBelow = Double.MaxValue;
+        private String maturityDateAbove;
+        private String maturityDateBelow;
+        private String moodyRatingAbove;
+        private String moodyRatingBelow;
+        private int numberOfRows = -1; //No row number specified
+        private String scanCode;
         private String scannerSettingPairs;
+        private String spRatingAbove;
+        private String spRatingBelow;
         private String stockTypeFilter;
+
         #endregion
 
         #region Properties
+
         /// <summary>
         /// Defines the number of rows of data to return for a query.
         /// </summary>
@@ -237,6 +240,7 @@ namespace Krs.Ats.IBNet
             get { return stockTypeFilter; }
             set { stockTypeFilter = value; }
         }
+
         #endregion
     }
 }

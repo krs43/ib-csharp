@@ -12,9 +12,7 @@
  *****************************************************************/
 
 using System;
-using System.Collections;
 using System.ComponentModel;
-using System.Globalization;
 using System.Reflection;
 
 namespace Krs.Ats.IBNet
@@ -31,7 +29,7 @@ namespace Krs.Ats.IBNet
         /// <returns>The description, if any, else it's .ToString()</returns>
         public static string GetEnumDescription(Enum value)
         {
-            if(value == null)
+            if (value == null)
                 throw new ArgumentNullException("value");
             FieldInfo fi = value.GetType().GetField(value.ToString());
             DescriptionAttribute[] attributes =
@@ -48,9 +46,9 @@ namespace Krs.Ats.IBNet
         /// <returns>The description, if any, else the passed name</returns>
         public static string GetEnumDescription(Type value, string name)
         {
-            if(name == null)
+            if (name == null)
                 throw new ArgumentNullException("name");
-            if(value == null)
+            if (value == null)
                 throw new ArgumentNullException("value");
             FieldInfo fi = value.GetField(name);
             DescriptionAttribute[] attributes =
@@ -67,9 +65,9 @@ namespace Krs.Ats.IBNet
         /// <returns>The value, or the passed in description, if it was not found</returns>
         public static object GetEnumValue(Type value, string description)
         {
-            if(value == null)
+            if (value == null)
                 throw new ArgumentNullException("value");
-            if(description == null)
+            if (description == null)
                 throw new ArgumentNullException("description");
 
             FieldInfo[] fis = value.GetFields();

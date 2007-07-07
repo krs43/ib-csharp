@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Krs.Ats.IBNet
 {
@@ -10,16 +8,6 @@ namespace Krs.Ats.IBNet
     public class ScannerParametersEventArgs : EventArgs
     {
         private readonly string xml;
-        /// <summary>
-        /// Document describing available scanner subscription parameters.
-        /// </summary>
-        public string Xml
-        {
-            get
-            {
-                return xml;
-            }
-        }
 
         /// <summary>
         /// Full Constructor
@@ -28,6 +16,14 @@ namespace Krs.Ats.IBNet
         public ScannerParametersEventArgs(string xml)
         {
             this.xml = xml;
+        }
+
+        /// <summary>
+        /// Document describing available scanner subscription parameters.
+        /// </summary>
+        public string Xml
+        {
+            get { return xml; }
         }
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Krs.Ats.IBNet
 {
@@ -12,22 +10,20 @@ namespace Krs.Ats.IBNet
         private readonly ContractDetails contractDetails;
 
         /// <summary>
-        /// This structure contains a full description of the bond contract being looked up.
-        /// </summary>
-        public ContractDetails ContractDetails
-        {
-            get
-            {
-                return contractDetails;
-            }
-        }
-        /// <summary>
         /// Full Constructor
         /// </summary>
         /// <param name="contractDetails">This structure contains a full description of the bond contract being looked up.</param>
         public BondContractDetailsEventArgs(ContractDetails contractDetails)
         {
             this.contractDetails = contractDetails;
+        }
+
+        /// <summary>
+        /// This structure contains a full description of the bond contract being looked up.
+        /// </summary>
+        public ContractDetails ContractDetails
+        {
+            get { return contractDetails; }
         }
     }
 }

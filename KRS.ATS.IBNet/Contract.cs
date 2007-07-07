@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Krs.Ats.IBNet;
-using System.Collections;
 
 namespace Krs.Ats.IBNet
 {
@@ -12,49 +10,51 @@ namespace Krs.Ats.IBNet
     public class Contract
     {
         #region Private Variables
-        private String symbol;
-        private SecurityType securityType;
-        private String expiry;
-        private double strike;
-        private RightType right;
-        private String multiplier;
-        private String exchange;
 
-        private String currency;
-        private String localSymbol;
-        private String primaryExch; // pick a non-aggregate (ie not the SMART exchange) exchange that the contract trades on.  DO NOT SET TO SMART.
-        private bool includeExpired; // can not be set to true for orders.
-		
-        // COMBOS
-        private String comboLegsDescrip; // received in open order version 14 and up for all combos
         private readonly List<ComboLeg> comboLegs = new List<ComboLeg>();
-		
+
         // BOND values
-        private String cusip;
-        private String ratings;
-        private String descriptionAppend;
         private String bondType;
-        private String couponType;
         private bool callable;
-        private bool putable;
-        private double coupon;
+        private String comboLegsDescrip; // received in open order version 14 and up for all combos
         private bool convertible;
-        private String maturity;
+        private double coupon;
+        private String couponType;
+        private String currency;
+        private String cusip;
+        private String descriptionAppend;
+        private String exchange;
+        private String expiry;
+        private bool includeExpired; // can not be set to true for orders.
         private String issueDate;
+        private String localSymbol;
+        private String maturity;
+        private String multiplier;
         private String nextOptionDate;
-        private String nextOptionType;
         private bool nextOptionPartial;
+        private String nextOptionType;
         private String notes;
+
+        private String primaryExch;
+                       // pick a non-aggregate (ie not the SMART exchange) exchange that the contract trades on.  DO NOT SET TO SMART.
+
+        private bool putable;
+        private String ratings;
+        private RightType right;
+        private SecurityType securityType;
+        private double strike;
+        private String symbol;
+
         #endregion
 
         #region Constructors
+
         ///<summary>
         /// Undefined Contract Constructor
         ///</summary>
         public Contract() :
-            this(null, IBNet.SecurityType.Undefined, null, 0, RightType.Undefined, null, null, null, null, null)
+            this(null, SecurityType.Undefined, null, 0, RightType.Undefined, null, null, null, null, null)
         {
-            
         }
 
         /// <summary>
@@ -68,7 +68,6 @@ namespace Krs.Ats.IBNet
         public Contract(string symbol, string exchange, SecurityType securityType, string currency, string expiry) :
             this(symbol, securityType, expiry, 0, RightType.Undefined, null, exchange, currency, null, null)
         {
-            
         }
 
         /// <summary>
@@ -100,9 +99,11 @@ namespace Krs.Ats.IBNet
             this.localSymbol = localSymbol;
             this.primaryExch = primaryExch;
         }
+
         #endregion
 
         #region Properties
+
         /// <summary>
         /// This is the symbol of the underlying asset.
         /// </summary>
@@ -111,6 +112,7 @@ namespace Krs.Ats.IBNet
             get { return symbol; }
             set { symbol = value; }
         }
+
         /// <summary>
         /// This is the security type.
         /// </summary>
@@ -132,6 +134,7 @@ namespace Krs.Ats.IBNet
             get { return securityType; }
             set { securityType = value; }
         }
+
         /// <summary>
         /// The expiration date. Use the format YYYYMM.
         /// </summary>
@@ -140,6 +143,7 @@ namespace Krs.Ats.IBNet
             get { return expiry; }
             set { expiry = value; }
         }
+
         /// <summary>
         /// The strike price.
         /// </summary>
@@ -148,6 +152,7 @@ namespace Krs.Ats.IBNet
             get { return strike; }
             set { strike = value; }
         }
+
         /// <summary>
         /// Specifies a Put or Call.
         /// </summary>
@@ -163,6 +168,7 @@ namespace Krs.Ats.IBNet
             get { return right; }
             set { right = value; }
         }
+
         /// <summary>
         /// Allows you to specify a future or option contract multiplier.
         /// This is only necessary when multiple possibilities exist.
@@ -172,6 +178,7 @@ namespace Krs.Ats.IBNet
             get { return multiplier; }
             set { multiplier = value; }
         }
+
         /// <summary>
         /// The order destination, such as Smart.
         /// </summary>
@@ -180,6 +187,7 @@ namespace Krs.Ats.IBNet
             get { return exchange; }
             set { exchange = value; }
         }
+
         /// <summary>
         /// Specifies the currency.
         /// </summary>
@@ -194,6 +202,7 @@ namespace Krs.Ats.IBNet
             get { return currency; }
             set { currency = value; }
         }
+
         /// <summary>
         /// This is the local exchange symbol of the underlying asset.
         /// </summary>
@@ -202,6 +211,7 @@ namespace Krs.Ats.IBNet
             get { return localSymbol; }
             set { localSymbol = value; }
         }
+
         /// <summary>
         /// Identifies the listing exchange for the contract (do not list SMART).
         /// </summary>
@@ -210,6 +220,7 @@ namespace Krs.Ats.IBNet
             get { return primaryExch; }
             set { primaryExch = value; }
         }
+
         /// <summary>
         /// If set to true, contract details requests and historical data queries
         /// can be performed pertaining to expired contracts.
@@ -223,6 +234,7 @@ namespace Krs.Ats.IBNet
             get { return includeExpired; }
             set { includeExpired = value; }
         }
+
         /// <summary>
         /// Description for combo legs
         /// </summary>
@@ -231,6 +243,7 @@ namespace Krs.Ats.IBNet
             get { return comboLegsDescrip; }
             set { comboLegsDescrip = value; }
         }
+
         /// <summary>
         /// Dynamic memory structure used to store the leg definitions for this contract.
         /// </summary>
@@ -238,6 +251,7 @@ namespace Krs.Ats.IBNet
         {
             get { return comboLegs; }
         }
+
         /// <summary>
         /// For Bonds. The nine-character bond CUSIP or the 12-character SEDOL.
         /// </summary>
@@ -246,6 +260,7 @@ namespace Krs.Ats.IBNet
             get { return cusip; }
             set { cusip = value; }
         }
+
         /// <summary>
         /// For Bonds. Identifies the credit rating of the issuer. A higher credit
         /// rating generally indicates a less risky investment. Bond ratings
@@ -256,6 +271,7 @@ namespace Krs.Ats.IBNet
             get { return ratings; }
             set { ratings = value; }
         }
+
         /// <summary>
         /// For Bonds. A description string containing further descriptive information about the bond.
         /// </summary>
@@ -264,6 +280,7 @@ namespace Krs.Ats.IBNet
             get { return descriptionAppend; }
             set { descriptionAppend = value; }
         }
+
         /// <summary>
         /// For Bonds. The type of bond, such as "CORP."
         /// </summary>
@@ -272,6 +289,7 @@ namespace Krs.Ats.IBNet
             get { return bondType; }
             set { bondType = value; }
         }
+
         /// <summary>
         /// For Bonds. The type of bond coupon, such as "FIXED."
         /// </summary>
@@ -280,6 +298,7 @@ namespace Krs.Ats.IBNet
             get { return couponType; }
             set { couponType = value; }
         }
+
         /// <summary>
         /// For Bonds. Values are True or False. If true, the bond can be called
         /// by the issuer under certain conditions.
@@ -289,6 +308,7 @@ namespace Krs.Ats.IBNet
             get { return callable; }
             set { callable = value; }
         }
+
         /// <summary>
         /// For Bonds. Values are True or False. If true, the bond can be sold
         /// back to the issuer under certain conditions.
@@ -298,6 +318,7 @@ namespace Krs.Ats.IBNet
             get { return putable; }
             set { putable = value; }
         }
+
         /// <summary>
         /// For Bonds. The interest rate used to calculate the amount you will
         /// receive in interest payments over the course of the year.
@@ -307,6 +328,7 @@ namespace Krs.Ats.IBNet
             get { return coupon; }
             set { coupon = value; }
         }
+
         /// <summary>
         /// For Bonds. Values are True or False.
         /// If true, the bond can be converted to stock under certain conditions.
@@ -316,6 +338,7 @@ namespace Krs.Ats.IBNet
             get { return convertible; }
             set { convertible = value; }
         }
+
         /// <summary>
         /// For Bonds. The date on which the issuer must repay the face value of the bond.
         /// </summary>
@@ -324,6 +347,7 @@ namespace Krs.Ats.IBNet
             get { return maturity; }
             set { maturity = value; }
         }
+
         /// <summary>
         /// For Bonds. The date the bond was issued. 
         /// </summary>
@@ -332,6 +356,7 @@ namespace Krs.Ats.IBNet
             get { return issueDate; }
             set { issueDate = value; }
         }
+
         /// <summary>
         /// For Bonds, relevant if the bond has embedded options
         /// </summary>
@@ -340,6 +365,7 @@ namespace Krs.Ats.IBNet
             get { return nextOptionDate; }
             set { nextOptionDate = value; }
         }
+
         /// <summary>
         /// For Bonds, relevant if the bond has embedded options
         /// </summary>
@@ -348,6 +374,7 @@ namespace Krs.Ats.IBNet
             get { return nextOptionType; }
             set { nextOptionType = value; }
         }
+
         /// <summary>
         /// For Bonds, relevant if the bond has embedded options, i.e., is the next option full or partial?
         /// </summary>
@@ -356,6 +383,7 @@ namespace Krs.Ats.IBNet
             get { return nextOptionPartial; }
             set { nextOptionPartial = value; }
         }
+
         /// <summary>
         /// For Bonds, if populated for the bond in IBs database
         /// </summary>
@@ -364,6 +392,7 @@ namespace Krs.Ats.IBNet
             get { return notes; }
             set { notes = value; }
         }
+
         #endregion
     }
 }

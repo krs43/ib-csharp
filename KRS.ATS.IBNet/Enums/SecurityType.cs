@@ -1,7 +1,4 @@
-using System;
 using System.ComponentModel;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Krs.Ats.IBNet
 {
@@ -13,47 +10,38 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Stock
         /// </summary>
-        [Description("STK")]
-        Stock,
+        [Description("STK")] Stock,
         /// <summary>
         /// Option
         /// </summary>
-        [Description("OPT")]
-        Option,
+        [Description("OPT")] Option,
         /// <summary>
         /// Future
         /// </summary>
-        [Description("FUT")]
-        Future,
+        [Description("FUT")] Future,
         /// <summary>
         /// Indice
         /// </summary>
-        [Description("IND")]
-        Indice,
+        [Description("IND")] Indice,
         /// <summary>
         /// FOP = options on futures
         /// </summary>
-        [Description("FOP")]
-        FutureOption,
+        [Description("FOP")] FutureOption,
         /// <summary>
         /// Cash
         /// </summary>
-        [Description("CASH")]
-        Cash,
+        [Description("CASH")] Cash,
         /// <summary>
         /// For Combination Orders - must use combo leg details
         /// </summary>
-        [Description("BAG")]
-        Bag,
+        [Description("BAG")] Bag,
         /// <summary>
         /// Bond
         /// </summary>
-        [Description("BOND")]
-        Bond,
+        [Description("BOND")] Bond,
         /// <summary>
         /// Undefined Security Type
         /// </summary>
-        [Description("")]
-        Undefined
+        [Description("")] Undefined
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Krs.Ats.IBNet
 {
@@ -9,128 +7,16 @@ namespace Krs.Ats.IBNet
     /// </summary>
     public class HistoricalDataEventArgs : EventArgs
     {
-        private readonly int reqId;
-        /// <summary>
-        /// The ticker Id of the request to which this bar is responding.
-        /// </summary>
-        public int ReqId
-        {
-            get
-            {
-                return reqId;
-            }
-        }
-
-        private readonly string date;
-        /// <summary>
-        /// The date-time stamp of the start of the bar.
-        /// The format is determined by the reqHistoricalData() formatDate parameter.
-        /// </summary>
-        public string Date
-        {
-            get
-            {
-                return date;
-            }
-        }
-
-        private readonly double open;
-
-        /// <summary>
-        /// Bar opening price.
-        /// </summary>
-        public double Open
-        {
-            get
-            {
-                return open;
-            }
-        }
-
-        private readonly double high;
-        /// <summary>
-        /// High price during the time covered by the bar.
-        /// </summary>
-        public double High
-        {
-            get
-            {
-                return high;
-            }
-        }
-
-        private readonly double low;
-        /// <summary>
-        /// Low price during the time covered by the bar.
-        /// </summary>
-        public double Low
-        {
-            get
-            {
-                return low;
-            }
-        }
-
         private readonly double close;
-        /// <summary>
-        /// Bar closing price.
-        /// </summary>
-        public double Close
-        {
-            get
-            {
-                return close;
-            }
-        }
-
-        private readonly int volume;
-        /// <summary>
-        /// Volume during the time covered by the bar.
-        /// </summary>
-        public int Volume
-        {
-            get
-            {
-                return volume;
-            }
-        }
-
         private readonly int count;
-        /// <summary>
-        /// When TRADES historical data is returned, represents the number of trades that
-        /// occurred during the time period the bar covers.
-        /// </summary>
-        public int Count
-        {
-            get
-            {
-                return count;
-            }
-        }
-
-        private readonly double wap;
-        /// <summary>
-        /// Weighted average price during the time covered by the bar.
-        /// </summary>
-        public double Wap
-        {
-            get
-            {
-                return wap;
-            }
-        }
-
+        private readonly string date;
         private readonly bool hasGaps;
-        /// <summary>
-        /// Whether or not there are gaps in the data.
-        /// </summary>
-        public bool HasGaps
-        {
-            get
-            {
-                return hasGaps;
-            }
-        }
+        private readonly double high;
+        private readonly double low;
+        private readonly double open;
+        private readonly int reqId;
+        private readonly int volume;
+        private readonly double wap;
 
         /// <summary>
         /// Full Constructor
@@ -147,7 +33,8 @@ namespace Krs.Ats.IBNet
         /// occurred during the time period the bar covers.</param>
         /// <param name="wap">Weighted average price during the time covered by the bar.</param>
         /// <param name="hasGaps">Whether or not there are gaps in the data.</param>
-        public HistoricalDataEventArgs(int reqId, string date, double open, double high, double low, double close, int volume, int count, double wap, bool hasGaps)
+        public HistoricalDataEventArgs(int reqId, string date, double open, double high, double low, double close,
+                                       int volume, int count, double wap, bool hasGaps)
         {
             this.reqId = reqId;
             this.hasGaps = hasGaps;
@@ -159,6 +46,88 @@ namespace Krs.Ats.IBNet
             this.high = high;
             this.open = open;
             this.date = date;
+        }
+
+        /// <summary>
+        /// The ticker Id of the request to which this bar is responding.
+        /// </summary>
+        public int ReqId
+        {
+            get { return reqId; }
+        }
+
+        /// <summary>
+        /// The date-time stamp of the start of the bar.
+        /// The format is determined by the reqHistoricalData() formatDate parameter.
+        /// </summary>
+        public string Date
+        {
+            get { return date; }
+        }
+
+        /// <summary>
+        /// Bar opening price.
+        /// </summary>
+        public double Open
+        {
+            get { return open; }
+        }
+
+        /// <summary>
+        /// High price during the time covered by the bar.
+        /// </summary>
+        public double High
+        {
+            get { return high; }
+        }
+
+        /// <summary>
+        /// Low price during the time covered by the bar.
+        /// </summary>
+        public double Low
+        {
+            get { return low; }
+        }
+
+        /// <summary>
+        /// Bar closing price.
+        /// </summary>
+        public double Close
+        {
+            get { return close; }
+        }
+
+        /// <summary>
+        /// Volume during the time covered by the bar.
+        /// </summary>
+        public int Volume
+        {
+            get { return volume; }
+        }
+
+        /// <summary>
+        /// When TRADES historical data is returned, represents the number of trades that
+        /// occurred during the time period the bar covers.
+        /// </summary>
+        public int Count
+        {
+            get { return count; }
+        }
+
+        /// <summary>
+        /// Weighted average price during the time covered by the bar.
+        /// </summary>
+        public double Wap
+        {
+            get { return wap; }
+        }
+
+        /// <summary>
+        /// Whether or not there are gaps in the data.
+        /// </summary>
+        public bool HasGaps
+        {
+            get { return hasGaps; }
         }
     }
 }
