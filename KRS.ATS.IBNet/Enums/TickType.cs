@@ -186,6 +186,16 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Close EFP Computation
         /// </summary>
-        [Description("CLOSE_EFP_COMPUTATION")] CloseEfpComputation = 44
+        [Description("CLOSE_EFP_COMPUTATION")] CloseEfpComputation = 44,
+        /// <summary>
+        /// Last Time Stamp
+        /// </summary>
+        [Description("LAST_TIMESTAMP")]
+        LastTimeStamp = 45,
+        /// <summary>
+        /// Shortable
+        /// </summary>
+        [Description("SHORTABLE")]
+		Shortable = 46
     }
 }

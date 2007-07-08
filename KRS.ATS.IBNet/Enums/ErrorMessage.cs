@@ -106,6 +106,22 @@ namespace Krs.Ats.IBNet
         /// </summary>
         [Description("Request Historical Data Sending Error")] FailSendRequestHistoricalData = 527,
         /// <summary>
+        /// Cancel Historical Data Sending Error
+        /// </summary>
+        [Description("Cancel Historical Data Sending Error")] FailSendCancelHistoricalData = 528,
+        /// <summary>
+        /// Request Real-time Bar Data Sending Error
+        /// </summary>
+        [Description("Request Real-time Bar Data Sending Error")] FailSendRequestRealTimeBars = 529,
+        /// <summary>
+        /// Cancel Real-time Bar Data Sending Error
+        /// </summary>
+        [Description("Cancel Real-time Bar Data Sending Error")] FailSendCancelRealTimeBars = 530,
+        /// <summary>
+        /// Request Current Time Sending Error
+        /// </summary>
+        [Description("Request Current Time Sending Error")] FailSendRequestCurrentTime = 531,
+        /// <summary>
         /// No Valid ID for error message
         /// </summary>
         [Description("")] NoValidId = -1

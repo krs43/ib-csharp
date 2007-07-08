@@ -5,7 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Update Market Depth Event Arguments
     /// </summary>
-    public class UpdateMktDepthEventArgs : EventArgs
+    public class UpdateMktDepthEventArgs : System.EventArgs
     {
         private readonly MarketDepthOperation operation;
         private readonly int position;

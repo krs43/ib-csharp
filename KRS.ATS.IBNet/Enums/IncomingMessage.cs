@@ -110,6 +110,16 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Tick Exchange for Physical(EFP)
         /// </summary>
-        [Description("TICK_EFP")] TickEfp = 47
+        [Description("TICK_EFP")] TickEfp = 47,
+        /// <summary>
+        /// Current Time
+        /// </summary>
+        [Description("CURRENT_TIME")]
+        CurrentTime = 49,
+        /// <summary>
+        /// Real Time Bars
+        /// </summary>
+        [Description("REAL_TIME_BARS")]
+		RealTimeBars = 50
     }
 }

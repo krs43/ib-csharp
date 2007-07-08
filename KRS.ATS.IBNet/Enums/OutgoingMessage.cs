@@ -111,5 +111,17 @@ namespace Krs.Ats.IBNet
         /// Cancel Historical Data
         /// </summary>
         [Description("CANCEL_HISTORICAL_DATA")] CancelHistoricalData = 25,
+        /// <summary>
+        /// Request Current Time
+        /// </summary>
+        [Description("REQ_CURRENT_TIME")] RequestCurrentTime = 49,
+        /// <summary>
+        /// Request Real Time Bars
+        /// </summary>
+        [Description("REQ_REAL_TIME_BARS")] RequestRealTimeBars = 50,
+        /// <summary>
+        /// Cancel Real Time Bars
+        /// </summary>
+        [Description("CANCEL_REAL_TIME_BARS")] CancelRealTimeBars = 51
     }
 }

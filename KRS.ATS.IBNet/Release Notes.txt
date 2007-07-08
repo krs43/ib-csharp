@@ -1,0 +1,10 @@
+Release Notes
+
+9.2.0.1
+* Updated to support 9.20 Interactive Brokers API Release
+	* ErrorMessage.cs added four new messages for real time bars, current time, and canceling a historical request.
+	* Updated Order Status Event and Event Arguments to support whyHeld parameter.
+	* Added Real Time Bar Event / Event Argument / Message Parser
+	* Added Current Time Event / Event Argument / Message Parser
+	* Added new outgoing messages for real time bars and current time
+	* Fixed Cancel Historical Data error Message

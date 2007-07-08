@@ -5,7 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Connection Closed Event Arguments
     /// </summary>
-    public class ConnectionClosedEventArgs : EventArgs
+    public class ConnectionClosedEventArgs : System.EventArgs
     {
     }
 }

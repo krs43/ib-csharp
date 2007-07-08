@@ -161,7 +161,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Called internally when the receive thread receives an order status event.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">Order Status Event Arguments</param>
         protected virtual void OnOrderStatus(OrderStatusEventArgs e)
         {
             if (OrderStatus != null)
@@ -170,10 +170,10 @@ namespace Krs.Ats.IBNet
 
         private void orderStatus(int orderId, OrderStatus status, int filled, int remaining, double avgFillPrice,
                                  int permId,
-                                 int parentId, double lastFillPrice, int clientId)
+                                 int parentId, double lastFillPrice, int clientId, string whyHeld)
         {
             OrderStatusEventArgs e = new OrderStatusEventArgs(orderId, status, filled, remaining,
-                                                              avgFillPrice, permId, parentId, lastFillPrice, clientId);
+                                                              avgFillPrice, permId, parentId, lastFillPrice, clientId, whyHeld);
             OnOrderStatus(e);
         }
 
@@ -528,6 +528,49 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// This method receives the realtime bars data results.
+        /// </summary>
+        public event EventHandler<RealTimeBarEventArgs> RealTimeBar;
+
+        /// <summary>
+        /// Called internally when the receive thread receives a real time bar event.
+        /// </summary>
+        /// <param name="e">Real Time Bar Event Arguments</param>
+        protected virtual void OnRealTimeBar(RealTimeBarEventArgs e)
+        {
+            if (RealTimeBar != null)
+                RealTimeBar(this, e);
+        }
+
+        private void realTimeBar(int reqId, long time, double open, double high, double low, double close, long volume, double wap, int count)
+        {
+            RealTimeBarEventArgs e = new RealTimeBarEventArgs(reqId, time, open, high, low, close, volume, wap, count);
+            OnRealTimeBar(e);
+        }
+
+        /// <summary>
+        /// This method receives the current system time on the server side.
+        /// </summary>
+        public event EventHandler<CurrentTimeEventArgs> CurrentTime;
+
+        /// <summary>
+        /// Called internally when the receive thread receives a current time event.
+        /// </summary>
+        /// <param name="e">Current Time Event Arguments</param>
+        protected virtual void OnCurrentTime(CurrentTimeEventArgs e)
+        {
+            if (CurrentTime != null)
+                CurrentTime(this, e);
+        }
+
+        private void currentTime(long time)
+        {
+            CurrentTimeEventArgs e = new CurrentTimeEventArgs(time);
+            OnCurrentTime(e);
+
+        }
+
+        /// <summary>
         /// This event is fired when there is an error with the communication or when TWS wants to send a message to the client.
         /// </summary>
         public event EventHandler<ErrorEventArgs> Error;
@@ -657,7 +700,7 @@ namespace Krs.Ats.IBNet
 
         #region Values
 
-        private const int ClientVersion = 31;
+        private const int ClientVersion = 32;
         private const int MinimumServerVersion = 1;
 
         #endregion
@@ -1047,6 +1090,13 @@ namespace Krs.Ats.IBNet
                     }
                     if (serverVersion >= 31)
                     {
+                        /*
+                         * Even though SHORTABLE tick type supported only
+                         * starting server version 33 it would be relatively
+                         * expensive to expose this restriction here.
+                         * 
+                         * Therefore we are relying on TWS doing validation.
+                         */
                         string genList = "";
                         if (genericTickList != null)
                         {
@@ -1070,9 +1120,9 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Call the cancelHistoricalData() method to stop receiving historical data results. 
+        /// Call the CancelHistoricalData method to stop receiving historical data results.
         /// </summary>
-        /// <param name="tickerId">the Id that was specified in the call to reqHistoricalData().</param>
+        /// <param name="tickerId">the Id that was specified in the call to <see cref="ReqHistoricalData"/>.</param>
         public void CancelHistoricalData(int tickerId)
         {
             lock (this)
@@ -1104,11 +1154,54 @@ namespace Krs.Ats.IBNet
                     if (!(e is ObjectDisposedException || e is IOException))
                         throw;
 
-                    error(tickerId, ErrorMessage.FailSendCancelScanner, e);
+                    error(tickerId, ErrorMessage.FailSendCancelHistoricalData, e);
                     close();
                 }
             }
         }
+
+        /// <summary>
+        /// Call the cancelRealTimeBars() method to stop receiving real time bar results. 
+        /// </summary>
+        /// <param name="tickerId">The Id that was specified in the call to <see cref="ReqRealTimeBars"/>.</param>
+        public void CancelRealTimeBars(int tickerId)
+        {
+            lock (this)
+            {
+                // not connected?
+                if (!connected)
+                {
+                    error(ErrorMessage.NotConnected);
+                    return;
+                }
+
+                //34 is the minimum server version for real time bars
+                if (serverVersion < 34)
+                {
+                    error(ErrorMessage.UpdateTws, "It does not support realtime bar data query cancellation.");
+                    return;
+                }
+
+                int version = 1;
+
+                // send cancel mkt data msg
+                try
+                {
+                    send((int)OutgoingMessage.CancelRealTimeBars);
+                    send(version);
+                    send(tickerId);
+                }
+                catch (Exception e)
+                {
+                    if (!(e is ObjectDisposedException || e is IOException))
+                        throw;
+
+                    error(tickerId, ErrorMessage.FailSendCancelRealTimeBars, e);
+                    close();
+                }
+            }
+        }
+		
 
         /// <summary>
         /// Call the reqHistoricalData() method to start receiving historical data results through the historicalData() EWrapper method. 
@@ -1356,6 +1449,74 @@ namespace Krs.Ats.IBNet
                 }
             }
         }
+
+        /// <summary>
+        /// Call the reqRealTimeBars() method to start receiving real time bar results through the realtimeBar() EWrapper method.
+        /// </summary>
+        /// <param name="tickerId">The Id for the request. Must be a unique value. When the data is received, it will be identified
+        /// by this Id. This is also used when canceling the historical data request.</param>
+        /// <param name="contract">This structure contains a description of the contract for which historical data is being requested.</param>
+        /// <param name="barSize">Currently only 5 second bars are supported, if any other value is used, an exception will be thrown.</param>
+        /// <param name="whatToShow">Determines the nature of the data extracted. Valid values include:
+        /// TRADES
+        /// BID
+        /// ASK
+        /// MIDPOINT
+        /// </param>
+        /// <param name="useRTH">useRTH – Regular Trading Hours only. Valid values include:
+        /// 0 = all data available during the time span requested is returned, including time intervals when the market in question was outside of regular trading hours.
+        /// 1 = only data within the regular trading hours for the product requested is returned, even if the time time span falls partially or completely outside.
+        /// </param>
+        public void ReqRealTimeBars(int tickerId, Contract contract, int barSize, RealTimeBarType whatToShow, bool useRTH)
+        {
+            lock (this)
+            {
+                // not connected?
+                if (!connected)
+                {
+                    error(tickerId, ErrorMessage.NotConnected);
+                    return;
+                }
+                //34 is the minimum version for real time bars
+                if (serverVersion < 34)
+                {
+                    error(ErrorMessage.UpdateTws, "It does not support real time bars.");
+                    return;
+                }
+
+                int version = 1;
+
+                try
+                {
+                    // send req mkt data msg
+                    send((int)OutgoingMessage.RequestRealTimeBars);
+                    send(version);
+                    send(tickerId);
+
+                    send(contract.Symbol);
+                    send(EnumDescConverter.GetEnumDescription(contract.SecurityType));
+                    send(contract.Expiry);
+                    send(contract.Strike);
+                    send(EnumDescConverter.GetEnumDescription(contract.Right));
+                    send(contract.Multiplier);
+                    send(contract.Exchange);
+                    send(contract.PrimaryExch);
+                    send(contract.Currency);
+                    send(contract.LocalSymbol);
+                    send(barSize);
+                    send(EnumDescConverter.GetEnumDescription(whatToShow));
+                    send(useRTH);
+                }
+                catch (System.Exception e)
+                {
+                    if (!(e is ObjectDisposedException || e is IOException))
+                        throw;
+                    error(tickerId, ErrorMessage.FailSendRequestRealTimeBars, e);
+                    close();
+                }
+            }
+        }
+		
 
         /// <summary>
         /// Call this method to request market depth for a specific contract. The market depth will be returned by the updateMktDepth() and updateMktDepthL2() methods.
@@ -2259,6 +2420,47 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Returns the current system time on the server side.
+        /// </summary>
+        public void ReqCurrentTime()
+        {
+            lock (this)
+            {
+                // not connected?
+                if (!connected)
+                {
+                    error(ErrorMessage.NotConnected);
+                    return;
+                }
+
+                // This feature is only available for versions of TWS >= 33
+                if (serverVersion < 33)
+                {
+                    error(ErrorMessage.UpdateTws, "It does not support current time requests.");
+                    return;
+                }
+
+                int version = 1;
+
+                try
+                {
+                    send((int)OutgoingMessage.RequestCurrentTime);
+                    send(version);
+                }
+                catch (Exception e)
+                {
+                    if (!(e is ObjectDisposedException || e is IOException))
+                        throw;
+
+                    error(ErrorMessage.FailSendRequestCurrentTime, e);
+                    close();
+                }
+            }
+        }
+		
+		
+
+        /// <summary>
         /// The default level is ERROR. Refer to the API logging page for more details.
         /// </summary>
         /// <param name="serverLogLevel">
@@ -2660,8 +2862,15 @@ namespace Krs.Ats.IBNet
                             clientId = ReadInt();
                         }
 
+                        string whyHeld = null;
+                        if (version >= 6)
+                        {
+                            whyHeld = ReadStr();
+                        }
+						
+
                         orderStatus(id, status, filled, remaining, avgFillPrice, permId, parentId, lastFillPrice,
-                                    clientId);
+                                    clientId, whyHeld);
                         break;
                     }
 
@@ -3173,6 +3382,33 @@ namespace Krs.Ats.IBNet
                         scannerParameters(xml);
                         break;
                     }
+
+                case IncomingMessage.CurrentTime:
+                    {
+                        /*int version =*/
+                        ReadInt();
+                        long time = ReadLong();
+                        currentTime(time);
+                        break;
+                    }
+
+                case IncomingMessage.RealTimeBars:
+                    {
+                        /*int version =*/
+                        ReadInt();
+                        int reqId = ReadInt();
+                        long time = ReadLong();
+                        double open = ReadDouble();
+                        double high = ReadDouble();
+                        double low = ReadDouble();
+                        double close = ReadDouble();
+                        long volume = ReadLong();
+                        double wap = ReadDouble();
+                        int count = ReadInt();
+                        realTimeBar(reqId, time, open, high, low, close, volume, wap, count);
+                        break;
+                    }
+				
 
                 default:
                     {

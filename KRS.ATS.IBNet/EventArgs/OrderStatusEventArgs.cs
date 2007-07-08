@@ -15,6 +15,7 @@ namespace Krs.Ats.IBNet
         private readonly int parentId;
         private readonly int permId;
         private readonly int remaining;
+        private readonly string whyHeld;
 
         private readonly OrderStatus status;
 
@@ -34,8 +35,10 @@ namespace Krs.Ats.IBNet
         /// only if the filled parameter value is greater than zero. Otherwise, the price parameter will be zero.</param>
         /// <param name="clientId">The ID of the client (or TWS) that placed the order.
         /// The TWS orders have a fixed clientId and orderId of 0 that distinguishes them from API orders.</param>
+        /// <param name="whyHeld">This field is used to identify an order held when TWS is trying to locate shares for a short sell.
+        /// The value used to indicate this is 'locate'.</param>
         public OrderStatusEventArgs(int orderId, OrderStatus status, int filled, int remaining, double avgFillPrice,
-                                    int permId, int parentId, double lastFillPrice, int clientId)
+                                    int permId, int parentId, double lastFillPrice, int clientId, string whyHeld)
         {
             this.orderId = orderId;
             this.clientId = clientId;
@@ -46,6 +49,7 @@ namespace Krs.Ats.IBNet
             this.remaining = remaining;
             this.filled = filled;
             this.status = status;
+            this.whyHeld = whyHeld;
         }
 
         /// <summary>
@@ -155,6 +159,16 @@ namespace Krs.Ats.IBNet
         public int ClientId
         {
             get { return clientId; }
+        }
+
+        /// <summary>
+        /// This field is used to identify an order held when TWS is trying to locate shares for a short sell.
+        /// The value used to indicate this is 'locate'.
+        /// </summary>
+        /// <remarks>This field is supported starting with TWS release 872.</remarks>
+        public string WhyHeld
+        {
+            get { return whyHeld; }
         }
     }
 }

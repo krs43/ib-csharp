@@ -48,14 +48,17 @@
     <Compile Include="Enums\OrderOrigin.cs" />
     <Compile Include="Enums\OrderStatus.cs" />
     <Compile Include="Enums\OrderType.cs" />
+    <Compile Include="Enums\RealTimeBarType.cs" />
     <Compile Include="Enums\TimeInForce.cs" />
     <Compile Include="Enums\TriggerMethod.cs" />
     <Compile Include="Enums\VolatilityType.cs" />
     <Compile Include="EventArgs\BondContractDetailsEventArgs.cs" />
     <Compile Include="EventArgs\ConnectionClosedEventArgs.cs" />
+    <Compile Include="EventArgs\CurrentTimeEventArgs.cs" />
     <Compile Include="EventArgs\ErrorEventArgs.cs" />
     <Compile Include="EventArgs\HistoricalDataEventArgs.cs" />
     <Compile Include="EventArgs\ManagedAccountsEventArgs.cs" />
+    <Compile Include="EventArgs\RealTimeBarEventArgs.cs" />
     <Compile Include="EventArgs\ReceiveFAEventArgs.cs" />
     <Compile Include="EventArgs\ScannerDataEventArgs.cs" />
     <Compile Include="EventArgs\ScannerParametersEventArgs.cs" />
