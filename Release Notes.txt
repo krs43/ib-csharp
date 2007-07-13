@@ -1,6 +1,13 @@
+Interactive Brokers C# Socket API
+Karl Schulze - www.dinosaurtech.com
+
 Release Notes
 
-9.2.0.1
+9.1.0.1 Initial Release (Alpha) - July 8th, 2007
+ * Corresponds to Interactive Brokers API Release 9.10
+ * Considered an alpha release, as library has been mechanically converted and not yet rigorously tested.
+
+9.2.0.1 Second Release - July 12th, 2007
 * Updated to support 9.20 Interactive Brokers API Release
 	* ErrorMessage.cs added four new messages for real time bars, current time, and canceling a historical request.
 	* Updated Order Status Event and Event Arguments to support whyHeld parameter.
@@ -8,3 +15,5 @@ Release Notes
 	* Added Current Time Event / Event Argument / Message Parser
 	* Added new outgoing messages for real time bars and current time
 	* Fixed Cancel Historical Data error Message
+* Added Visual Basic.Net Sample
+	* Module is CLR compliant
