@@ -2457,8 +2457,6 @@ namespace Krs.Ats.IBNet
                 }
             }
         }
-		
-		
 
         /// <summary>
         /// The default level is ERROR. Refer to the API logging page for more details.

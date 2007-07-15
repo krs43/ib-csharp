@@ -17,3 +17,6 @@ Release Notes
 	* Fixed Cancel Historical Data error Message
 * Added Visual Basic.Net Sample
 	* Module is CLR compliant
+
+9.2.0.2 Bug Fix Release - July 14th, 2007
+* Fixed RightType descriptions. Changed from "PUT" to "P" and "CALL" to "C".

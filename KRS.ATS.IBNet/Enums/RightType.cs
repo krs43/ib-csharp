@@ -10,11 +10,13 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Option type is a Put (Right to sell)
         /// </summary>
-        [Description("PUT")] Put,
+        /// Description tag used to be "PUT"
+        [Description("P")] Put,
         /// <summary>
         /// Option type is a Call (Right to buy)
         /// </summary>
-        [Description("CALL")] Call,
+        /// Description tag used to be "CALL"
+        [Description("C")] Call,
         /// <summary>
         /// Option type is not defined (contract is not an option).
         /// </summary>
