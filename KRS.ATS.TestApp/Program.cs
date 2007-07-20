@@ -63,7 +63,7 @@ namespace Krs.Ats.TestApp
             BuyContract.LmtPrice = 820;
             BuyContract.OrderType = OrderType.Limit;
             BuyContract.TotalQuantity = 1;
-            client.PlaceOrder(25, ER2, BuyContract);
+            client.PlaceOrder(26, ER2, BuyContract);
         }
 
         static void client_OrderStatus(object sender, OrderStatusEventArgs e)

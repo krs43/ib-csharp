@@ -25,3 +25,4 @@ Release Notes
 * Fixed Order placement. Problem related to the castings of several enumerations, as well as a missing order status type.
 * Added a contract constructor for indices.
 * Updated C# App with a lot more default contracts, and a sample order placement.
+* Added ThrowExceptions property to IBClient to help in debugging
