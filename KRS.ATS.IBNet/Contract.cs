@@ -71,6 +71,19 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Indice Contract Constructor
+        /// </summary>
+        /// <param name="symbol">This is the symbol of the underlying asset.</param>
+        /// <param name="exchange">The order destination, such as Smart.</param>
+        /// <param name="securityType">This is the security type.</param>
+        /// <param name="currency">Specifies the currency.</param>
+        public Contract(string symbol, string exchange, SecurityType securityType, string currency)
+            :
+            this(symbol, securityType, null, 0, RightType.Undefined, null, exchange, currency, null, null)
+        {
+        }
+
+        /// <summary>
         /// Default Contract Constructor
         /// </summary>
         /// <param name="symbol">This is the symbol of the underlying asset.</param>

@@ -102,6 +102,7 @@ namespace Krs.Ats.IBNet
             openClose = "O";
             origin = OrderOrigin.Customer;
             transmit = true;
+            tif = TimeInForce.Day;
             designatedLocation = "";
             minQty = Int32.MaxValue;
             percentOffset = Double.MaxValue;
@@ -113,7 +114,7 @@ namespace Krs.Ats.IBNet
             stockRangeUpper = Double.MaxValue;
             volatility = Double.MaxValue;
             volatilityType = VolatilityType.Undefined;
-            deltaNeutralOrderType = OrderType.None;
+            deltaNeutralOrderType = OrderType.Empty;
             deltaNeutralAuxPrice = Double.MaxValue;
             referencePriceType = Int32.MaxValue;
             trailStopPrice = Double.MaxValue;

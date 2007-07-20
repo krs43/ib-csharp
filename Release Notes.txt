@@ -20,3 +20,8 @@ Release Notes
 
 9.2.0.2 Bug Fix Release - July 14th, 2007
 * Fixed RightType descriptions. Changed from "PUT" to "P" and "CALL" to "C".
+
+9.2.0.3 Bug Fix Release - July 20th, 2007
+* Fixed Order placement. Problem related to the castings of several enumerations, as well as a missing order status type.
+* Added a contract constructor for indices.
+* Updated C# App with a lot more default contracts, and a sample order placement.

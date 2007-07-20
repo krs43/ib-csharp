@@ -39,6 +39,10 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// The order has been completely filled.
         /// </summary>
-        Filled
+        Filled,
+        /// <summary>
+        /// The Order is inactive
+        /// </summary>
+        Inactive
     }
 }

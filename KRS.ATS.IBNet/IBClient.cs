@@ -671,6 +671,16 @@ namespace Krs.Ats.IBNet
             GC.SuppressFinalize(this);
         }
 
+        private bool throwExceptions = false;
+        /// <summary>
+        /// Used to control the exception handling.
+        /// If true, all exceptions are thrown, else only throw non network exceptions.
+        /// </summary>
+        public bool ThrowExceptions
+        {
+            get { return throwExceptions; }
+            set { throwExceptions = value; }
+        }
 
         /// <summary>
         /// The bulk of the clean-up code is implemented in Dispose(bool)
@@ -905,7 +915,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(tickerId, ErrorMessage.FailSendCancelScanner, e);
@@ -943,7 +953,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) | throwExceptions)
                         throw;
                     error(ErrorMessage.FailSendRequestScannerParameters, e);
                     close();
@@ -1012,7 +1022,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
                     error(tickerId, ErrorMessage.FailSendRequestScanner, e);
                     close();
@@ -1111,7 +1121,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
                     error(tickerId, ErrorMessage.FailSendRequestMarket, e);
                     close();
@@ -1151,7 +1161,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(tickerId, ErrorMessage.FailSendCancelHistoricalData, e);
@@ -1193,7 +1203,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) | throwExceptions)
                         throw;
 
                     error(tickerId, ErrorMessage.FailSendCancelRealTimeBars, e);
@@ -1383,7 +1393,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
                     error(tickerId, ErrorMessage.FailSendRequestHistoricalData, e);
                     close();
@@ -1442,7 +1452,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
                     error(ErrorMessage.FailSendRequestContract, e);
                     close();
@@ -1509,7 +1519,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (System.Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
                     error(tickerId, ErrorMessage.FailSendRequestRealTimeBars, e);
                     close();
@@ -1574,7 +1584,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(tickerId, ErrorMessage.FailSendRequestMarketDepth, e);
@@ -1609,7 +1619,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(tickerId, ErrorMessage.FailSendCancelMarket, e);
@@ -1651,7 +1661,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(tickerId, ErrorMessage.FailSendCancelMarketDepth, e);
@@ -1725,7 +1735,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(tickerId, ErrorMessage.FailSendRequestMarket, e);
@@ -1813,7 +1823,7 @@ namespace Krs.Ats.IBNet
                         send(order.BlockOrder);
                         send(order.SweepToFill);
                         send(order.DisplaySize);
-                        send(EnumDescConverter.GetEnumDescription(order.TriggerMethod));
+                        send((int)order.TriggerMethod);
                         send(order.IgnoreRth);
                     }
 
@@ -1881,7 +1891,7 @@ namespace Krs.Ats.IBNet
                     }
                     if (serverVersion >= 19)
                     {
-                        send(EnumDescConverter.GetEnumDescription(order.OcaType));
+                        send((int)order.OcaType);
                         send(order.RthOnly);
                         send(EnumDescConverter.GetEnumDescription(order.Rule80A));
                         send(order.SettlingFirm);
@@ -1949,7 +1959,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(orderId, ErrorMessage.FailSendOrder, e);
@@ -1991,7 +2001,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(ErrorMessage.FailSendAccountUpdate, e);
@@ -2041,7 +2051,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
                     error(ErrorMessage.FailSendExecution, e);
                     close();
@@ -2075,7 +2085,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
                     error(orderId, ErrorMessage.FailSendCancelOrder, e);
                     close();
@@ -2109,7 +2119,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(ErrorMessage.FailSendOpenOrder, e);
@@ -2143,7 +2153,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(ErrorMessage.FailSendCancelOrder, e);
@@ -2177,7 +2187,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(ErrorMessage.FailSendCancelOrder, e);
@@ -2210,7 +2220,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(ErrorMessage.FailSendCancelOrder, e);
@@ -2247,7 +2257,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(ErrorMessage.FailSendOpenOrder, e);
@@ -2282,7 +2292,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(ErrorMessage.FailSendOpenOrder, e);
@@ -2317,7 +2327,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(ErrorMessage.FailSendOpenOrder, e);
@@ -2363,7 +2373,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(ErrorMessage.FailSendFARequest, e);
@@ -2410,7 +2420,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(ErrorMessage.FailSendFAReplace, e);
@@ -2449,7 +2459,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(ErrorMessage.FailSendRequestCurrentTime, e);
@@ -2491,7 +2501,7 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectDisposedException || e is IOException))
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
 
                     error(ErrorMessage.FailSendServerLogLevel, e.ToString());
@@ -2830,8 +2840,9 @@ namespace Krs.Ats.IBNet
                     {
                         int version = ReadInt();
                         int id = ReadInt();
+                        string orderstat = ReadStr();
                         OrderStatus status =
-                            (OrderStatus) EnumDescConverter.GetEnumValue(typeof (OrderStatus), ReadStr());
+                            (OrderStatus) EnumDescConverter.GetEnumValue(typeof (OrderStatus), orderstat);
                         int filled = ReadInt();
                         int remaining = ReadInt();
                         double avgFillPrice = ReadDouble();
@@ -2979,7 +2990,7 @@ namespace Krs.Ats.IBNet
                         contract.Expiry = ReadStr();
                         contract.Strike = ReadDouble();
                         string rstr = ReadStr();
-                        contract.Right = (rstr.Length <= 0
+                        contract.Right = (rstr.Length <= 0 || rstr.Equals("?")
                                               ? RightType.Undefined
                                               : (RightType) EnumDescConverter.GetEnumValue(typeof (RightType), rstr));
                         contract.Exchange = ReadStr();
@@ -3082,8 +3093,9 @@ namespace Krs.Ats.IBNet
                             else
                             {
                                 // version 12 and up
+                                string dnoa = ReadStr();
                                 order.DeltaNeutralOrderType =
-                                    (OrderType) EnumDescConverter.GetEnumValue(typeof (OrderType), ReadStr());
+                                    (OrderType) EnumDescConverter.GetEnumValue(typeof (OrderType), dnoa);
                                 order.DeltaNeutralAuxPrice = ReadDouble();
                             }
                             order.ContinuousUpdate = ReadInt();

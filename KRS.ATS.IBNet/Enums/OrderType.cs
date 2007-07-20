@@ -76,6 +76,10 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Used to initialize the delta Order Field.
         /// </summary>
-        [Description("")] Empty
+        [Description("")] Empty,
+        /// <summary>
+        /// Default - used for Delta Neutral Order Type
+        /// </summary>
+        [Description("Default")] Default
     }
 }

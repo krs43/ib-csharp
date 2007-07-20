@@ -3,7 +3,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Trigger method for actions.
     /// </summary>
-    public enum TriggerMethod
+    public enum TriggerMethod : int
     {
         /// <summary>
         /// 0 - the default value. The "double bid/ask" method will be used for orders for OTC stocks and US options. All other orders will used the "last" method.
