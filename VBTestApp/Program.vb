@@ -14,7 +14,7 @@ Module Program
         AddHandler Program.client.NextValidId, New EventHandler(Of NextValidIdEventArgs)(AddressOf Program.client_NextValidId)
         Program.client.Connect("127.0.0.1", &H1D48, 10)
         Program.ER2 = New Contract("ER2", "GLOBEX", SecurityType.Future, "USD", "200709")
-        Program.client.ReqMktData(12, Program.ER2, Nothing)
+        Program.client.ReqMktData(12, Program.ER2, Nothing, False)
 
     End Sub
     Private Sub client_TickSize(ByVal sender As Object, ByVal e As TickSizeEventArgs)

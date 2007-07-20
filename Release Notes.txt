@@ -3,9 +3,22 @@ Karl Schulze - www.dinosaurtech.com
 
 Release Notes
 
-9.1.0.1 Initial Release (Alpha) - July 8th, 2007
- * Corresponds to Interactive Brokers API Release 9.10
- * Considered an alpha release, as library has been mechanically converted and not yet rigorously tested.
+9.3.0.3 API and Feature Release - July 20th, 2007
+* Updated to support 9.30 Interactive Brokers API Release
+	* Added Support for Scale Orders
+	* Added Support to ComboLegs for Short Sales
+	* Added Support for Market Data Snap Shots
+* Thanks to RLaumeyer for the Contract Examples. Added a new namespace Krs.Ats.IBNet.Contracts and included his two examples, an Option Contract and an Equity Contract.
+* Rearranged this Release Notes File to be descending with each release.
+
+9.2.0.3 Bug Fix Release - July 20th, 2007
+* Fixed Order placement. Problem related to the castings of several enumerations, as well as a missing order status type.
+* Added a contract constructor for indices.
+* Updated C# App with a lot more default contracts, and a sample order placement.
+* Added ThrowExceptions property to IBClient to help in debugging
+
+9.2.0.2 Bug Fix Release - July 14th, 2007
+* Fixed RightType descriptions. Changed from "PUT" to "P" and "CALL" to "C".
 
 9.2.0.1 Second Release - July 12th, 2007
 * Updated to support 9.20 Interactive Brokers API Release
@@ -18,11 +31,8 @@ Release Notes
 * Added Visual Basic.Net Sample
 	* Module is CLR compliant
 
-9.2.0.2 Bug Fix Release - July 14th, 2007
-* Fixed RightType descriptions. Changed from "PUT" to "P" and "CALL" to "C".
+9.1.0.1 Initial Release (Alpha) - July 8th, 2007
+ * Corresponds to Interactive Brokers API Release 9.10
+ * Considered an alpha release, as library has been mechanically converted and not yet rigorously tested.
 
-9.2.0.3 Bug Fix Release - July 20th, 2007
-* Fixed Order placement. Problem related to the castings of several enumerations, as well as a missing order status type.
-* Added a contract constructor for indices.
-* Updated C# App with a lot more default contracts, and a sample order placement.
-* Added ThrowExceptions property to IBClient to help in debugging
+

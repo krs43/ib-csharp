@@ -710,7 +710,7 @@ namespace Krs.Ats.IBNet
 
         #region Values
 
-        private const int ClientVersion = 32;
+        private const int ClientVersion = 33;
         private const int MinimumServerVersion = 1;
 
         #endregion
@@ -1036,7 +1036,8 @@ namespace Krs.Ats.IBNet
         /// <param name="tickerId">the ticker id. Must be a unique value. When the market data returns, it will be identified by this tag. This is also used when canceling the market data.</param>
         /// <param name="contract">this structure contains a description of the contract for which market data is being requested.</param>
         /// <param name="genericTickList">comma delimited list of generic tick types.  Tick types can be found here: (new Generic Tick Types page) </param>
-        public void ReqMktData(int tickerId, Contract contract, Collection<GenericTickType> genericTickList)
+        /// <param name="snapshot">Allows client to request snapshot market data.</param>
+        public void ReqMktData(int tickerId, Contract contract, Collection<GenericTickType> genericTickList, bool snapshot)
         {
             lock (this)
             {
@@ -1047,7 +1048,14 @@ namespace Krs.Ats.IBNet
                     return;
                 }
 
-                int version = 6;
+                //35 is the minimum versio nfor snapshots
+                if (serverVersion < 35 && snapshot)
+                {
+                    error(tickerId, ErrorMessage.UpdateTws, "It does not support snapshot market data requests.");
+                    return;
+                }
+
+                int version = 7;
 
                 try
                 {
@@ -1117,6 +1125,11 @@ namespace Krs.Ats.IBNet
                                           ((int) genericTickList[ix]).ToString(CultureInfo.InvariantCulture);
                         }
                         send(genList);
+                    }
+                    //35 is the minum version for SnapShot
+                    if (serverVersion >= 35)
+                    {
+                        send(snapshot);
                     }
                 }
                 catch (Exception e)
@@ -1766,7 +1779,35 @@ namespace Krs.Ats.IBNet
                     return;
                 }
 
-                int version = 21;
+                //Scale Orders Minimum Version is 35
+                if (serverVersion < 35)
+                {
+                    if (order.ScaleNumComponents != Int32.MaxValue || order.ScaleComponentSize != Int32.MaxValue || order.ScalePriceIncrement != Double.MaxValue)
+                    {
+                        error(orderId, ErrorMessage.UpdateTws, "It does not support Scale orders.");
+                        return;
+                    }
+                }
+
+                //Minimum Sell Short Combo Leg Order is 35
+                if (serverVersion < 35)
+                {
+                    if (!(contract.ComboLegs.Count == 0))
+                    {
+                        ComboLeg comboLeg;
+                        for (int i = 0; i < contract.ComboLegs.Count; ++i)
+                        {
+                            comboLeg = (ComboLeg)contract.ComboLegs[i];
+                            if (comboLeg.ShortSaleSlot != 0 || (comboLeg.DesignatedLocation != null && comboLeg.DesignatedLocation.Length > 0))
+                            {
+                                error(orderId, ErrorMessage.UpdateTws, "It does not support SSHORT flag for combo legs.");
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                int version = 22;
 
                 // send place order msg
                 try
@@ -1852,6 +1893,12 @@ namespace Krs.Ats.IBNet
                                 send(EnumDescConverter.GetEnumDescription(comboLeg.Action));
                                 send(comboLeg.Exchange);
                                 send(EnumDescConverter.GetEnumDescription(comboLeg.OpenClose));
+                                //Min Combo Leg Short Sale Server Version is 35
+                                if (serverVersion >= 35)
+                                {
+                                    send((int)comboLeg.ShortSaleSlot);
+                                    send(comboLeg.DesignatedLocation);
+                                }
                             }
                         }
                     }
@@ -1886,7 +1933,7 @@ namespace Krs.Ats.IBNet
                     if (serverVersion >= 18)
                     {
                         // institutional short sale slot fields.
-                        send(order.ShortSaleSlot); // 0 only for retail, 1 or 2 only for institution.
+                        send((int)order.ShortSaleSlot); // 0 only for retail, 1 or 2 only for institution.
                         send(order.DesignatedLocation); // only populate when order.shortSaleSlot = 2.
                     }
                     if (serverVersion >= 19)
@@ -1955,6 +2002,14 @@ namespace Krs.Ats.IBNet
                     {
                         // TRAIL_STOP_LIMIT stop price
                         sendMax(order.TrailStopPrice);
+                    }
+
+                    //Scale Orders require server version 35 or higher.
+                    if (serverVersion >= 35)
+                    {
+                        sendMax(order.ScaleNumComponents);
+                        sendMax(order.ScaleComponentSize);
+                        sendMax(order.ScalePriceIncrement);
                     }
                 }
                 catch (Exception e)
@@ -2518,7 +2573,7 @@ namespace Krs.Ats.IBNet
         {
             // write string to data buffer; writer thread will
             // write it to ibSocket
-            if (str != null)
+            if (str != null && str.Length > 0)
             {
                 dos.Write(ToByteArray(str));
             }
@@ -3055,7 +3110,7 @@ namespace Krs.Ats.IBNet
                                 (AgentDescription) EnumDescConverter.GetEnumValue(typeof (AgentDescription), ReadStr());
                             order.PercentOffset = ReadDouble();
                             order.SettlingFirm = ReadStr();
-                            order.ShortSaleSlot = ReadInt();
+                            order.ShortSaleSlot = (ShortSaleSlot)ReadInt();
                             order.DesignatedLocation = ReadStr();
                             order.AuctionStrategy = (AuctionStrategy) ReadInt();
                             order.StartingPrice = ReadDouble();
@@ -3117,6 +3172,13 @@ namespace Krs.Ats.IBNet
                             order.BasisPoints = ReadDouble();
                             order.BasisPointsType = ReadInt();
                             contract.ComboLegsDescrip = ReadStr();
+                        }
+
+                        if (version >= 15)
+                        {
+                            order.ScaleNumComponents = ReadIntMax();
+                            order.ScaleComponentSize = ReadIntMax();
+                            order.ScalePriceIncrement = ReadDoubleMax();
                         }
 
                         openOrder(order.OrderId, contract, order);
@@ -3462,6 +3524,12 @@ namespace Krs.Ats.IBNet
             return str == null ? 0 : Int32.Parse(str, CultureInfo.InvariantCulture);
         }
 
+        private int ReadIntMax()
+        {
+            String str = ReadStr();
+            return (str == null || str.Length == 0) ? Int32.MaxValue : Int32.Parse(str, CultureInfo.InvariantCulture);
+        }
+
         private long ReadLong()
         {
             String str = ReadStr();
@@ -3472,6 +3540,12 @@ namespace Krs.Ats.IBNet
         {
             String str = ReadStr();
             return str == null ? 0 : Double.Parse(str, CultureInfo.InvariantCulture);
+        }
+
+        private double ReadDoubleMax()
+        {
+            String str = ReadStr();
+            return (str == null || str.Length == 0) ? Double.MaxValue : Double.Parse(str, CultureInfo.InvariantCulture);
         }
 
         #endregion

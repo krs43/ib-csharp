@@ -67,7 +67,7 @@ namespace Krs.Ats.IBNet
         private String settlingFirm;
         private String sharesAllocation; // deprecated
 
-        private int shortSaleSlot;
+        private ShortSaleSlot shortSaleSlot;
                     // 1 if you hold the shares, 2 if they will be delivered from elsewhere.  Only for Action="SSHORT
 
         // BOX ORDERS ONLY
@@ -89,6 +89,11 @@ namespace Krs.Ats.IBNet
         // VOLATILITY ORDERS ONLY
         private double volatility;
         private VolatilityType volatilityType; // 1=daily, 2=annual
+
+        // SCALE ORDERS ONLY
+        private int scaleNumComponents;
+        private int scaleComponentSize;
+        private double scalePriceIncrement;
 
         #endregion
 
@@ -120,6 +125,9 @@ namespace Krs.Ats.IBNet
             trailStopPrice = Double.MaxValue;
             basisPoints = Double.MaxValue;
             basisPointsType = Int32.MaxValue;
+            scaleNumComponents = Int32.MaxValue;
+            scaleComponentSize = Int32.MaxValue;
+            scalePriceIncrement = Double.MaxValue;
         }
 
         #endregion
@@ -512,9 +520,9 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Values are 1 or 2.
+        /// ShortSaleSlot of Third Party requires DesignatedLocation to be specified. Non-empty DesignatedLocation values for all other cases will cause orders to be rejected.
         /// </summary>
-        public int ShortSaleSlot
+        public ShortSaleSlot ShortSaleSlot
         {
             get { return shortSaleSlot; }
             set { shortSaleSlot = value; }
@@ -711,6 +719,33 @@ namespace Krs.Ats.IBNet
         {
             get { return basisPointsType; }
             set { basisPointsType = value; }
+        }
+
+        /// <summary>
+        /// split order into X buckets
+        /// </summary>
+        public int ScaleNumComponents
+        {
+            get { return scaleNumComponents; }
+            set { scaleNumComponents = value; }
+        }
+
+        /// <summary>
+        /// split order so each bucket is of the size X
+        /// </summary>
+        public int ScaleComponentSize
+        {
+            get { return scaleComponentSize; }
+            set { scaleComponentSize = value; }
+        }
+
+        /// <summary>
+        /// price increment per bucket
+        /// </summary>
+        public double ScalePriceIncrement
+        {
+            get { return scalePriceIncrement; }
+            set { scalePriceIncrement = value; }
         }
 
         #endregion

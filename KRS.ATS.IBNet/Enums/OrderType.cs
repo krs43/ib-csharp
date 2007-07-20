@@ -80,6 +80,10 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Default - used for Delta Neutral Order Type
         /// </summary>
-        [Description("Default")] Default
+        [Description("Default")] Default,
+        /// <summary>
+        /// Scale Order.
+        /// </summary>
+        [Description("SCALE")] Scale
     }
 }

@@ -11,11 +11,15 @@ namespace Krs.Ats.IBNet
     {
         #region Private Variables
 
-        private ActionSide action; // BUY/SELL
+        private ActionSide action; // BUY/SELL/SSHORT
         private int conId;
         private String exchange;
         private ComboOpenClose openClose;
         private int ratio;
+
+        // for stock legs when doing short sale
+        private ShortSaleSlot shortSaleSlot; // 1 = clearing broker, 2 = third party
+        private String designatedLocation;
 
         #endregion
 
@@ -24,7 +28,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Initialize the ComboLeg
         /// </summary>
-        public ComboLeg()
+        public ComboLeg() : this(0,0,ActionSide.Undefined, null, ComboOpenClose.Unknown, ShortSaleSlot.Unapplicable, null)
         {
         }
 
@@ -36,14 +40,21 @@ namespace Krs.Ats.IBNet
         /// <param name="action">The side (buy or sell) for the leg you are constructing. See property <see cref="ComboLeg.Action"/></param>
         /// <param name="exchange">The exchange to which the complete combination order will be routed. See property <see cref="ComboLeg.Exchange"/>.</param>
         /// <param name="openClose">Specifies whether the order is an open or close order. Retail customers must use <see cref="ComboOpenClose.Same"/>. See property <see cref="ComboLeg.OpenClose"/></param>
-        public ComboLeg(int conId, int ratio, ActionSide action, String exchange, ComboOpenClose openClose)
+        /// <param name="shortSaleSlot">ShortSaleSlot of Third Party requires DesignatedLocation to be specified. Non-empty DesignatedLocation values for all other cases will cause orders to be rejected. See Property <see cref="ComboLeg.ShortSaleSlot"/></param>
+        /// <param name="designatedLocation">Use only when shortSaleSlot value = 2. See Property <see cref="ComboLeg.DesignatedLocation"/></param>
+        public ComboLeg(int conId, int ratio, ActionSide action, String exchange, ComboOpenClose openClose, ShortSaleSlot shortSaleSlot, string designatedLocation)
         {
             this.conId = conId;
             this.ratio = ratio;
             this.action = action;
             this.exchange = exchange;
             this.openClose = openClose;
+            this.shortSaleSlot = shortSaleSlot;
+            this.designatedLocation = designatedLocation;
         }
+
+
+		
 
         #endregion
 
@@ -96,6 +107,24 @@ namespace Krs.Ats.IBNet
         {
             get { return openClose; }
             set { openClose = value; }
+        }
+
+        /// <summary>
+        /// ShortSaleSlot of Third Party requires DesignatedLocation to be specified. Non-empty DesignatedLocation values for all other cases will cause orders to be rejected.
+        /// </summary>
+        public ShortSaleSlot ShortSaleSlot
+        {
+            get { return shortSaleSlot; }
+            set { shortSaleSlot = value; }
+        }
+
+        /// <summary>
+        /// Use only when shortSaleSlot value = 2.
+        /// </summary>
+        public string DesignatedLocation
+        {
+            get { return designatedLocation; }
+            set { designatedLocation = value; }
         }
 
         #endregion

@@ -34,6 +34,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\Equity.cs" />
+    <Compile Include="Contracts\Option.cs" />
     <Compile Include="EnumDescConverter.cs" />
     <Compile Include="Enums\ActionSide.cs" />
     <Compile Include="Enums\AgentDescription.cs" />
@@ -49,6 +51,7 @@
     <Compile Include="Enums\OrderStatus.cs" />
     <Compile Include="Enums\OrderType.cs" />
     <Compile Include="Enums\RealTimeBarType.cs" />
+    <Compile Include="Enums\ShortSaleSlot.cs" />
     <Compile Include="Enums\TimeInForce.cs" />
     <Compile Include="Enums\TriggerMethod.cs" />
     <Compile Include="Enums\VolatilityType.cs" />

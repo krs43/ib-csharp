@@ -18,9 +18,11 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Undefined
         /// </summary>
-        [Description("")] Undefined
-        /* DEPRECATED
-         * [Description("SSHORT")]
-         * SShort*/
+        [Description("")] Undefined,
+        /// <summary>
+        /// Sell Short as part of a combo leg
+        /// </summary>
+        [Description("SSHORT")]
+         SShort
     }
 }

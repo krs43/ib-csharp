@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Krs.Ats.IBNet;
+using Krs.Ats.IBNet.Contracts;
 
 namespace Krs.Ats.TestApp
 {
@@ -54,8 +55,11 @@ namespace Krs.Ats.TestApp
             VolNyse = new Contract("VOL-NYSE", "NYSE", SecurityType.Indice, "USD");
             AdNyse = new Contract("AD-NYSE", "NYSE", SecurityType.Indice, "USD");
 
-            client.ReqMktData(14, ZB, null);
-            client.ReqMktDepth(15, ZB, 5);
+            //New Contract Creation Features
+            Equity Google = new Equity("GOOG");
+
+            client.ReqMktData(14, Google, null, false);
+            client.ReqMktDepth(15, Google, 5);
 
             Order BuyContract = new Order();
             BuyContract.Action = ActionSide.Buy;
@@ -63,7 +67,7 @@ namespace Krs.Ats.TestApp
             BuyContract.LmtPrice = 820;
             BuyContract.OrderType = OrderType.Limit;
             BuyContract.TotalQuantity = 1;
-            client.PlaceOrder(26, ER2, BuyContract);
+            client.PlaceOrder(502, ER2, BuyContract);
         }
 
         static void client_OrderStatus(object sender, OrderStatusEventArgs e)
