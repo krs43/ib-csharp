@@ -3,6 +3,16 @@ Karl Schulze - www.dinosaurtech.com
 
 Release Notes
 
+9.3.0.5 Bug Fix Release -
+* Fixed Historical Data Requests (had improperly fomatted parameter and timestamps)
+* Fixed Disconnect call to properly kill the reader thread
+* Added support for additional contracts (forex, Futures, Indices)
+* Began Order Classes, incomplete for now, but started a Limit Order class.
+* Fixed Current Time call, it now returns a date time instead of a string.
+
+9.3.0.4 Bug Fix Release - 
+* Added Market On Open enumeration to Time in Force
+
 9.3.0.3 API and Feature Release - July 20th, 2007
 * Updated to support 9.30 Interactive Brokers API Release
 	* Added Support for Scale Orders

@@ -3,7 +3,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Market Depth Side
     /// </summary>
-    public enum MarketDepthSide
+    public enum MarketDepthSide : int
     {
         /// <summary>
         /// Ask Price Side

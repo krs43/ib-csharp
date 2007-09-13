@@ -475,7 +475,7 @@ namespace Krs.Ats.IBNet
                 HistoricalData(this, e);
         }
 
-        private void historicalData(int reqId, string date, double open, double high, double low, double close,
+        private void historicalData(int reqId, DateTime date, double open, double high, double low, double close,
                                     int volume, int count, double WAP, bool hasGaps)
         {
             HistoricalDataEventArgs e =
@@ -563,7 +563,7 @@ namespace Krs.Ats.IBNet
                 CurrentTime(this, e);
         }
 
-        private void currentTime(long time)
+        private void currentTime(DateTime time)
         {
             CurrentTimeEventArgs e = new CurrentTimeEventArgs(time);
             OnCurrentTime(e);
@@ -794,6 +794,7 @@ namespace Krs.Ats.IBNet
                 {
                     twsTime = ReadStr();
                     Console.WriteLine("TWS Time at connection:" + twsTime);
+                    //Let's fire the servertime event
                 }
                 if (serverVersion < MinimumServerVersion)
                 {
@@ -869,6 +870,7 @@ namespace Krs.Ats.IBNet
                 {
                     // stop Reader thread
                     Stop();
+                    readThread.Abort();
 
                     // close ibSocket
                     if (ibSocket != null)
@@ -1231,8 +1233,8 @@ namespace Krs.Ats.IBNet
         /// </summary>
         /// <param name="tickerId">the Id for the request. Must be a unique value. When the data is received, it will be identified by this Id. This is also used when canceling the historical data request.</param>
         /// <param name="contract">this structure contains a description of the contract for which market data is being requested.</param>
-        /// <param name="endDateTime">Use the format yyyymmdd hh:mm:ss tmz, where the time zone is allowed (optionally) after a space at the end.</param>
-        /// <param name="durationStr">This is the time span the request will cover, and is specified using the format:
+        /// <param name="endDateTime">Date is sent after a .ToUniversalTime, so make sure the kind property is set correctly, and assumes GMT timezone. Use the format yyyymmdd hh:mm:ss tmz, where the time zone is allowed (optionally) after a space at the end.</param>
+        /// <param name="duration">This is the time span the request will cover, and is specified using the format:
         /// <integer /> <unit />, i.e., 1 D, where valid units are:
         /// S (seconds)
         /// D (days)
@@ -1322,13 +1324,8 @@ namespace Krs.Ats.IBNet
         /// 0 - all data is returned even where the market in question was outside of its regular trading hours.
         /// 1 - only data within the regular trading hours is returned, even if the requested time span falls partially or completely outside of the RTH.
         /// </param>
-        /// <param name="formatDate">
-        /// determines the date format applied to returned bars. Valid values include:
-        /// 1 - dates applying to bars returned in the format: yyyymmdd{space}{space}hh:mm:dd
-        /// 2 - dates are returned as a long integer specifying the number of seconds since 1/1/1970 GMT.
-        /// </param>
-        public void ReqHistoricalData(int tickerId, Contract contract, String endDateTime, String durationStr,
-                                      String barSizeSetting, String whatToShow, int useRth, int formatDate)
+        public void ReqHistoricalData(int tickerId, Contract contract, DateTime endDateTime, TimeSpan duration,
+                                      BarSize barSizeSetting, HistoricalDataType whatToShow, int useRth)
         {
             if (contract == null)
                 throw new ArgumentNullException("contract");
@@ -1372,15 +1369,17 @@ namespace Krs.Ats.IBNet
                     }
                     if (serverVersion >= 20)
                     {
-                        send(endDateTime);
-                        send(barSizeSetting);
+                        //yyyymmdd hh:mm:ss tmz
+                        send(endDateTime.ToUniversalTime().ToString("yyyyMMdd HH:mm:ss") + " GMT");
+                        send(EnumDescConverter.GetEnumDescription(barSizeSetting));
                     }
-                    send(durationStr);
+                    send(Convert.ToInt32(duration.TotalSeconds).ToString() + " S");
                     send(useRth);
-                    send(whatToShow);
+                    send(EnumDescConverter.GetEnumDescription(whatToShow));
                     if (serverVersion > 16)
                     {
-                        send(formatDate);
+                        //Send date times as seconds since 1970
+                        send(2);
                     }
                     if (contract.SecurityType == SecurityType.Bag)
                     {
@@ -2732,6 +2731,10 @@ namespace Krs.Ats.IBNet
                 // loop until thread is terminated
                 while (!Stopping && ProcessMsg((IncomingMessage) ReadInt())) ;
             }
+            catch(IOException)
+            {
+                
+            }
             finally
             {
                 SetStopped();
@@ -3315,7 +3318,7 @@ namespace Krs.Ats.IBNet
                         contract.Expiry = ReadStr();
                         contract.Strike = ReadDouble();
                         string rstr = ReadStr();
-                        contract.Right = (rstr.Length <= 0
+                        contract.Right = (rstr == null || rstr.Length <= 0
                                               ? RightType.Undefined
                                               : (RightType) EnumDescConverter.GetEnumValue(typeof (RightType), rstr));
                         contract.Exchange = ReadStr();
@@ -3416,17 +3419,20 @@ namespace Krs.Ats.IBNet
                         int reqId = ReadInt();
                         String startDateStr;
                         String endDateStr;
-                        String completedIndicator = "finished";
                         if (version >= 2)
                         {
                             startDateStr = ReadStr();
                             endDateStr = ReadStr();
-                            completedIndicator += ("-" + startDateStr + "-" + endDateStr);
+                            //completedIndicator += ("-" + startDateStr + "-" + endDateStr);
                         }
                         int itemCount = ReadInt();
                         for (int ctr = 0; ctr < itemCount; ctr++)
                         {
+                            //Comes in as seconds
+                            //2 - dates are returned as a long integer specifying the number of seconds since 1/1/1970 GMT.
                             String date = ReadStr();
+                            long longDate = Int64.Parse(date);
+                            DateTime timeStamp = new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc).AddSeconds(longDate);
                             double open = ReadDouble();
                             double high = ReadDouble();
                             double low = ReadDouble();
@@ -3439,11 +3445,11 @@ namespace Krs.Ats.IBNet
                             {
                                 barCount = ReadInt();
                             }
-                            historicalData(reqId, date, open, high, low, close, volume, barCount, WAP,
+                            historicalData(reqId, timeStamp, open, high, low, close, volume, barCount, WAP,
                                            Boolean.Parse(hasGaps));
                         }
                         // send end of dataset marker
-                        historicalData(reqId, completedIndicator, - 1, - 1, - 1, - 1, - 1, - 1, - 1, false);
+                        historicalData(reqId, DateTime.MinValue, - 1, - 1, - 1, - 1, - 1, - 1, - 1, false);
                         break;
                     }
 
@@ -3460,7 +3466,8 @@ namespace Krs.Ats.IBNet
                         /*int version =*/
                         ReadInt();
                         long time = ReadLong();
-                        currentTime(time);
+                        DateTime cTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(time);
+                        currentTime(cTime);
                         break;
                     }
 

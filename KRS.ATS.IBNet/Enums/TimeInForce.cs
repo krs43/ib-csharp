@@ -20,9 +20,17 @@ namespace Krs.Ats.IBNet
         /// </summary>
         [Description("IOC")] ImmediateOrCancel,
         /// <summary>
+        /// Setting FOK as the time in force dictates that the entire order must execute immediately or be canceled.
+        /// </summary>
+        [Description("FOK")] FillOrKill,
+        /// <summary>
         /// Good Till Date
         /// </summary>
         [Description("GTD")] GoodTillDate,
+        /// <summary>
+        /// Market On Open
+        /// </summary>
+        [Description("OPG")] MarketOnOpen,
         /// <summary>
         /// Undefined
         /// </summary>

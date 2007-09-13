@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Krs.Ats.IBNet;
+using System.Threading;
 using Krs.Ats.IBNet.Contracts;
 
 namespace Krs.Ats.TestApp
@@ -34,8 +35,10 @@ namespace Krs.Ats.TestApp
             client.Error += client_Error;
             client.NextValidId += client_NextValidId;
             client.UpdateMktDepth += client_UpdateMktDepth;
-            client.OrderStatus += new EventHandler<OrderStatusEventArgs>(client_OrderStatus);
+            client.RealTimeBar += client_RealTimeBar;
+            client.OrderStatus += client_OrderStatus;
 
+            Console.WriteLine("Connecting to IB.");
             client.Connect("127.0.0.1", 7496, 10);
             ER2 = new Contract("ER2", "GLOBEX", SecurityType.Future, "USD", "200709");
             YmEcbot = new Contract("YM", "ECBOT", SecurityType.Future, "USD", "200709");
@@ -60,6 +63,7 @@ namespace Krs.Ats.TestApp
 
             client.ReqMktData(14, Google, null, false);
             client.ReqMktDepth(15, Google, 5);
+            client.ReqRealTimeBars(16, Google, 5, RealTimeBarType.Trades,false);
 
             Order BuyContract = new Order();
             BuyContract.Action = ActionSide.Buy;
@@ -67,7 +71,16 @@ namespace Krs.Ats.TestApp
             BuyContract.LmtPrice = 820;
             BuyContract.OrderType = OrderType.Limit;
             BuyContract.TotalQuantity = 1;
-            client.PlaceOrder(502, ER2, BuyContract);
+            //client.PlaceOrder(502, ER2, BuyContract);
+            while(true)
+            {
+                Thread.Sleep(100);
+            }
+        }
+
+        static void client_RealTimeBar(object sender, RealTimeBarEventArgs e)
+        {
+            Console.WriteLine("Received Real Time Bar: " + e.Close);
         }
 
         static void client_OrderStatus(object sender, OrderStatusEventArgs e)

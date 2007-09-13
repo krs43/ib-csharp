@@ -7,21 +7,21 @@ namespace Krs.Ats.IBNet
     /// </summary>
     public class CurrentTimeEventArgs : EventArgs
     {
-        private readonly long time;
+        private readonly DateTime time;
 
         /// <summary>
         /// Full Constructor
         /// </summary>
         /// <param name="time">Current system time on the server side</param>
-        public CurrentTimeEventArgs(long time)
+        public CurrentTimeEventArgs(DateTime time)
         {
             this.time = time;
         }
 
         /// <summary>
-        /// Current system time on the server side
+        /// Current system time on the server side in UTC
         /// </summary>
-        public long Time
+        public DateTime Time
         {
             get { return time; }
         }

@@ -9,7 +9,7 @@ namespace Krs.Ats.IBNet
     {
         private readonly double close;
         private readonly int count;
-        private readonly string date;
+        private readonly DateTime date;
         private readonly bool hasGaps;
         private readonly double high;
         private readonly double low;
@@ -33,7 +33,7 @@ namespace Krs.Ats.IBNet
         /// occurred during the time period the bar covers.</param>
         /// <param name="wap">Weighted average price during the time covered by the bar.</param>
         /// <param name="hasGaps">Whether or not there are gaps in the data.</param>
-        public HistoricalDataEventArgs(int reqId, string date, double open, double high, double low, double close,
+        public HistoricalDataEventArgs(int reqId, DateTime date, double open, double high, double low, double close,
                                        int volume, int count, double wap, bool hasGaps)
         {
             this.reqId = reqId;
@@ -60,7 +60,7 @@ namespace Krs.Ats.IBNet
         /// The date-time stamp of the start of the bar.
         /// The format is determined by the reqHistoricalData() formatDate parameter.
         /// </summary>
-        public string Date
+        public DateTime Date
         {
             get { return date; }
         }

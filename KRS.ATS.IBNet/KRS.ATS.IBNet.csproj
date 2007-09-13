@@ -35,13 +35,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contracts\Equity.cs" />
+    <Compile Include="Contracts\Forex.cs" />
+    <Compile Include="Contracts\Future.cs" />
+    <Compile Include="Contracts\Indice.cs" />
     <Compile Include="Contracts\Option.cs" />
     <Compile Include="EnumDescConverter.cs" />
     <Compile Include="Enums\ActionSide.cs" />
     <Compile Include="Enums\AgentDescription.cs" />
     <Compile Include="Enums\AuctionStrategy.cs" />
+    <Compile Include="Enums\BarSize.cs" />
     <Compile Include="Enums\ComboOpenClose.cs" />
     <Compile Include="Enums\ExecutionSide.cs" />
+    <Compile Include="Enums\HistoricalDataType.cs" />
     <Compile Include="Enums\LogLevel.cs" />
     <Compile Include="Enums\MarketDepthOperation.cs" />
     <Compile Include="Enums\MarketDepthSide.cs" />
@@ -83,6 +88,7 @@
     <Compile Include="Order.cs" />
     <Compile Include="EventArgs\OrderStatusEventArgs.cs" />
     <Compile Include="Enums\OutgoingMessage.cs" />
+    <Compile Include="Orders\LimitOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Enums\RightType.cs" />
     <Compile Include="ScannerSubscription.cs" />
