@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 
 namespace Krs.Ats.IBNet
@@ -5,6 +6,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Order Type Enumerations
     /// </summary>
+    [Serializable()] 
     public enum OrderType
     {
         /// <summary>
@@ -42,7 +44,7 @@ namespace Krs.Ats.IBNet
         /// A STOP-LIMIT order is similar to a stop order in that a stop price will activate the order. However, once activated, the stop-limit order becomes a buy limit or sell limit order and can only be executed at a specific price or better. It is a combination of both the stop order and the limit order.
         /// Forex, Futures, Options, Stocks
         /// </summary>
-        [Description("STPLMT")] StopLimit,
+        [Description("STP LMT")] StopLimit,
         /// <summary>
         /// A trailing stop for a sell order sets the stop price at a fixed amount below the market price. If the market price rises, the stop loss price rises by the increased amount, but if the stock price falls, the stop loss price remains the same. The reverse is true for a buy trailing stop order.
         /// Forex, Futures, Future Options, Options, Stocks, Warrants

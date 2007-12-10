@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
-using Krs.Ats.IBNet;
 
 namespace Krs.Ats.IBNet.Contracts
 {
@@ -9,6 +7,7 @@ namespace Krs.Ats.IBNet.Contracts
     /// Option Class - uses default constructors for creating an option contract.
     /// </summary>
     /// <seealso cref="Contract"/>
+    [Serializable()]
     public class Option : Contract
     {
         /// <summary>
@@ -21,7 +20,7 @@ namespace Krs.Ats.IBNet.Contracts
         /// <param name="strike">Option Strike Price. See <see cref="Contract.Strike"/>.</param>
         public Option(string equitySymbol, string optionSymbol, string expiry,
         RightType right, decimal strike)
-            : base(equitySymbol, SecurityType.Option, expiry, (double)strike,
+            : base(0, equitySymbol, SecurityType.Option, expiry, (double)strike,
         right, "100", "SMART", "USD", optionSymbol, "SMART")
         {
         }
@@ -37,7 +36,7 @@ namespace Krs.Ats.IBNet.Contracts
         /// <param name="strike">Option Strike Price. See <see cref="Contract.Strike"/>.</param>
         public Option(string equitySymbol, string optionSymbol, int year, int month,
         RightType right, decimal strike)
-            : base(equitySymbol, SecurityType.Option, "", (double)strike,
+            : base(0, equitySymbol, SecurityType.Option, "", (double)strike,
         right, "100", "SMART", "USD", optionSymbol, "SMART")
         {
             StringBuilder ExpirationString = new StringBuilder();

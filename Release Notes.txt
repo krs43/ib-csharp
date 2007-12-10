@@ -3,6 +3,16 @@ Karl Schulze - www.dinosaurtech.com
 
 Release Notes
 
+9.4.0.6 API and Bug Fix Release - 12/9/07
+* Updated to support 9.40 Interactive Brokers API Release
+	* What-If Order Support
+	* Commission Data
+	* Contract/Contract Details Refactored
+* Fixed Historical Request 1 day limitation
+* Changed TickSizeEvent Args to use TickType instead of TickerType
+* All Enums / Container classes are now marked serializable
+* Fixed bug on Stop Limit Orders "STPLMT" -> "STP LMT"
+
 9.3.0.5 Bug Fix Release -
 * Fixed Historical Data Requests (had improperly fomatted parameter and timestamps)
 * Fixed Disconnect call to properly kill the reader thread

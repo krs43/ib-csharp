@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 
 namespace Krs.Ats.IBNet
@@ -6,6 +7,7 @@ namespace Krs.Ats.IBNet
     /// Retail Customers are restricted to "SAME"
     /// Institutional Customers may use "SAME", "OPEN", "CLOSE", "UNKNOWN"
     /// </summary>
+    [Serializable()] 
     public enum ComboOpenClose : int
     {
         /// <summary>

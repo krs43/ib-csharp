@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.ComponentModel;
 
 namespace Krs.Ats.IBNet
@@ -8,6 +6,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Historical Data Request Return Types
     /// </summary>
+    [Serializable()] 
     public enum HistoricalDataType
     {
         /// <summary>

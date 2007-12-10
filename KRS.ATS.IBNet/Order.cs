@@ -5,12 +5,12 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Order class passed to Interactive Brokers to place an order.
     /// </summary>
+    [Serializable()]
     public class Order
     {
         #region Private Variables
 
         // main order fields
-        private String account;
         private ActionSide action;
         private bool allOrNone;
         private AuctionStrategy auctionStrategy; // 1=AUCTION_MATCH, 2=AUCTION_IMPROVEMENT, 3=AUCTION_TRANSPARENT
@@ -41,7 +41,7 @@ namespace Krs.Ats.IBNet
         private String goodAfterTime; // FORMAT: 20060505 08:00:00 {time zone}
         private String goodTillDate; // FORMAT: 20060505 08:00:00 {time zone}
         private bool hidden;
-        private bool ignoreRth;
+        private bool outsideRth;
         private double lmtPrice;
         private int minQty;
         private double nbboPriceCap;
@@ -59,13 +59,10 @@ namespace Krs.Ats.IBNet
         private double percentOffset; // REL orders only
         private int permId;
         private int referencePriceType; // 1=Average, 2 = BidOrAsk
-        private bool rthOnly;
 
         private AgentDescription rule80A;
                                  // Individual = 'I', Agency = 'A', AgentOtherMember = 'W', IndividualPTIA = 'J', AgencyPTIA = 'U', AgentOtherMemberPTIA = 'M', IndividualPT = 'K', AgencyPT = 'Y', AgentOtherMemberPT = 'N'
 
-        private String settlingFirm;
-        private String sharesAllocation; // deprecated
 
         private ShortSaleSlot shortSaleSlot;
                     // 1 if you hold the shares, 2 if they will be delivered from elsewhere.  Only for Action="SSHORT
@@ -94,6 +91,15 @@ namespace Krs.Ats.IBNet
         private int scaleNumComponents;
         private int scaleComponentSize;
         private double scalePriceIncrement;
+
+        // Clearing info
+        private string account; // IB account
+        private string settlingFirm;
+        private string clearingAccount; // True beneficiary of the order
+        private string clearingIntent; // "" (Default), "IB", "Away", "PTA" (PostTrade)
+
+        // What-if
+        private bool whatIf;
 
         #endregion
 
@@ -329,10 +335,10 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// If set to true, allows triggering of orders outside of regular trading hours.
         /// </summary>
-        public bool IgnoreRth
+        public bool OutsideRth
         {
-            get { return ignoreRth; }
-            set { ignoreRth = value; }
+            get { return outsideRth; }
+            set { outsideRth = value; }
         }
 
         /// <summary>
@@ -366,16 +372,6 @@ namespace Krs.Ats.IBNet
         {
             get { return goodTillDate; }
             set { goodTillDate = value; }
-        }
-
-        /// <summary>
-        /// Regular trading hours only.
-        /// </summary>
-        /// <remarks>yes=1, no=0</remarks>
-        public bool RthOnly
-        {
-            get { return rthOnly; }
-            set { rthOnly = value; }
         }
 
         /// <summary>
@@ -437,15 +433,6 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Deprecated. Upgrade to new FA functionality must be done. 
-        /// </summary>
-        public string SharesAllocation
-        {
-            get { return sharesAllocation; }
-            set { sharesAllocation = value; }
-        }
-
-        /// <summary>
         /// The Financial Advisor group the trade will be allocated to -- use an empty String if not applicable.
         /// </summary>
         public string FAGroup
@@ -479,24 +466,6 @@ namespace Krs.Ats.IBNet
         {
             get { return faPercentage; }
             set { faPercentage = value; }
-        }
-
-        /// <summary>
-        /// The account. For institutional customers only.
-        /// </summary>
-        public string Account
-        {
-            get { return account; }
-            set { account = value; }
-        }
-
-        /// <summary>
-        /// Institutional only.
-        /// </summary>
-        public string SettlingFirm
-        {
-            get { return settlingFirm; }
-            set { settlingFirm = value; }
         }
 
         /// <summary>
@@ -746,6 +715,52 @@ namespace Krs.Ats.IBNet
         {
             get { return scalePriceIncrement; }
             set { scalePriceIncrement = value; }
+        }
+
+        /// <summary>
+        /// The account. For institutional customers only.
+        /// </summary>
+        public string Account
+        {
+            get { return account; }
+            set { account = value; }
+        }
+
+        /// <summary>
+        /// Institutional only.
+        /// </summary>
+        public string SettlingFirm
+        {
+            get { return settlingFirm; }
+            set { settlingFirm = value; }
+        }
+
+        /// <summary>
+        /// Unknown - assume institutional only.
+        /// </summary>
+        public string ClearingAccount
+        {
+            get { return clearingAccount; }
+            set { clearingAccount = value; }
+        }
+
+        /// <summary>
+        /// Unknown - assume institutional only.
+        /// </summary>
+        public string ClearingIntent
+        {
+            get { return clearingIntent; }
+            set { clearingIntent = value; }
+        }
+
+        /// <summary>
+        /// When this value is set to true, margin and commission data is
+        /// received back via a new OrderState() object for the openOrder() callback.
+        /// </summary>
+        public bool WhatIf
+        {
+            get { return whatIf; }
+            set { whatIf = value; }
         }
 
         #endregion

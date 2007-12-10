@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Krs.Ats.IBNet;
 
 namespace Krs.Ats.IBNet.Contracts
 {
@@ -9,6 +6,7 @@ namespace Krs.Ats.IBNet.Contracts
     /// Create a contract with the default parameters for an indice
     /// </summary>
     /// <seealso cref="Contract"/>
+    [Serializable()]
     public class Indice : Contract
     {
         /// <summary>

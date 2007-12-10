@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Scanner Subscription details to pass to Interactive Brokers
     /// </summary>
+    [Serializable()]
     public class ScannerSubscription
     {
         #region Private Variables

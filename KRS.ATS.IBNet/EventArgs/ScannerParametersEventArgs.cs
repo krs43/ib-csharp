@@ -5,7 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Scanner Parameters Event Arguments
     /// </summary>
-    public class ScannerParametersEventArgs : System.EventArgs
+    public class ScannerParametersEventArgs : EventArgs
     {
         private readonly string xml;
 

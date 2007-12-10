@@ -5,7 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Tick Option Computation Event Arguments
     /// </summary>
-    public class TickOptionComputationEventArgs : System.EventArgs
+    public class TickOptionComputationEventArgs : EventArgs
     {
         private readonly double delta;
         private readonly double impliedVol;

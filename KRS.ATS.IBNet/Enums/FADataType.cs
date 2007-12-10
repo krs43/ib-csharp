@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 
 namespace Krs.Ats.IBNet
@@ -5,6 +6,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Financial Advisor Data Message
     /// </summary>
+    [Serializable()] 
     public enum FADataType : int
     {
         /// <summary>

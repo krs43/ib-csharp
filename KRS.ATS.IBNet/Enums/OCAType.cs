@@ -1,8 +1,11 @@
+using System;
+
 namespace Krs.Ats.IBNet
 {
     /// <summary>
     /// OCA Type Options
     /// </summary>
+    [Serializable()] 
     public enum OcaType : int
     {
         /// <summary>

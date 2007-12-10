@@ -1,8 +1,11 @@
+using System;
+
 namespace Krs.Ats.IBNet
 {
     /// <summary>
     /// Used for the set server log level
     /// </summary>
+    [Serializable()] 
     public enum LogLevel
     {
         /// <summary>

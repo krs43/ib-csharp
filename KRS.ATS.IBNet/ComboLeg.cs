@@ -7,6 +7,7 @@ namespace Krs.Ats.IBNet
     /// </summary>
     /// <seealso cref="Contract.ComboLegs"/>
     /// <seealso href="http://www.interactivebrokers.com/php/webhelp/Interoperability/Socket_Client_Java/java_properties.htm#ComboLeg"/>
+    [Serializable()]
     public class ComboLeg
     {
         #region Private Variables

@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 
 namespace Krs.Ats.IBNet
@@ -5,6 +6,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Order Time in Force Values
     /// </summary>
+    [Serializable()] 
     public enum TimeInForce
     {
         /// <summary>

@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 
 namespace Krs.Ats.IBNet
@@ -5,6 +6,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Contains all of the standard Interactive Brokers error messages.
     /// </summary>
+    [Serializable()] 
     public enum ErrorMessage : int
     {
         /// <summary>

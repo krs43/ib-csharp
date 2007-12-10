@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 
 namespace Krs.Ats.IBNet
@@ -6,6 +7,7 @@ namespace Krs.Ats.IBNet
     /// Describes wether a security was bought or sold in an execution.
     /// The past tense equivalent of ActionSide.
     /// </summary>
+    [Serializable()] 
     public enum ExecutionSide
     {
         /// <summary>

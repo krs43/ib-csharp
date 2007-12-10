@@ -1,8 +1,11 @@
+using System;
+
 namespace Krs.Ats.IBNet
 {
     /// <summary>
     /// Order Status reported by enum order status.
     /// </summary>
+    [Serializable()] 
     public enum OrderStatus
     {
         /// <summary>

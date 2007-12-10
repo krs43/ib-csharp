@@ -1,8 +1,11 @@
+using System;
+
 namespace Krs.Ats.IBNet
 {
     /// <summary>
     /// Order Origin Fields
     /// </summary>
+    [Serializable()] 
     public enum OrderOrigin : int
     {
         /// <summary>

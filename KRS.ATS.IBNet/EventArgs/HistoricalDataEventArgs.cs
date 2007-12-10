@@ -5,7 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Historical Data Event Arguments
     /// </summary>
-    public class HistoricalDataEventArgs : System.EventArgs
+    public class HistoricalDataEventArgs : EventArgs
     {
         private readonly double close;
         private readonly int count;

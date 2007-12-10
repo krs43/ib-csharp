@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Krs.Ats.IBNet.Contracts
 {
@@ -8,6 +6,7 @@ namespace Krs.Ats.IBNet.Contracts
     /// Forex Currency Contract
     /// for use on the IdealPro or Ideal exchanges
     /// </summary>
+    [Serializable()]
     public class Forex : Contract
     {
         /// <summary>
@@ -17,7 +16,7 @@ namespace Krs.Ats.IBNet.Contracts
         /// <param name="BaseCurrency">Base Currency</param>
         /// <param name="Exchange">IDEALPRO or IDEAL</param>
         public Forex(string Currency, string BaseCurrency, string Exchange)
-            : base(Currency, Exchange, IBNet.SecurityType.Cash, BaseCurrency)
+            : base(Currency, Exchange, SecurityType.Cash, BaseCurrency)
         {
         }
 
@@ -27,7 +26,7 @@ namespace Krs.Ats.IBNet.Contracts
         /// <param name="Currency">Foreign Currency to Exchange</param>
         /// <param name="BaseCurrency">Base Currency</param>
         public Forex(string Currency, string BaseCurrency)
-            : base(Currency, "IDEALPRO", IBNet.SecurityType.Cash, BaseCurrency)
+            : base(Currency, "IDEALPRO", SecurityType.Cash, BaseCurrency)
         {
             
         }

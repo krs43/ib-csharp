@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Execution details returned by Interactive Brokers
     /// </summary>
+    [Serializable()]
     public class Execution
     {
         #region Private Variables

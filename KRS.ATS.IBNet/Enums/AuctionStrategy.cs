@@ -1,8 +1,11 @@
+using System;
+
 namespace Krs.Ats.IBNet
 {
     /// <summary>
     /// Order Auction Strategy
     /// </summary>
+    [Serializable()] 
     public enum AuctionStrategy : int
     {
         /// <summary>

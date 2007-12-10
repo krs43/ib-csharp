@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 
 namespace Krs.Ats.IBNet
@@ -5,6 +6,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// incoming msg id's
     /// </summary>
+    [Serializable()] 
     public enum IncomingMessage : int
     {
         /// <summary>

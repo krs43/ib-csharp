@@ -10,19 +10,19 @@ namespace Krs.Ats.IBNet
         private readonly int size;
         private readonly int tickerId;
 
-        private readonly TickType tickerType;
+        private readonly TickType tickType;
 
         /// <summary>
         /// Full Constructor
         /// </summary>
         /// <param name="tickerId">The ticker Id that was specified previously in the call to reqMktData().</param>
-        /// <param name="tickerType">Specifies the type of price.</param>
+        /// <param name="tickType">Specifies the type of price.</param>
         /// <param name="size">Specifies the size for the specified field.</param>
-        public TickSizeEventArgs(int tickerId, TickType tickerType, int size)
+        public TickSizeEventArgs(int tickerId, TickType tickType, int size)
         {
             this.tickerId = tickerId;
             this.size = size;
-            this.tickerType = tickerType;
+            this.tickType = tickType;
         }
 
         /// <summary>
@@ -36,9 +36,9 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Specifies the type of price.
         /// </summary>
-        public TickType TickerType
+        public TickType TickType
         {
-            get { return tickerType; }
+            get { return tickType; }
         }
 
         /// <summary>

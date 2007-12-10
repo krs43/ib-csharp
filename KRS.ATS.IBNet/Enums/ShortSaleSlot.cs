@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Krs.Ats.IBNet
 {
     /// <summary>
     /// Used in a combination leg for Short Sale Orders.
     /// </summary>
+    [Serializable()]
     public enum ShortSaleSlot : int
     {
         /// <summary>

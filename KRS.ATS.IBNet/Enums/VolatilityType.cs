@@ -1,8 +1,11 @@
+using System;
+
 namespace Krs.Ats.IBNet
 {
     /// <summary>
     /// Time frame for Volatility
     /// </summary>
+    [Serializable()] 
     public enum VolatilityType : int
     {
         /// <summary>

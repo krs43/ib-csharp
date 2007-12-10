@@ -1,8 +1,11 @@
+using System;
+
 namespace Krs.Ats.IBNet
 {
     /// <summary>
     /// Market Depth Side
     /// </summary>
+    [Serializable()] 
     public enum MarketDepthSide : int
     {
         /// <summary>

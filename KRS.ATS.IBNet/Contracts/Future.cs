@@ -1,8 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Krs.Ats.IBNet;
 
 namespace Krs.Ats.IBNet.Contracts
 {
@@ -10,6 +6,7 @@ namespace Krs.Ats.IBNet.Contracts
     /// Future Class - uses default constructors for creating an future contract.
     /// </summary>
     /// <seealso cref="Contract"/>
+    [Serializable()]
     public class Future : Contract
     {
         /// <summary>

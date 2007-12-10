@@ -61,13 +61,17 @@ namespace Krs.Ats.TestApp
             //New Contract Creation Features
             Equity Google = new Equity("GOOG");
 
+            //Forex Test
+            Forex EUR = new Forex("EUR", "USD");
+
             client.ReqMktData(14, Google, null, false);
             client.ReqMktDepth(15, Google, 5);
             client.ReqRealTimeBars(16, Google, 5, RealTimeBarType.Trades,false);
+            client.ReqMktData(17, EUR, null, false);
 
             Order BuyContract = new Order();
             BuyContract.Action = ActionSide.Buy;
-            BuyContract.RthOnly = false;
+            BuyContract.OutsideRth = false;
             BuyContract.LmtPrice = 820;
             BuyContract.OrderType = OrderType.Limit;
             BuyContract.TotalQuantity = 1;
@@ -103,7 +107,7 @@ namespace Krs.Ats.TestApp
 
         static void client_TickSize(object sender, TickSizeEventArgs e)
         {
-            Console.WriteLine("Tick Size: " + e.Size + " Tick Type: " + EnumDescConverter.GetEnumDescription(e.TickerType));
+            Console.WriteLine("Tick Size: " + e.Size + " Tick Type: " + EnumDescConverter.GetEnumDescription(e.TickType));
         }
 
         static void client_Error(object sender, ErrorEventArgs e)

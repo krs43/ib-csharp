@@ -1,8 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Krs.Ats.IBNet;
 
 namespace Krs.Ats.IBNet.Contracts
 {
@@ -10,6 +6,7 @@ namespace Krs.Ats.IBNet.Contracts
     /// Equity Class - uses default constructors for creating an equity contract.
     /// </summary>
     /// <seealso cref="Contract"/>
+    [Serializable()]
     public class Equity : Contract
     {
         /// <summary>

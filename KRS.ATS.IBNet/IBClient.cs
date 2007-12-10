@@ -192,9 +192,9 @@ namespace Krs.Ats.IBNet
                 OpenOrder(this, e);
         }
 
-        private void openOrder(int orderId, Contract contract, Order order)
+        private void openOrder(int orderId, Contract contract, Order order, OrderState orderState)
         {
-            OpenOrderEventArgs e = new OpenOrderEventArgs(orderId, contract, order);
+            OpenOrderEventArgs e = new OpenOrderEventArgs(orderId, contract, order, orderState);
             OnOpenOrder(e);
         }
 
@@ -528,6 +528,29 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// This method receives the requested market scanner data results
+        /// </summary>
+        public event EventHandler<ScannerDataEndEventArgs> ScannerDataEnd;
+
+        /// <summary>
+        /// Called internally when the receive thread receives a tick price event.
+        /// </summary>
+        /// <param name="e">Scanner Data Event Arguments</param>
+        protected virtual void OnScannerDataEnd(ScannerDataEndEventArgs e)
+        {
+            if (ScannerDataEnd != null)
+                ScannerDataEnd(this, e);
+        }
+
+        private void scannerDataEnd(int reqId)
+        {
+            ScannerDataEndEventArgs e =
+                new ScannerDataEndEventArgs(reqId);
+            OnScannerDataEnd(e);
+        }
+
+
+        /// <summary>
         /// This method receives the realtime bars data results.
         /// </summary>
         public event EventHandler<RealTimeBarEventArgs> RealTimeBar;
@@ -660,6 +683,7 @@ namespace Krs.Ats.IBNet
         public IBClient()
         {
             readThread = new Thread(Run);
+            readThread.IsBackground = true;
         }
 
         /// <summary>
@@ -710,8 +734,8 @@ namespace Krs.Ats.IBNet
 
         #region Values
 
-        private const int ClientVersion = 33;
-        private const int MinimumServerVersion = 1;
+        private const int ClientVersion = 37;
+        private const int MinimumServerVersion = 38;
 
         #endregion
 
@@ -1066,6 +1090,7 @@ namespace Krs.Ats.IBNet
                     send(version);
                     send(tickerId);
 
+                    //Send Contract Fields
                     send(contract.Symbol);
                     send(EnumDescConverter.GetEnumDescription(contract.SecurityType));
                     send(contract.Expiry);
@@ -1351,6 +1376,8 @@ namespace Krs.Ats.IBNet
                     send((int) OutgoingMessage.RequestHistoricalData);
                     send(version);
                     send(tickerId);
+
+                    //Send Contract Fields
                     send(contract.Symbol);
                     send(EnumDescConverter.GetEnumDescription(contract.SecurityType));
                     send(contract.Expiry);
@@ -1373,7 +1400,42 @@ namespace Krs.Ats.IBNet
                         send(endDateTime.ToUniversalTime().ToString("yyyyMMdd HH:mm:ss") + " GMT");
                         send(EnumDescConverter.GetEnumDescription(barSizeSetting));
                     }
-                    send(Convert.ToInt32(duration.TotalSeconds).ToString() + " S");
+                    //Seconds are limited to a single day, must use longest possible
+                    //time to convey duration
+                    //This is the time span the request will cover, and is specified using the format:
+                    // <integer /> <unit />, i.e., 1 D, where valid units are:
+                    // S (seconds)
+                    // D (days)
+                    // W (weeks)
+                    // M (months)
+                    // Y (years)
+                    // If no unit is specified, seconds are used. "years" is currently limited to one.
+                    DateTime beginDateTime = endDateTime.Subtract(duration);
+                    if(endDateTime.AddDays(-1) < beginDateTime)
+                    {
+                        //Seconds
+                        send(Convert.ToInt32(duration.TotalSeconds) + " S");
+                    }
+                    if (endDateTime.AddDays(-7) < beginDateTime)
+                    {
+                        //Days
+                        send(Convert.ToInt32(duration.TotalDays) + " D");
+                    }
+                    if (endDateTime.AddMonths(-1) < beginDateTime)
+                    {
+                        send(Convert.ToInt32(duration.TotalDays / 7.0) + " W");
+                    }
+                    if (endDateTime.AddYears(-1) < beginDateTime)
+                    {
+                        int totalMonths = endDateTime.Month - beginDateTime.Month;
+                        if (totalMonths < 0)
+                            totalMonths += 12;
+                        send(Convert.ToInt32(totalMonths) + " M");
+                    }
+                    else
+                    {
+                        send("1 Y");
+                    }
                     send(useRth);
                     send(EnumDescConverter.GetEnumDescription(whatToShow));
                     if (serverVersion > 16)
@@ -1437,13 +1499,18 @@ namespace Krs.Ats.IBNet
                     return;
                 }
 
-                int version = 3;
+                int version = 4;
 
                 try
                 {
                     // send req mkt data msg
                     send((int) OutgoingMessage.RequestContractData);
                     send(version);
+
+                    if(serverVersion >= 37)
+                    {
+                        send(contract.ContractId);
+                    }
 
                     send(contract.Symbol);
                     send(EnumDescConverter.GetEnumDescription(contract.SecurityType));
@@ -1515,6 +1582,7 @@ namespace Krs.Ats.IBNet
                     send(version);
                     send(tickerId);
 
+                    //Send Contract Fields
                     send(contract.Symbol);
                     send(EnumDescConverter.GetEnumDescription(contract.SecurityType));
                     send(contract.Expiry);
@@ -1529,7 +1597,7 @@ namespace Krs.Ats.IBNet
                     send(EnumDescConverter.GetEnumDescription(whatToShow));
                     send(useRTH);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
                         throw;
@@ -1575,6 +1643,7 @@ namespace Krs.Ats.IBNet
                     send(version);
                     send(tickerId);
 
+                    //Request Contract Fields
                     send(contract.Symbol);
                     send(EnumDescConverter.GetEnumDescription(contract.SecurityType));
                     send(contract.Expiry);
@@ -1729,6 +1798,7 @@ namespace Krs.Ats.IBNet
                     send((int) OutgoingMessage.ExerciseOptions);
                     send(version);
                     send(tickerId);
+                    //Send Contract Fields
                     send(contract.Symbol);
                     send(EnumDescConverter.GetEnumDescription(contract.SecurityType));
                     send(contract.Expiry);
@@ -1806,7 +1876,16 @@ namespace Krs.Ats.IBNet
                     }
                 }
 
-                int version = 22;
+                if(serverVersion < 36)
+                {
+                    if(order.WhatIf)
+                    {
+                        error(orderId, ErrorMessage.UpdateTws, "It does not support what if orders.");
+                        return;
+                    }
+                }
+
+                int version = 25;
 
                 // send place order msg
                 try
@@ -1864,7 +1943,15 @@ namespace Krs.Ats.IBNet
                         send(order.SweepToFill);
                         send(order.DisplaySize);
                         send((int)order.TriggerMethod);
-                        send(order.IgnoreRth);
+                        if(serverVersion < 38)
+                        {
+                            //will never happen
+                            send(false);
+                        }
+                        else
+                        {
+                            send(order.OutsideRth);
+                        }
                     }
 
                     if (serverVersion >= 7)
@@ -1904,7 +1991,7 @@ namespace Krs.Ats.IBNet
 
                     if (serverVersion >= 9)
                     {
-                        send(order.SharesAllocation); // deprecated
+                        send("");
                     }
 
                     if (serverVersion >= 10)
@@ -1938,7 +2025,11 @@ namespace Krs.Ats.IBNet
                     if (serverVersion >= 19)
                     {
                         send((int)order.OcaType);
-                        send(order.RthOnly);
+                        if(serverVersion < 38)
+                        {
+                            //will never happen
+                            send(false);
+                        }
                         send(EnumDescConverter.GetEnumDescription(order.Rule80A));
                         send(order.SettlingFirm);
                         send(order.AllOrNone);
@@ -2009,6 +2100,17 @@ namespace Krs.Ats.IBNet
                         sendMax(order.ScaleNumComponents);
                         sendMax(order.ScaleComponentSize);
                         sendMax(order.ScalePriceIncrement);
+                    }
+
+                    if(serverVersion >= 39)
+                    {
+                        send(order.ClearingAccount);
+                        send(order.ClearingIntent);
+                    }
+
+                    if(serverVersion >= 36)
+                    {
+                        send(order.WhatIf);
                     }
                 }
                 catch (Exception e)
@@ -2962,13 +3064,17 @@ namespace Krs.Ats.IBNet
                     {
                         int version = ReadInt();
                         Contract contract = new Contract();
+                        if(version >= 6)
+                        {
+                            contract.ContractId = ReadInt();
+                        }
                         contract.Symbol = ReadStr();
                         contract.SecurityType =
                             (SecurityType) EnumDescConverter.GetEnumValue(typeof (SecurityType), ReadStr());
                         contract.Expiry = ReadStr();
                         contract.Strike = ReadDouble();
                         string rstr = ReadStr();
-                        contract.Right = (rstr.Length <= 0
+                        contract.Right = (rstr == null || rstr.Length <= 0 || rstr.Equals("?")
                                               ? RightType.Undefined
                                               : (RightType) EnumDescConverter.GetEnumValue(typeof (RightType), rstr));
                         contract.Currency = ReadStr();
@@ -3042,13 +3148,17 @@ namespace Krs.Ats.IBNet
 
                         // read contract fields
                         Contract contract = new Contract();
+                        if(version >= 17)
+                        {
+                            contract.ContractId = ReadInt();
+                        }
                         contract.Symbol = ReadStr();
                         contract.SecurityType =
                             (SecurityType) EnumDescConverter.GetEnumValue(typeof (SecurityType), ReadStr());
                         contract.Expiry = ReadStr();
                         contract.Strike = ReadDouble();
                         string rstr = ReadStr();
-                        contract.Right = (rstr.Length <= 0 || rstr.Equals("?")
+                        contract.Right = (rstr == null || rstr.Length <= 0 || rstr.Equals("?")
                                               ? RightType.Undefined
                                               : (RightType) EnumDescConverter.GetEnumValue(typeof (RightType), rstr));
                         contract.Exchange = ReadStr();
@@ -3079,7 +3189,17 @@ namespace Krs.Ats.IBNet
                         if (version >= 4)
                         {
                             order.PermId = ReadInt();
-                            order.IgnoreRth = ReadInt() == 1;
+                            if(version < 18)
+                            {
+                                // will never happen
+                                /* order.m_ignoreRth = */
+                                ReadBoolFromInt();
+                            }
+                            else
+                            {
+                                order.OutsideRth = ReadBoolFromInt();
+                            }
+                            order.OutsideRth = ReadInt() == 1;
                             order.Hidden = ReadInt() == 1;
                             order.DiscretionaryAmt = ReadDouble();
                         }
@@ -3091,7 +3211,8 @@ namespace Krs.Ats.IBNet
 
                         if (version >= 6)
                         {
-                            order.SharesAllocation = ReadStr();
+                            // skip deprecated sharesAllocation field
+                            ReadStr();
                         }
 
                         if (version >= 7)
@@ -3122,7 +3243,12 @@ namespace Krs.Ats.IBNet
                             order.StockRangeLower = ReadDouble();
                             order.StockRangeUpper = ReadDouble();
                             order.DisplaySize = ReadInt();
-                            order.RthOnly = ReadBoolFromInt();
+                            if (version < 18)
+                            {
+                                // will never happen
+                                /* order.m_rthOnly = */
+                                ReadBoolFromInt();
+                            }
                             order.BlockOrder = ReadBoolFromInt();
                             order.SweepToFill = ReadBoolFromInt();
                             order.AllOrNone = ReadBoolFromInt();
@@ -3184,7 +3310,31 @@ namespace Krs.Ats.IBNet
                             order.ScalePriceIncrement = ReadDoubleMax();
                         }
 
-                        openOrder(order.OrderId, contract, order);
+                        if (version >= 19)
+                        {
+                            order.ClearingAccount = ReadStr();
+                            order.ClearingIntent = ReadStr();
+                        }
+
+                        OrderState orderState = new OrderState();
+
+                        if (version >= 16)
+                        {
+
+                            order.WhatIf = ReadBoolFromInt();
+
+                            orderState.Status = ReadStr();
+                            orderState.InitMargin = ReadStr();
+                            orderState.MaintMargin = ReadStr();
+                            orderState.EquityWithLoan = ReadStr();
+                            orderState.Commission = ReadDoubleMax();
+                            orderState.MinCommission = ReadDoubleMax();
+                            orderState.MaxCommission = ReadDoubleMax();
+                            orderState.CommissionCurrency = ReadStr();
+                            orderState.WarningText = ReadStr();
+                        }
+
+                        openOrder(order.OrderId, contract, order, orderState);
                         break;
                     }
 
@@ -3207,13 +3357,17 @@ namespace Krs.Ats.IBNet
                         for (int ctr = 0; ctr < numberOfElements; ctr++)
                         {
                             int rank = ReadInt();
+                            if(version >= 3)
+                            {
+                                contract.Summary.ContractId = ReadInt();
+                            }
                             contract.Summary.Symbol = ReadStr();
                             contract.Summary.SecurityType =
                                 (SecurityType) EnumDescConverter.GetEnumValue(typeof (SecurityType), ReadStr());
                             contract.Summary.Expiry = ReadStr();
                             contract.Summary.Strike = ReadDouble();
                             string rstr = ReadStr();
-                            contract.Summary.Right = (rstr.Length <= 0
+                            contract.Summary.Right = (rstr == null || rstr.Length <= 0 || rstr.Equals("?")
                                                           ? RightType.Undefined
                                                           : (RightType)
                                                             EnumDescConverter.GetEnumValue(typeof (RightType), rstr));
@@ -3232,6 +3386,7 @@ namespace Krs.Ats.IBNet
                             }
                             scannerData(tickerId, rank, contract, distance, benchmark, projection, legsStr);
                         }
+                        scannerDataEnd(tickerId);
                         break;
                     }
 
@@ -3246,7 +3401,7 @@ namespace Krs.Ats.IBNet
                         contract.Summary.Expiry = ReadStr();
                         contract.Summary.Strike = ReadDouble();
                         string rstr = ReadStr();
-                        contract.Summary.Right = (rstr.Length <= 0
+                        contract.Summary.Right = (rstr == null || rstr.Length <= 0 || rstr.Equals("?")
                                                       ? RightType.Undefined
                                                       : (RightType)
                                                         EnumDescConverter.GetEnumValue(typeof (RightType), rstr));
@@ -3255,9 +3410,9 @@ namespace Krs.Ats.IBNet
                         contract.Summary.LocalSymbol = ReadStr();
                         contract.MarketName = ReadStr();
                         contract.TradingClass = ReadStr();
-                        contract.ContractId = ReadInt();
+                        contract.Summary.ContractId = ReadInt();
                         contract.MinTick = ReadDouble();
-                        contract.Multiplier = ReadStr();
+                        contract.Summary.Multiplier = ReadStr();
                         contract.OrderTypes = ReadStr();
                         contract.ValidExchanges = ReadStr();
                         if (version >= 2)
@@ -3276,31 +3431,31 @@ namespace Krs.Ats.IBNet
                         contract.Summary.Symbol = ReadStr();
                         contract.Summary.SecurityType =
                             (SecurityType) EnumDescConverter.GetEnumValue(typeof (SecurityType), ReadStr());
-                        contract.Summary.Cusip = ReadStr();
-                        contract.Summary.Coupon = ReadDouble();
-                        contract.Summary.Maturity = ReadStr();
-                        contract.Summary.IssueDate = ReadStr();
-                        contract.Summary.Ratings = ReadStr();
-                        contract.Summary.BondType = ReadStr();
-                        contract.Summary.CouponType = ReadStr();
-                        contract.Summary.Convertible = ReadBoolFromInt();
-                        contract.Summary.Callable = ReadBoolFromInt();
-                        contract.Summary.Putable = ReadBoolFromInt();
-                        contract.Summary.DescriptionAppend = ReadStr();
+                        contract.Cusip = ReadStr();
+                        contract.Coupon = ReadDouble();
+                        contract.Maturity = ReadStr();
+                        contract.IssueDate = ReadStr();
+                        contract.Ratings = ReadStr();
+                        contract.BondType = ReadStr();
+                        contract.CouponType = ReadStr();
+                        contract.Convertible = ReadBoolFromInt();
+                        contract.Callable = ReadBoolFromInt();
+                        contract.Putable = ReadBoolFromInt();
+                        contract.DescriptionAppend = ReadStr();
                         contract.Summary.Exchange = ReadStr();
                         contract.Summary.Currency = ReadStr();
                         contract.MarketName = ReadStr();
                         contract.TradingClass = ReadStr();
-                        contract.ContractId = ReadInt();
+                        contract.Summary.ContractId = ReadInt();
                         contract.MinTick = ReadDouble();
                         contract.OrderTypes = ReadStr();
                         contract.ValidExchanges = ReadStr();
                         if (version >= 2)
                         {
-                            contract.Summary.NextOptionDate = ReadStr();
-                            contract.Summary.NextOptionType = ReadStr();
-                            contract.Summary.NextOptionPartial = ReadBoolFromInt();
-                            contract.Summary.Notes = ReadStr();
+                            contract.NextOptionDate = ReadStr();
+                            contract.NextOptionType = ReadStr();
+                            contract.NextOptionPartial = ReadBoolFromInt();
+                            contract.Notes = ReadStr();
                         }
                         bondContractDetails(contract);
                         break;
@@ -3311,14 +3466,19 @@ namespace Krs.Ats.IBNet
                         int version = ReadInt();
                         int orderId = ReadInt();
 
+                        //Read Contract Fields
                         Contract contract = new Contract();
+                        if(version >= 5)
+                        {
+                            contract.ContractId = ReadInt();
+                        }
                         contract.Symbol = ReadStr();
                         contract.SecurityType =
                             (SecurityType) EnumDescConverter.GetEnumValue(typeof (SecurityType), ReadStr());
                         contract.Expiry = ReadStr();
                         contract.Strike = ReadDouble();
                         string rstr = ReadStr();
-                        contract.Right = (rstr == null || rstr.Length <= 0
+                        contract.Right = (rstr == null || rstr.Length <= 0 || rstr.Equals("?")
                                               ? RightType.Undefined
                                               : (RightType) EnumDescConverter.GetEnumValue(typeof (RightType), rstr));
                         contract.Exchange = ReadStr();
@@ -3432,7 +3592,7 @@ namespace Krs.Ats.IBNet
                             //2 - dates are returned as a long integer specifying the number of seconds since 1/1/1970 GMT.
                             String date = ReadStr();
                             long longDate = Int64.Parse(date);
-                            DateTime timeStamp = new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc).AddSeconds(longDate);
+                            DateTime timeStamp = new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc).AddSeconds(longDate).ToLocalTime();
                             double open = ReadDouble();
                             double high = ReadDouble();
                             double low = ReadDouble();

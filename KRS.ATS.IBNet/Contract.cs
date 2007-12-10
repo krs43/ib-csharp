@@ -7,39 +7,26 @@ namespace Krs.Ats.IBNet
     /// Class to describe a financial security.
     /// </summary>
     /// <seealso href="http://www.interactivebrokers.com/php/webhelp/Interoperability/Socket_Client_Java/java_properties.htm#Contract">Interactive Brokers Contract Documentation</seealso>
+    [Serializable()]
     public class Contract
     {
         #region Private Variables
 
         private readonly List<ComboLeg> comboLegs = new List<ComboLeg>();
 
-        // BOND values
-        private String bondType;
-        private bool callable;
+        private int contractId;
+
         private String comboLegsDescrip; // received in open order version 14 and up for all combos
-        private bool convertible;
-        private double coupon;
-        private String couponType;
         private String currency;
-        private String cusip;
-        private String descriptionAppend;
         private String exchange;
         private String expiry;
         private bool includeExpired; // can not be set to true for orders.
-        private String issueDate;
         private String localSymbol;
-        private String maturity;
         private String multiplier;
-        private String nextOptionDate;
-        private bool nextOptionPartial;
-        private String nextOptionType;
-        private String notes;
 
         private String primaryExch;
                        // pick a non-aggregate (ie not the SMART exchange) exchange that the contract trades on.  DO NOT SET TO SMART.
 
-        private bool putable;
-        private String ratings;
         private RightType right;
         private SecurityType securityType;
         private double strike;
@@ -53,7 +40,7 @@ namespace Krs.Ats.IBNet
         /// Undefined Contract Constructor
         ///</summary>
         public Contract() :
-            this(null, SecurityType.Undefined, null, 0, RightType.Undefined, null, null, null, null, null)
+            this(0, null, SecurityType.Undefined, null, 0, RightType.Undefined, null, null, null, null, null)
         {
         }
 
@@ -66,7 +53,7 @@ namespace Krs.Ats.IBNet
         /// <param name="currency">Specifies the currency.</param>
         /// <param name="expiry">The expiration date. Use the format YYYYMM.</param>
         public Contract(string symbol, string exchange, SecurityType securityType, string currency, string expiry) :
-            this(symbol, securityType, expiry, 0, RightType.Undefined, null, exchange, currency, null, null)
+            this(0, symbol, securityType, expiry, 0, RightType.Undefined, null, exchange, currency, null, null)
         {
         }
 
@@ -79,13 +66,14 @@ namespace Krs.Ats.IBNet
         /// <param name="currency">Specifies the currency.</param>
         public Contract(string symbol, string exchange, SecurityType securityType, string currency)
             :
-            this(symbol, securityType, null, 0, RightType.Undefined, null, exchange, currency, null, null)
+            this(0, symbol, securityType, null, 0, RightType.Undefined, null, exchange, currency, null, null)
         {
         }
 
         /// <summary>
         /// Default Contract Constructor
         /// </summary>
+        /// <param name="contractId">The unique contract identifier.</param>
         /// <param name="symbol">This is the symbol of the underlying asset.</param>
         /// <param name="securityType">This is the security type.</param>
         /// <param name="expiry">The expiration date. Use the format YYYYMM.</param>
@@ -97,9 +85,10 @@ namespace Krs.Ats.IBNet
         /// <param name="currency">Specifies the currency.</param>
         /// <param name="localSymbol">This is the local exchange symbol of the underlying asset.</param>
         /// <param name="primaryExch">Identifies the listing exchange for the contract (do not list SMART).</param>
-        public Contract(String symbol, SecurityType securityType, String expiry, double strike, RightType right,
+        public Contract(int contractId, String symbol, SecurityType securityType, String expiry, double strike, RightType right,
                         String multiplier, string exchange, string currency, string localSymbol, string primaryExch)
         {
+            this.contractId = contractId;
             this.symbol = symbol;
             this.securityType = securityType;
             this.expiry = expiry;
@@ -266,144 +255,12 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// For Bonds. The nine-character bond CUSIP or the 12-character SEDOL.
+        /// The unique contract identifier.
         /// </summary>
-        public string Cusip
+        public int ContractId
         {
-            get { return cusip; }
-            set { cusip = value; }
-        }
-
-        /// <summary>
-        /// For Bonds. Identifies the credit rating of the issuer. A higher credit
-        /// rating generally indicates a less risky investment. Bond ratings
-        /// are from Moody's and SP respectively.
-        /// </summary>
-        public string Ratings
-        {
-            get { return ratings; }
-            set { ratings = value; }
-        }
-
-        /// <summary>
-        /// For Bonds. A description string containing further descriptive information about the bond.
-        /// </summary>
-        public string DescriptionAppend
-        {
-            get { return descriptionAppend; }
-            set { descriptionAppend = value; }
-        }
-
-        /// <summary>
-        /// For Bonds. The type of bond, such as "CORP."
-        /// </summary>
-        public string BondType
-        {
-            get { return bondType; }
-            set { bondType = value; }
-        }
-
-        /// <summary>
-        /// For Bonds. The type of bond coupon, such as "FIXED."
-        /// </summary>
-        public string CouponType
-        {
-            get { return couponType; }
-            set { couponType = value; }
-        }
-
-        /// <summary>
-        /// For Bonds. Values are True or False. If true, the bond can be called
-        /// by the issuer under certain conditions.
-        /// </summary>
-        public bool Callable
-        {
-            get { return callable; }
-            set { callable = value; }
-        }
-
-        /// <summary>
-        /// For Bonds. Values are True or False. If true, the bond can be sold
-        /// back to the issuer under certain conditions.
-        /// </summary>
-        public bool Putable
-        {
-            get { return putable; }
-            set { putable = value; }
-        }
-
-        /// <summary>
-        /// For Bonds. The interest rate used to calculate the amount you will
-        /// receive in interest payments over the course of the year.
-        /// </summary>
-        public double Coupon
-        {
-            get { return coupon; }
-            set { coupon = value; }
-        }
-
-        /// <summary>
-        /// For Bonds. Values are True or False.
-        /// If true, the bond can be converted to stock under certain conditions.
-        /// </summary>
-        public bool Convertible
-        {
-            get { return convertible; }
-            set { convertible = value; }
-        }
-
-        /// <summary>
-        /// For Bonds. The date on which the issuer must repay the face value of the bond.
-        /// </summary>
-        public string Maturity
-        {
-            get { return maturity; }
-            set { maturity = value; }
-        }
-
-        /// <summary>
-        /// For Bonds. The date the bond was issued. 
-        /// </summary>
-        public string IssueDate
-        {
-            get { return issueDate; }
-            set { issueDate = value; }
-        }
-
-        /// <summary>
-        /// For Bonds, relevant if the bond has embedded options
-        /// </summary>
-        public string NextOptionDate
-        {
-            get { return nextOptionDate; }
-            set { nextOptionDate = value; }
-        }
-
-        /// <summary>
-        /// For Bonds, relevant if the bond has embedded options
-        /// </summary>
-        public string NextOptionType
-        {
-            get { return nextOptionType; }
-            set { nextOptionType = value; }
-        }
-
-        /// <summary>
-        /// For Bonds, relevant if the bond has embedded options, i.e., is the next option full or partial?
-        /// </summary>
-        public bool NextOptionPartial
-        {
-            get { return nextOptionPartial; }
-            set { nextOptionPartial = value; }
-        }
-
-        /// <summary>
-        /// For Bonds, if populated for the bond in IBs database
-        /// </summary>
-        public string Notes
-        {
-            get { return notes; }
-            set { notes = value; }
+            get { return contractId; }
+            set { contractId = value; }
         }
 
         #endregion

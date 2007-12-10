@@ -1,8 +1,11 @@
+using System;
+
 namespace Krs.Ats.IBNet
 {
     /// <summary>
     /// Trigger method for actions.
     /// </summary>
+    [Serializable()] 
     public enum TriggerMethod : int
     {
         /// <summary>

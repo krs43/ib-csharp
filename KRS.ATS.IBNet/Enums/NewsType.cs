@@ -1,8 +1,11 @@
+using System;
+
 namespace Krs.Ats.IBNet
 {
     /// <summary>
     /// News Message Type
     /// </summary>
+    [Serializable()]
     public enum NewsType : int
     {
         /// <summary>

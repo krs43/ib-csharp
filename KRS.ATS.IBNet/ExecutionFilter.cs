@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Argument passed to interactive brokers when requesting execution history.
     /// </summary>
+    [Serializable()]
     public class ExecutionFilter
     {
         #region Private Variables

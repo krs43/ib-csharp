@@ -5,7 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Update Account Value Event Arguments
     /// </summary>
-    public class UpdateAccountValueEventArgs : System.EventArgs
+    public class UpdateAccountValueEventArgs : EventArgs
     {
         private readonly string accountName;
         private readonly string currency;
