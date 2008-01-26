@@ -1416,16 +1416,16 @@ namespace Krs.Ats.IBNet
                         //Seconds
                         send(Convert.ToInt32(duration.TotalSeconds) + " S");
                     }
-                    if (endDateTime.AddDays(-7) < beginDateTime)
+                    else if (endDateTime.AddDays(-7) < beginDateTime)
                     {
                         //Days
                         send(Convert.ToInt32(duration.TotalDays) + " D");
                     }
-                    if (endDateTime.AddMonths(-1) < beginDateTime)
+                    else if (endDateTime.AddMonths(-1) < beginDateTime)
                     {
                         send(Convert.ToInt32(duration.TotalDays / 7.0) + " W");
                     }
-                    if (endDateTime.AddYears(-1) < beginDateTime)
+                    else if (endDateTime.AddYears(-1) < beginDateTime)
                     {
                         int totalMonths = endDateTime.Month - beginDateTime.Month;
                         if (totalMonths < 0)
@@ -3575,6 +3575,7 @@ namespace Krs.Ats.IBNet
 
                 case IncomingMessage.HistoricalData:
                     {
+                        Console.WriteLine("Inbound Historical Data");
                         int version = ReadInt();
                         int reqId = ReadInt();
                         String startDateStr;
@@ -3586,6 +3587,7 @@ namespace Krs.Ats.IBNet
                             //completedIndicator += ("-" + startDateStr + "-" + endDateStr);
                         }
                         int itemCount = ReadInt();
+                        Console.WriteLine("Item Count: {0}", itemCount);
                         for (int ctr = 0; ctr < itemCount; ctr++)
                         {
                             //Comes in as seconds
@@ -3607,8 +3609,11 @@ namespace Krs.Ats.IBNet
                             }
                             historicalData(reqId, timeStamp, open, high, low, close, volume, barCount, WAP,
                                            Boolean.Parse(hasGaps));
+                            Console.Write(".");
                         }
                         // send end of dataset marker
+                        Console.WriteLine();
+                        Console.WriteLine("Calling Complete");
                         historicalData(reqId, DateTime.MinValue, - 1, - 1, - 1, - 1, - 1, - 1, - 1, false);
                         break;
                     }

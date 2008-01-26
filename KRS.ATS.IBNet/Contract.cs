@@ -102,6 +102,15 @@ namespace Krs.Ats.IBNet
             this.primaryExch = primaryExch;
         }
 
+        /// <summary>
+        /// Get a Contract by its unique contractId
+        /// </summary>
+        /// <param name="contractId"></param>
+        public Contract(int contractId)
+        {
+            this.contractId = contractId;
+        }
+
         #endregion
 
         #region Properties

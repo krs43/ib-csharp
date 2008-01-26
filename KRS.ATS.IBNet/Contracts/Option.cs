@@ -40,7 +40,7 @@ namespace Krs.Ats.IBNet.Contracts
         right, "100", "SMART", "USD", optionSymbol, "SMART")
         {
             StringBuilder ExpirationString = new StringBuilder();
-            ExpirationString.AppendFormat("{0}{1}", year, month);
+            ExpirationString.AppendFormat("{0:0000}{1:00}", year, month);
             Expiry = ExpirationString.ToString();
         }
     } 
