@@ -35,8 +35,8 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly : AssemblyVersion("9.4.0.6")]
-[assembly : AssemblyFileVersion("9.4.0.6")]
+[assembly : AssemblyVersion("9.4.0.7")]
+[assembly : AssemblyFileVersion("9.4.0.7")]
 
 //CLS Compliant
 

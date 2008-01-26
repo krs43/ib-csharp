@@ -14,9 +14,9 @@ namespace Krs.Ats.IBNet
         /// </summary>
         [Description("DAY")] Day,
         /// <summary>
-        /// Good Till Close
+        /// Good Till Cancel
         /// </summary>
-        [Description("GTC")] GoodTillClose,
+        [Description("GTC")] GoodTillCancel,
         /// <summary>
         /// You can set the time in force for MARKET or LIMIT orders as IOC. This dictates that any portion of the order not executed immediately after it becomes available on the market will be cancelled.
         /// </summary>

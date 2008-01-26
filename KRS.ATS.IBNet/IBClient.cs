@@ -734,8 +734,8 @@ namespace Krs.Ats.IBNet
 
         #region Values
 
-        private const int ClientVersion = 37;
-        private const int MinimumServerVersion = 38;
+        private const int clientVersion = 37;
+        private const int minimumServerVersion = 38;
 
         #endregion
 
@@ -755,6 +755,14 @@ namespace Krs.Ats.IBNet
         public int ServerVersion
         {
             get { return serverVersion; }
+        }
+
+        /// <summary>
+        /// Returns the client version of the TWS API
+        /// </summary>
+        public int ClientVersion
+        {
+            get { return clientVersion; }
         }
 
         /// <summary>
@@ -807,7 +815,7 @@ namespace Krs.Ats.IBNet
                 dos = new BinaryWriter(ibSocket.GetStream());
 
                 // set client version
-                send(ClientVersion);
+                send(clientVersion);
 
                 // start Reader thread
 
@@ -820,10 +828,10 @@ namespace Krs.Ats.IBNet
                     Console.WriteLine("TWS Time at connection:" + twsTime);
                     //Let's fire the servertime event
                 }
-                if (serverVersion < MinimumServerVersion)
+                if (serverVersion < minimumServerVersion)
                 {
                     error(ErrorMessage.UpdateTws,
-                          "Server version " + serverVersion + " is lower than required version " + MinimumServerVersion +
+                          "Server version " + serverVersion + " is lower than required version " + minimumServerVersion +
                           ".");
                     return;
                 }
@@ -1978,7 +1986,7 @@ namespace Krs.Ats.IBNet
                                 send(comboLeg.Ratio);
                                 send(EnumDescConverter.GetEnumDescription(comboLeg.Action));
                                 send(comboLeg.Exchange);
-                                send(EnumDescConverter.GetEnumDescription(comboLeg.OpenClose));
+                                send((int)comboLeg.OpenClose);
                                 //Min Combo Leg Short Sale Server Version is 35
                                 if (serverVersion >= 35)
                                 {
@@ -2012,7 +2020,7 @@ namespace Krs.Ats.IBNet
                     if (serverVersion >= 13)
                     {
                         send(order.FAGroup);
-                        send(order.FAMethod);
+                        send(EnumDescConverter.GetEnumDescription(order.FAMethod));
                         send(order.FAPercentage);
                         send(order.FAProfile);
                     }
@@ -3001,8 +3009,8 @@ namespace Krs.Ats.IBNet
                         int version = ReadInt();
                         int id = ReadInt();
                         string orderstat = ReadStr();
-                        OrderStatus status =
-                            (OrderStatus) EnumDescConverter.GetEnumValue(typeof (OrderStatus), orderstat);
+                        Krs.Ats.IBNet.OrderStatus status = ((orderstat == null || orderstat == "") ? Krs.Ats.IBNet.OrderStatus.None :
+                            (Krs.Ats.IBNet.OrderStatus) EnumDescConverter.GetEnumValue(typeof (Krs.Ats.IBNet.OrderStatus), orderstat));
                         int filled = ReadInt();
                         int remaining = ReadInt();
                         double avgFillPrice = ReadDouble();
@@ -3074,7 +3082,7 @@ namespace Krs.Ats.IBNet
                         contract.Expiry = ReadStr();
                         contract.Strike = ReadDouble();
                         string rstr = ReadStr();
-                        contract.Right = (rstr == null || rstr.Length <= 0 || rstr.Equals("?")
+                        contract.Right = (rstr == null || rstr.Length <= 0 || rstr.Equals("?") || rstr.Equals("0")
                                               ? RightType.Undefined
                                               : (RightType) EnumDescConverter.GetEnumValue(typeof (RightType), rstr));
                         contract.Currency = ReadStr();
@@ -3199,7 +3207,6 @@ namespace Krs.Ats.IBNet
                             {
                                 order.OutsideRth = ReadBoolFromInt();
                             }
-                            order.OutsideRth = ReadInt() == 1;
                             order.Hidden = ReadInt() == 1;
                             order.DiscretionaryAmt = ReadDouble();
                         }
@@ -3218,7 +3225,8 @@ namespace Krs.Ats.IBNet
                         if (version >= 7)
                         {
                             order.FAGroup = ReadStr();
-                            order.FAMethod = ReadStr();
+                            string fam = ReadStr();
+                            order.FAMethod = ((fam == null || fam == "") ? FinancialAdvisorAllocationMethod.None : (FinancialAdvisorAllocationMethod)EnumDescConverter.GetEnumValue(typeof(FinancialAdvisorAllocationMethod), fam));
                             order.FAPercentage = ReadStr();
                             order.FAProfile = ReadStr();
                         }
@@ -3230,8 +3238,8 @@ namespace Krs.Ats.IBNet
 
                         if (version >= 9)
                         {
-                            order.Rule80A =
-                                (AgentDescription) EnumDescConverter.GetEnumValue(typeof (AgentDescription), ReadStr());
+                            rstr = ReadStr();
+                            order.Rule80A = ((rstr == null || rstr == "") ? AgentDescription.None : (AgentDescription)EnumDescConverter.GetEnumValue(typeof (AgentDescription), rstr));
                             order.PercentOffset = ReadDouble();
                             order.SettlingFirm = ReadStr();
                             order.ShortSaleSlot = (ShortSaleSlot)ReadInt();
@@ -3268,7 +3276,9 @@ namespace Krs.Ats.IBNet
                         if (version >= 11)
                         {
                             order.Volatility = ReadDouble();
-                            order.VolatilityType = (VolatilityType) ReadInt();
+                            rstr = ReadStr();
+                            int i;
+                            order.VolatilityType = (int.TryParse(rstr, out i) ? (VolatilityType) i : VolatilityType.Undefined);
                             if (version == 11)
                             {
                                 int receivedInt = ReadInt();
@@ -3278,8 +3288,7 @@ namespace Krs.Ats.IBNet
                             {
                                 // version 12 and up
                                 string dnoa = ReadStr();
-                                order.DeltaNeutralOrderType =
-                                    (OrderType) EnumDescConverter.GetEnumValue(typeof (OrderType), dnoa);
+                                order.DeltaNeutralOrderType = ((dnoa == null || dnoa == "") ? OrderType.None : (OrderType)EnumDescConverter.GetEnumValue(typeof (OrderType), dnoa));
                                 order.DeltaNeutralAuxPrice = ReadDouble();
                             }
                             order.ContinuousUpdate = ReadInt();
@@ -3320,10 +3329,11 @@ namespace Krs.Ats.IBNet
 
                         if (version >= 16)
                         {
+                            rstr = ReadStr();
+                            order.WhatIf = !(rstr == null || rstr == "" || rstr == "0");
 
-                            order.WhatIf = ReadBoolFromInt();
-
-                            orderState.Status = ReadStr();
+                            string ost = ReadStr();
+                            orderState.Status = ((ost == null || ost == "") ? Krs.Ats.IBNet.OrderStatus.None : (Krs.Ats.IBNet.OrderStatus)EnumDescConverter.GetEnumValue(typeof(Krs.Ats.IBNet.OrderStatus), ost));
                             orderState.InitMargin = ReadStr();
                             orderState.MaintMargin = ReadStr();
                             orderState.EquityWithLoan = ReadStr();

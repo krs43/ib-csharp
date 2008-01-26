@@ -11,7 +11,7 @@ namespace Krs.Ats.IBNet
     {
         #region Private Variables
 
-        private String status;
+        private OrderStatus status;
 
 	    private String initMargin;
 	    private String maintMargin;
@@ -67,7 +67,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Order Status
         /// </summary>
-        public string Status
+        public OrderStatus Status
 	    {
 	        get { return status; }
 	        set { status = value; }

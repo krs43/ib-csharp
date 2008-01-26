@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 
 namespace Krs.Ats.IBNet
 {
@@ -13,7 +14,7 @@ namespace Krs.Ats.IBNet
         /// confirmation that it has been accepted by the order destination.
         /// This order status is not sent by TWS and should be explicitly set by the API developer when an order is submitted.
         /// </summary>
-        PendingSubmit,
+        [Description("PendingSubmit")] PendingSubmit,
         /// <summary>
         /// PendingCancel - indicates that you have sent a request to cancel the order
         /// but have not yet received cancel confirmation from the order destination.
@@ -21,7 +22,7 @@ namespace Krs.Ats.IBNet
         /// an execution while your cancellation request is pending.
         /// This order status is not sent by TWS and should be explicitly set by the API developer when an order is canceled.
         /// </summary>
-        PendingCancel,
+        [Description("PendingCancel")] PendingCancel,
         /// <summary>
         /// indicates that a simulated order type has been accepted by the IB system and
         /// that this order has yet to be elected. The order is held in the IB system
@@ -29,23 +30,31 @@ namespace Krs.Ats.IBNet
         /// At that time the order is transmitted to the order destination as specified
         /// (and the order status color will change).
         /// </summary>
-        PreSubmitted,
+        [Description("PreSubmitted")] PreSubmitted,
         /// <summary>
         /// indicates that your order has been accepted at the order destination and is working.
         /// </summary>
-        Submitted,
+        [Description("Submitted")] Submitted,
         /// <summary>
         /// indicates that the balance of your order has been confirmed canceled by the IB system.
         /// This could occur unexpectedly when IB or the destination has rejected your order.
         /// </summary>
-        Cancelled,
+        [Description("Cancelled")] Cancelled,
         /// <summary>
         /// The order has been completely filled.
         /// </summary>
-        Filled,
+        [Description("Filled")] Filled,
         /// <summary>
         /// The Order is inactive
         /// </summary>
-        Inactive
+        [Description("Inactive")] Inactive,
+        /// <summary>
+        /// The order is Partially Filled
+        /// </summary>
+        [Description("PartiallyFilled")] PartiallyFilled,
+        /// <summary>
+        /// No Order Status
+        /// </summary>
+        [Description("")] None
     }
 }

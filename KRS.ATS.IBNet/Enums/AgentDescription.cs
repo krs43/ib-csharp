@@ -44,6 +44,10 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Agent Other Member PT
         /// </summary>
-        [Description("N")] AgentOtherMemberPT
+        [Description("N")] AgentOtherMemberPT,
+        /// <summary>
+        /// No Description Provided
+        /// </summary>
+        [Description("")] None
     }
 }

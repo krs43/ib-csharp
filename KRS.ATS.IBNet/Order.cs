@@ -34,7 +34,7 @@ namespace Krs.Ats.IBNet
 
         // Financial advisors only 
         private String faGroup;
-        private String faMethod;
+        private FinancialAdvisorAllocationMethod faMethod;
         private String faPercentage;
         private String faProfile;
         private bool firmQuoteOnly;
@@ -134,6 +134,7 @@ namespace Krs.Ats.IBNet
             scaleNumComponents = Int32.MaxValue;
             scaleComponentSize = Int32.MaxValue;
             scalePriceIncrement = Double.MaxValue;
+            faMethod = FinancialAdvisorAllocationMethod.None;
         }
 
         #endregion
@@ -453,7 +454,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// The Financial Advisor allocation method the trade will be allocated with -- use an empty String if not applicable.
         /// </summary>
-        public string FAMethod
+        public FinancialAdvisorAllocationMethod FAMethod
         {
             get { return faMethod; }
             set { faMethod = value; }

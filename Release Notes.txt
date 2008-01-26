@@ -3,6 +3,11 @@ Karl Schulze - www.dinosaurtech.com
 
 Release Notes
 
+9.4.0.7 Bug Fix Release - 1/26/08
+* Changed FAMethod to Enumeration
+* Changed OrderState.Status to enumeration
+* Fixed several data parsing problems related to empty strings
+
 9.4.0.6 API and Bug Fix Release - 12/9/07
 * Updated to support 9.40 Interactive Brokers API Release
 	* What-If Order Support
