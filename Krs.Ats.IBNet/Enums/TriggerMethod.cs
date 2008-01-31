@@ -35,6 +35,6 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// 8 mid-point method.
         /// </summary>
-        MidPointMethod = 8
+        MidpointMethod = 8
     }
 }

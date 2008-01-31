@@ -7,23 +7,23 @@ namespace Krs.Ats.IBNet
     /// </summary>
     public class UpdateAccountTimeEventArgs : EventArgs
     {
-        private readonly string timeStamp;
+        private readonly string timestamp;
 
         /// <summary>
         /// Full Constructor
         /// </summary>
-        /// <param name="timeStamp">Current system time on the server side.</param>
-        public UpdateAccountTimeEventArgs(string timeStamp)
+        /// <param name="timestamp">Current system time on the server side.</param>
+        public UpdateAccountTimeEventArgs(string timestamp)
         {
-            this.timeStamp = timeStamp;
+            this.timestamp = timestamp;
         }
 
         /// <summary>
         /// Current system time on the server side.
         /// </summary>
-        public string TimeStamp
+        public string Timestamp
         {
-            get { return timeStamp; }
+            get { return timestamp; }
         }
     }
 }

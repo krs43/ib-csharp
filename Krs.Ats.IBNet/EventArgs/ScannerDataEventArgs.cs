@@ -13,22 +13,22 @@ namespace Krs.Ats.IBNet
         private readonly string legsStr;
         private readonly string projection;
         private readonly int rank;
-        private readonly int reqId;
+        private readonly int requestId;
 
         /// <summary>
         /// Full Constructor
         /// </summary>
-        /// <param name="reqId">The ticker ID of the request to which this row is responding.</param>
+        /// <param name="requestId">The ticker ID of the request to which this row is responding.</param>
         /// <param name="rank">The ranking within the response of this bar.</param>
         /// <param name="contractDetails">This structure contains a full description of the contract that was executed.</param>
         /// <param name="distance">Meaning varies based on query.</param>
         /// <param name="benchmark">Meaning varies based on query.</param>
         /// <param name="projection">Meaning varies based on query.</param>
         /// <param name="legsStr">Describes combo legs when scan is returning EFP.</param>
-        public ScannerDataEventArgs(int reqId, int rank, ContractDetails contractDetails, string distance,
+        public ScannerDataEventArgs(int requestId, int rank, ContractDetails contractDetails, string distance,
                                     string benchmark, string projection, string legsStr)
         {
-            this.reqId = reqId;
+            this.requestId = requestId;
             this.legsStr = legsStr;
             this.projection = projection;
             this.benchmark = benchmark;
@@ -40,9 +40,9 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// The ticker ID of the request to which this row is responding.
         /// </summary>
-        public int ReqId
+        public int RequestId
         {
-            get { return reqId; }
+            get { return requestId; }
         }
 
         /// <summary>

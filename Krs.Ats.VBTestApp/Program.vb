@@ -1,9 +1,11 @@
 Imports Krs.Ats.IBNet
+Imports Krs.Ats.IBNet.Contracts
 
 Module Program
     ' Fields
     Private client As IBClient
-    Private ER2 As Contract
+    Private ER2 As Future
+    Private Goog As Equity
     Private NextOrderId As Integer
 
     Sub Main()
@@ -13,9 +15,13 @@ Module Program
         AddHandler Program.client.Error, New EventHandler(Of ErrorEventArgs)(AddressOf Program.client_Error)
         AddHandler Program.client.NextValidId, New EventHandler(Of NextValidIdEventArgs)(AddressOf Program.client_NextValidId)
         Program.client.Connect("127.0.0.1", &H1D48, 10)
-        Program.ER2 = New Contract("ER2", "GLOBEX", SecurityType.Future, "USD", "200709")
-        Program.client.ReqMktData(12, Program.ER2, Nothing, False)
-
+        Program.ER2 = New Future("ER2", "GLOBEX", "200803")
+        Program.Goog = New Equity("GOOG")
+        Program.client.RequestMarketData(12, Program.ER2, Nothing, False)
+        Program.client.RequestMarketData(13, Program.Goog, Nothing, False)
+        Do While True
+            Threading.Thread.Sleep(100)
+        Loop
     End Sub
     Private Sub client_TickSize(ByVal sender As Object, ByVal e As TickSizeEventArgs)
         Console.WriteLine(("Tick Size: " & e.Size))

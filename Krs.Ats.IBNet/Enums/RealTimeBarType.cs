@@ -28,6 +28,6 @@ namespace Krs.Ats.IBNet
         /// Mid Point
         /// </summary>
         [Description("MIDPOINT")]
-        MidPoint
+        Midpoint
     }
 }

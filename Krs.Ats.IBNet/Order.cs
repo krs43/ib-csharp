@@ -42,7 +42,7 @@ namespace Krs.Ats.IBNet
         private String goodTillDate; // FORMAT: 20060505 08:00:00 {time zone}
         private bool hidden;
         private bool outsideRth;
-        private double lmtPrice;
+        private double limitPrice;
         private int minQty;
         private double nbboPriceCap;
         private String ocaGroup; // one cancels all group name
@@ -201,10 +201,10 @@ namespace Krs.Ats.IBNet
         /// In all other cases specify zero. For relative orders with no limit price,
         /// also specify zero.
         /// </summary>
-        public double LmtPrice
+        public double LimitPrice
         {
-            get { return lmtPrice; }
-            set { lmtPrice = value; }
+            get { return limitPrice; }
+            set { limitPrice = value; }
         }
 
         /// <summary>

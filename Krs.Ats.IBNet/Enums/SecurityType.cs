@@ -24,7 +24,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Indice
         /// </summary>
-        [Description("IND")] Indice,
+        [Description("IND")] Index,
         /// <summary>
         /// FOP = options on futures
         /// </summary>

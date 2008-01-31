@@ -12,21 +12,21 @@ namespace Krs.Ats.IBNet.Contracts
         /// <summary>
         /// Creates a Forex Contract for use on the IdealPro or Ideal exchanges
         /// </summary>
-        /// <param name="Currency">Foreign Currency to Exchange</param>
-        /// <param name="BaseCurrency">Base Currency</param>
-        /// <param name="Exchange">IDEALPRO or IDEAL</param>
-        public Forex(string Currency, string BaseCurrency, string Exchange)
-            : base(Currency, Exchange, SecurityType.Cash, BaseCurrency)
+        /// <param name="currency">Foreign Currency to Exchange</param>
+        /// <param name="baseCurrency">Base Currency</param>
+        /// <param name="exchange">IDEALPRO or IDEAL</param>
+        public Forex(string currency, string baseCurrency, string exchange)
+            : base(currency, exchange, SecurityType.Cash, baseCurrency)
         {
         }
 
         /// <summary>
         /// Creates a Forex Contract for use on the IdealPro Exchange
         /// </summary>
-        /// <param name="Currency">Foreign Currency to Exchange</param>
-        /// <param name="BaseCurrency">Base Currency</param>
-        public Forex(string Currency, string BaseCurrency)
-            : base(Currency, "IDEALPRO", SecurityType.Cash, BaseCurrency)
+        /// <param name="currency">Foreign Currency to Exchange</param>
+        /// <param name="baseCurrency">Base Currency</param>
+        public Forex(string currency, string baseCurrency)
+            : base(currency, "IDEALPRO", SecurityType.Cash, baseCurrency)
         {
             
         }

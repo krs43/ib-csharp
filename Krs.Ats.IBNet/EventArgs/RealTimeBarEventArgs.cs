@@ -12,7 +12,7 @@ namespace Krs.Ats.IBNet
         private readonly double high;
         private readonly double low;
         private readonly double open;
-        private readonly int reqId;
+        private readonly int requestId;
         private readonly long time;
         private readonly long volume;
         private readonly double wap;
@@ -20,7 +20,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Real Time Bar Event Arguments
         /// </summary>
-        /// <param name="reqId">The ticker Id of the request to which this bar is responding.</param>
+        /// <param name="requestId">The ticker Id of the request to which this bar is responding.</param>
         /// <param name="time">The date-time stamp of the start of the bar.
         /// The format is determined by the reqHistoricalData() formatDate parameter.</param>
         /// <param name="open">Bar opening price.</param>
@@ -30,10 +30,10 @@ namespace Krs.Ats.IBNet
         /// <param name="volume">Volume during the time covered by the bar.</param>
         /// <param name="wap">Weighted average price during the time covered by the bar.</param>
         /// <param name="count">When TRADES historical data is returned, represents the number of trades that occurred during the time period the bar covers.</param>
-        public RealTimeBarEventArgs(int reqId, long time, double open, double high, double low, double close,
+        public RealTimeBarEventArgs(int requestId, long time, double open, double high, double low, double close,
                                     long volume, double wap, int count)
         {
-            this.reqId = reqId;
+            this.requestId = requestId;
             this.time = time;
             this.open = open;
             this.high = high;
@@ -47,9 +47,9 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// The ticker Id of the request to which this bar is responding.
         /// </summary>
-        public int ReqId
+        public int RequestId
         {
-            get { return reqId; }
+            get { return requestId; }
         }
 
         /// <summary>

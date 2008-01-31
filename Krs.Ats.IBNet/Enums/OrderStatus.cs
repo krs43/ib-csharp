@@ -39,7 +39,7 @@ namespace Krs.Ats.IBNet
         /// indicates that the balance of your order has been confirmed canceled by the IB system.
         /// This could occur unexpectedly when IB or the destination has rejected your order.
         /// </summary>
-        [Description("Cancelled")] Cancelled,
+        [Description("Cancelled")] Canceled,
         /// <summary>
         /// The order has been completely filled.
         /// </summary>

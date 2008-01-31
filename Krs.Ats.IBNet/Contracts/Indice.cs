@@ -7,15 +7,15 @@ namespace Krs.Ats.IBNet.Contracts
     /// </summary>
     /// <seealso cref="Contract"/>
     [Serializable()]
-    public class Indice : Contract
+    public class Index : Contract
     {
         /// <summary>
         /// Create an Indice Contract for a specific exchange
         /// </summary>
         /// <param name="symbol">Symbol for the indice contract. See <see cref="Contract.Symbol"/>.</param>
         /// <param name="exchange">Exchange for the indice contract. See <see cref="Contract.Exchange"/></param>
-        public Indice(string symbol, string exchange)
-            : base(symbol, exchange, SecurityType.Indice, "USD")
+        public Index(string symbol, string exchange)
+            : base(symbol, exchange, SecurityType.Index, "USD")
         {
         }
     }

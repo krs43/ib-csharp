@@ -1,4 +1,5 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Collections.Generic;
 
 namespace Krs.Ats.IBNet
@@ -12,11 +13,11 @@ namespace Krs.Ats.IBNet
     {
         #region Private Variables
 
-        private readonly List<ComboLeg> comboLegs = new List<ComboLeg>();
+        private readonly Collection<ComboLeg> comboLegs = new Collection<ComboLeg>();
 
         private int contractId;
 
-        private String comboLegsDescrip; // received in open order version 14 and up for all combos
+        private String comboLegsDescription; // received in open order version 14 and up for all combos
         private String currency;
         private String exchange;
         private String expiry;
@@ -24,7 +25,7 @@ namespace Krs.Ats.IBNet
         private String localSymbol;
         private String multiplier;
 
-        private String primaryExch;
+        private String primaryExchange;
                        // pick a non-aggregate (ie not the SMART exchange) exchange that the contract trades on.  DO NOT SET TO SMART.
 
         private RightType right;
@@ -84,9 +85,9 @@ namespace Krs.Ats.IBNet
         /// <param name="exchange">The order destination, such as Smart.</param>
         /// <param name="currency">Specifies the currency.</param>
         /// <param name="localSymbol">This is the local exchange symbol of the underlying asset.</param>
-        /// <param name="primaryExch">Identifies the listing exchange for the contract (do not list SMART).</param>
+        /// <param name="primaryExchange">Identifies the listing exchange for the contract (do not list SMART).</param>
         public Contract(int contractId, String symbol, SecurityType securityType, String expiry, double strike, RightType right,
-                        String multiplier, string exchange, string currency, string localSymbol, string primaryExch)
+                        String multiplier, string exchange, string currency, string localSymbol, string primaryExchange)
         {
             this.contractId = contractId;
             this.symbol = symbol;
@@ -99,7 +100,7 @@ namespace Krs.Ats.IBNet
 
             this.currency = currency;
             this.localSymbol = localSymbol;
-            this.primaryExch = primaryExch;
+            this.primaryExchange = primaryExchange;
         }
 
         /// <summary>
@@ -226,10 +227,10 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Identifies the listing exchange for the contract (do not list SMART).
         /// </summary>
-        public string PrimaryExch
+        public string PrimaryExchange
         {
-            get { return primaryExch; }
-            set { primaryExch = value; }
+            get { return primaryExchange; }
+            set { primaryExchange = value; }
         }
 
         /// <summary>
@@ -249,16 +250,16 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Description for combo legs
         /// </summary>
-        public string ComboLegsDescrip
+        public string ComboLegsDescription
         {
-            get { return comboLegsDescrip; }
-            set { comboLegsDescrip = value; }
+            get { return comboLegsDescription; }
+            set { comboLegsDescription = value; }
         }
 
         /// <summary>
         /// Dynamic memory structure used to store the leg definitions for this contract.
         /// </summary>
-        public List<ComboLeg> ComboLegs
+        public Collection<ComboLeg> ComboLegs
         {
             get { return comboLegs; }
         }

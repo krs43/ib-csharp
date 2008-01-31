@@ -34,29 +34,29 @@ namespace Krs.Ats.TestApp
             client.TickSize += client_TickSize;
             client.Error += client_Error;
             client.NextValidId += client_NextValidId;
-            client.UpdateMktDepth += client_UpdateMktDepth;
+            client.UpdateMarketDepth += client_UpdateMktDepth;
             client.RealTimeBar += client_RealTimeBar;
             client.OrderStatus += client_OrderStatus;
 
             Console.WriteLine("Connecting to IB.");
             client.Connect("127.0.0.1", 7496, 10);
-            ER2 = new Contract("ER2", "GLOBEX", SecurityType.Future, "USD", "200709");
-            YmEcbot = new Contract("YM", "ECBOT", SecurityType.Future, "USD", "200709");
-            ES = new Contract("ES", "GLOBEX", SecurityType.Future, "USD", "200709");
-            SPY = new Contract("SPY", "GLOBEX", SecurityType.Future, "USD", "200709");
-            ZN = new Contract("ZN", "ECBOT", SecurityType.Future, "USD", "200709");
-            ZB = new Contract("ZB", "ECBOT", SecurityType.Future, "USD", "200709");
-            ZT = new Contract("ZT", "ECBOT", SecurityType.Future, "USD", "200709");
-            ZF = new Contract("ZF", "ECBOT", SecurityType.Future, "USD", "200709");
+            ER2 = new Contract("ER2", "GLOBEX", SecurityType.Future, "USD", "200806");
+            YmEcbot = new Contract("YM", "ECBOT", SecurityType.Future, "USD", "200806");
+            ES = new Contract("ES", "GLOBEX", SecurityType.Future, "USD", "200806");
+            SPY = new Contract("SPY", "GLOBEX", SecurityType.Future, "USD", "200806");
+            ZN = new Contract("ZN", "ECBOT", SecurityType.Future, "USD", "200806");
+            ZB = new Contract("ZB", "ECBOT", SecurityType.Future, "USD", "200806");
+            ZT = new Contract("ZT", "ECBOT", SecurityType.Future, "USD", "200806");
+            ZF = new Contract("ZF", "ECBOT", SecurityType.Future, "USD", "200806");
 
-            TickNasdaq = new Contract("TICK-NASD", "NASDAQ", SecurityType.Indice, "USD");
-            VolNasdaq = new Contract("VOL-NASD", "NASDAQ", SecurityType.Indice, "USD");
-            AdNasdaq = new Contract("AD-NASD", "NASDAQ", SecurityType.Indice, "USD");
+            TickNasdaq = new Contract("TICK-NASD", "NASDAQ", SecurityType.Index, "USD");
+            VolNasdaq = new Contract("VOL-NASD", "NASDAQ", SecurityType.Index, "USD");
+            AdNasdaq = new Contract("AD-NASD", "NASDAQ", SecurityType.Index, "USD");
 
 
-            TickNyse = new Contract("TICK-NYSE", "NYSE", SecurityType.Indice, "USD");
-            VolNyse = new Contract("VOL-NYSE", "NYSE", SecurityType.Indice, "USD");
-            AdNyse = new Contract("AD-NYSE", "NYSE", SecurityType.Indice, "USD");
+            TickNyse = new Contract("TICK-NYSE", "NYSE", SecurityType.Index, "USD");
+            VolNyse = new Contract("VOL-NYSE", "NYSE", SecurityType.Index, "USD");
+            AdNyse = new Contract("AD-NYSE", "NYSE", SecurityType.Index, "USD");
 
             //New Contract Creation Features
             Equity Google = new Equity("GOOG");
@@ -64,15 +64,15 @@ namespace Krs.Ats.TestApp
             //Forex Test
             Forex EUR = new Forex("EUR", "USD");
 
-            client.ReqMktData(14, Google, null, false);
-            client.ReqMktDepth(15, Google, 5);
-            client.ReqRealTimeBars(16, Google, 5, RealTimeBarType.Trades,false);
-            client.ReqMktData(17, EUR, null, false);
+            client.RequestMarketData(14, Google, null, false);
+            client.RequestMarketDepth(15, Google, 5);
+            client.RequestRealTimeBars(16, Google, 5, RealTimeBarType.Trades,false);
+            client.RequestMarketData(17, EUR, null, false);
 
             Order BuyContract = new Order();
             BuyContract.Action = ActionSide.Buy;
             BuyContract.OutsideRth = false;
-            BuyContract.LmtPrice = 820;
+            BuyContract.LimitPrice = 820;
             BuyContract.OrderType = OrderType.Limit;
             BuyContract.TotalQuantity = 1;
             //client.PlaceOrder(502, ER2, BuyContract);
@@ -92,7 +92,7 @@ namespace Krs.Ats.TestApp
             Console.WriteLine("Order Placed.");
         }
 
-        static void client_UpdateMktDepth(object sender, UpdateMktDepthEventArgs e)
+        static void client_UpdateMktDepth(object sender, UpdateMarketDepthEventArgs e)
         {
             Console.WriteLine("Tick ID: " + e.TickerId + " Tick Side: " + EnumDescConverter.GetEnumDescription(e.Side) +
                               " Tick Size: " + e.Size + " Tick Price: " + e.Price + " Tick Position: " + e.Position +

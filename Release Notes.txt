@@ -3,6 +3,19 @@ Karl Schulze - www.dinosaurtech.com
 
 Release Notes
 
+9.4.0.8 Code Clean up - 1/31/08
+* Ran Vs2008 Code Analysis Wizard / FxCop and implemented cleanup
+	* Numerous Spelling Changes
+		* All Mkt references went to Market
+		* All Req references went to Request etc.
+		* All Lmt references went to Limit
+		* All Indice references went to index
+	* Added a lot of CultureInfo related fixes, making sure to provide invarient parsing
+* Fixed VB Client, used old contracts, and changed contract references to equity/future
+
+Please note - These are breaking changes, no functionality has been changes, but it will require
+you to modify your code to the new spellings.
+
 9.4.0.7 Bug Fix Release - 1/26/08
 * Changed FAMethod to Enumeration
 * Changed OrderState.Status to enumeration

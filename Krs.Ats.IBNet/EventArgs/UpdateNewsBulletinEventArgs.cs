@@ -10,7 +10,7 @@ namespace Krs.Ats.IBNet
         private readonly string message;
         private readonly int msgId;
         private readonly NewsType msgType;
-        private readonly string origExchange;
+        private readonly string originExchange;
 
         /// <summary>
         /// Full Constructor
@@ -18,11 +18,11 @@ namespace Krs.Ats.IBNet
         /// <param name="msgId">The bulletin ID, incrementing for each new bulletin.</param>
         /// <param name="msgType">Specifies the type of bulletin.</param>
         /// <param name="message">The bulletin's message text.</param>
-        /// <param name="origExchange">The exchange from which this message originated.</param>
-        public UpdateNewsBulletinEventArgs(int msgId, NewsType msgType, string message, string origExchange)
+        /// <param name="originExchange">The exchange from which this message originated.</param>
+        public UpdateNewsBulletinEventArgs(int msgId, NewsType msgType, string message, string originExchange)
         {
             this.msgId = msgId;
-            this.origExchange = origExchange;
+            this.originExchange = originExchange;
             this.message = message;
             this.msgType = msgType;
         }
@@ -55,9 +55,9 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// The exchange from which this message originated.
         /// </summary>
-        public string OrigExchange
+        public string OriginExchange
         {
-            get { return origExchange; }
+            get { return originExchange; }
         }
     }
 }

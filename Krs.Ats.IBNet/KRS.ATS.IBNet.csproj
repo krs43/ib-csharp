@@ -102,6 +102,7 @@
     <Compile Include="ExecutionFilter.cs" />
     <Compile Include="Enums\FADataType.cs" />
     <Compile Include="Enums\GenericTickType.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IBClient.cs" />
     <Compile Include="EventArgs\NextValidIdEventArgs.cs" />
     <Compile Include="EventArgs\OpenOrderEventArgs.cs" />
@@ -145,6 +146,9 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="CodeAnalysisDictionary.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

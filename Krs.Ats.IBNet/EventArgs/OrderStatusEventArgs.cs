@@ -7,7 +7,7 @@ namespace Krs.Ats.IBNet
     /// </summary>
     public class OrderStatusEventArgs : EventArgs
     {
-        private readonly double avgFillPrice;
+        private readonly double averageFillPrice;
         private readonly int clientId;
         private readonly int filled;
         private readonly double lastFillPrice;
@@ -26,7 +26,7 @@ namespace Krs.Ats.IBNet
         /// <param name="status">The order status.</param>
         /// <param name="filled">Specifies the number of shares that have been executed.</param>
         /// <param name="remaining">Specifies the number of shares still outstanding.</param>
-        /// <param name="avgFillPrice">The average price of the shares that have been executed.
+        /// <param name="averageFillPrice">The average price of the shares that have been executed.
         /// This parameter is valid only if the filled parameter value
         /// is greater than zero. Otherwise, the price parameter will be zero.</param>
         /// <param name="permId">The TWS id used to identify orders. Remains the same over TWS sessions.</param>
@@ -37,7 +37,7 @@ namespace Krs.Ats.IBNet
         /// The TWS orders have a fixed clientId and orderId of 0 that distinguishes them from API orders.</param>
         /// <param name="whyHeld">This field is used to identify an order held when TWS is trying to locate shares for a short sell.
         /// The value used to indicate this is 'locate'.</param>
-        public OrderStatusEventArgs(int orderId, OrderStatus status, int filled, int remaining, double avgFillPrice,
+        public OrderStatusEventArgs(int orderId, OrderStatus status, int filled, int remaining, double averageFillPrice,
                                     int permId, int parentId, double lastFillPrice, int clientId, string whyHeld)
         {
             this.orderId = orderId;
@@ -45,7 +45,7 @@ namespace Krs.Ats.IBNet
             this.lastFillPrice = lastFillPrice;
             this.parentId = parentId;
             this.permId = permId;
-            this.avgFillPrice = avgFillPrice;
+            this.averageFillPrice = averageFillPrice;
             this.remaining = remaining;
             this.filled = filled;
             this.status = status;
@@ -122,9 +122,9 @@ namespace Krs.Ats.IBNet
         /// This parameter is valid only if the filled parameter value
         /// is greater than zero. Otherwise, the price parameter will be zero.
         /// </summary>
-        public double AvgFillPrice
+        public double AverageFillPrice
         {
-            get { return avgFillPrice; }
+            get { return averageFillPrice; }
         }
 
         /// <summary>

@@ -5,7 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Update Market Depth Event Arguments
     /// </summary>
-    public class UpdateMktDepthEventArgs : EventArgs
+    public class UpdateMarketDepthEventArgs : EventArgs
     {
         private readonly MarketDepthOperation operation;
         private readonly int position;
@@ -23,7 +23,7 @@ namespace Krs.Ats.IBNet
         /// <param name="side">Identifies the side of the book that this order belongs to.</param>
         /// <param name="price">The order price.</param>
         /// <param name="size">The order size.</param>
-        public UpdateMktDepthEventArgs(int tickerId, int position, MarketDepthOperation operation, MarketDepthSide side,
+        public UpdateMarketDepthEventArgs(int tickerId, int position, MarketDepthOperation operation, MarketDepthSide side,
                                        double price, int size)
         {
             this.tickerId = tickerId;

@@ -42,9 +42,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KRS.ATS.IBNet\KRS.ATS.IBNet.csproj">
+    <ProjectReference Include="..\Krs.Ats.IBNet\Krs.Ats.IBNet.csproj">
       <Project>{98672E16-97B1-4204-86CC-EA0009CA15F4}</Project>
-      <Name>KRS.ATS.IBNet</Name>
+      <Name>Krs.Ats.IBNet</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

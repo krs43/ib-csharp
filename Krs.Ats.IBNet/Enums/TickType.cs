@@ -193,7 +193,7 @@ namespace Krs.Ats.IBNet
         /// Last Time Stamp
         /// </summary>
         [Description("LAST_TIMESTAMP")]
-        LastTimeStamp = 45,
+        LastTimestamp = 45,
         /// <summary>
         /// Shortable
         /// </summary>

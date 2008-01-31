@@ -7,23 +7,23 @@ namespace Krs.Ats.IBNet
     /// </summary>
     public class ScannerDataEndEventArgs : EventArgs
     {
-        private readonly int reqId;
+        private readonly int requestId;
 
         /// <summary>
         /// Full Constructor
         /// </summary>
-        /// <param name="reqId">The ticker ID of the request to which this row is responding.</param>
-        public ScannerDataEndEventArgs(int reqId)
+        /// <param name="requestId">The ticker ID of the request to which this row is responding.</param>
+        public ScannerDataEndEventArgs(int requestId)
         {
-            this.reqId = reqId;
+            this.requestId = requestId;
         }
 
         /// <summary>
         /// The ticker ID of the request to which this row is responding.
         /// </summary>
-        public int ReqId
+        public int RequestId
         {
-            get { return reqId; }
+            get { return requestId; }
         }
     }
 }

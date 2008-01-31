@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRS.ATS.IBNet", "KRS.ATS.IBNet\KRS.ATS.IBNet.csproj", "{98672E16-97B1-4204-86CC-EA0009CA15F4}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Krs.Ats.VBTestApp", "Krs.Ats.VBTestApp\Krs.Ats.VBTestApp.vbproj", "{BA79D2A3-162C-4E76-A79C-B595197031CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRS.ATS.TestApp", "KRS.ATS.TestApp\KRS.ATS.TestApp.csproj", "{6991EC5C-B18D-42BA-87B0-7A696F78AC77}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Krs.Ats.IBNet", "Krs.Ats.IBNet\Krs.Ats.IBNet.csproj", "{98672E16-97B1-4204-86CC-EA0009CA15F4}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VBTestApp", "VBTestApp\VBTestApp.vbproj", "{BA79D2A3-162C-4E76-A79C-B595197031CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Krs.Ats.TestApp", "Krs.Ats.TestApp\Krs.Ats.TestApp.csproj", "{6991EC5C-B18D-42BA-87B0-7A696F78AC77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +13,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BA79D2A3-162C-4E76-A79C-B595197031CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA79D2A3-162C-4E76-A79C-B595197031CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA79D2A3-162C-4E76-A79C-B595197031CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA79D2A3-162C-4E76-A79C-B595197031CF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{98672E16-97B1-4204-86CC-EA0009CA15F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{98672E16-97B1-4204-86CC-EA0009CA15F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98672E16-97B1-4204-86CC-EA0009CA15F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -21,10 +25,6 @@ Global
 		{6991EC5C-B18D-42BA-87B0-7A696F78AC77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6991EC5C-B18D-42BA-87B0-7A696F78AC77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6991EC5C-B18D-42BA-87B0-7A696F78AC77}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BA79D2A3-162C-4E76-A79C-B595197031CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BA79D2A3-162C-4E76-A79C-B595197031CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BA79D2A3-162C-4E76-A79C-B595197031CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BA79D2A3-162C-4E76-A79C-B595197031CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -286,7 +286,7 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// This event fires in response to the <see cref="ReqContractDetails"/> method.
+        /// This event fires in response to the <see cref="RequestContractDetails"/> method.
         /// </summary>
         public event EventHandler<ContractDetailsEventArgs> ContractDetails;
 
@@ -307,7 +307,7 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// This event fires in response to the <see cref="ReqContractDetails"/> method called on a bond contract.
+        /// This event fires in response to the <see cref="RequestContractDetails"/> method called on a bond contract.
         /// </summary>
         public event EventHandler<BondContractDetailsEventArgs> BondContractDetails;
 
@@ -328,7 +328,7 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// This event fires in response to the <see cref="ReqExecutions"/> method or after an order is placed.
+        /// This event fires in response to the <see cref="RequestExecutions"/> method or after an order is placed.
         /// </summary>
         public event EventHandler<ExecDetailsEventArgs> ExecDetails;
 
@@ -353,47 +353,47 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// This method is called when the market depth changes.
         /// </summary>
-        public event EventHandler<UpdateMktDepthEventArgs> UpdateMktDepth;
+        public event EventHandler<UpdateMarketDepthEventArgs> UpdateMarketDepth;
 
         /// <summary>
         /// Called internally when the receive thread receives an update market depth event.
         /// </summary>
         /// <param name="e"></param>
-        protected virtual void OnUpdateMktDepth(UpdateMktDepthEventArgs e)
+        protected virtual void OnUpdateMarketDepth(UpdateMarketDepthEventArgs e)
         {
-            if (UpdateMktDepth != null)
-                UpdateMktDepth(this, e);
+            if (UpdateMarketDepth != null)
+                UpdateMarketDepth(this, e);
         }
 
         private void updateMktDepth(int tickerId, int position, MarketDepthOperation operation, MarketDepthSide side,
                                     double price, int size)
         {
-            UpdateMktDepthEventArgs e = new UpdateMktDepthEventArgs(tickerId, position, operation, side, price, size);
-            OnUpdateMktDepth(e);
+            UpdateMarketDepthEventArgs e = new UpdateMarketDepthEventArgs(tickerId, position, operation, side, price, size);
+            OnUpdateMarketDepth(e);
         }
 
         /// <summary>
         /// This method is called when the Level II market depth changes.
         /// </summary>
-        public event EventHandler<UpdateMktDepthL2EventArgs> UpdateMktDepthL2;
+        public event EventHandler<UpdateMarketDepthL2EventArgs> UpdateMarketDepthL2;
 
         /// <summary>
         /// Called internally when the receive thread receives an update market depth level 2 event.
         /// </summary>
         /// <param name="e">Update Market Depth L2 Event Arguments</param>
-        protected virtual void OnUpdateMktDepthL2(UpdateMktDepthL2EventArgs e)
+        protected virtual void OnUpdateMarketDepthL2(UpdateMarketDepthL2EventArgs e)
         {
-            if (UpdateMktDepthL2 != null)
-                UpdateMktDepthL2(this, e);
+            if (UpdateMarketDepthL2 != null)
+                UpdateMarketDepthL2(this, e);
         }
 
         private void updateMktDepthL2(int tickerId, int position, string marketMaker, MarketDepthOperation operation,
                                       MarketDepthSide side,
                                       double price, int size)
         {
-            UpdateMktDepthL2EventArgs e =
-                new UpdateMktDepthL2EventArgs(tickerId, position, marketMaker, operation, side, price, size);
-            OnUpdateMktDepthL2(e);
+            UpdateMarketDepthL2EventArgs e =
+                new UpdateMarketDepthL2EventArgs(tickerId, position, marketMaker, operation, side, price, size);
+            OnUpdateMarketDepthL2(e);
         }
 
         /// <summary>
@@ -760,7 +760,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Returns the client version of the TWS API
         /// </summary>
-        public int ClientVersion
+        public static int ClientVersion
         {
             get { return clientVersion; }
         }
@@ -961,7 +961,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Call the reqScannerParameters() method to receive an XML document that describes the valid parameters that a scanner subscription can have.
         /// </summary>
-        public void ReqScannerParameters()
+        public void RequestScannerParameters()
         {
             lock (this)
             {
@@ -1000,7 +1000,7 @@ namespace Krs.Ats.IBNet
         /// </summary>
         /// <param name="tickerId">the Id for the subscription. Must be a unique value. When the subscription  data is received, it will be identified by this Id. This is also used when canceling the scanner.</param>
         /// <param name="subscription">summary of the scanner subscription parameters including filters.</param>
-        public void ReqScannerSubscription(int tickerId, ScannerSubscription subscription)
+        public void RequestScannerSubscription(int tickerId, ScannerSubscription subscription)
         {
             if (subscription == null)
                 throw new ArgumentNullException("subscription");
@@ -1071,7 +1071,7 @@ namespace Krs.Ats.IBNet
         /// <param name="contract">this structure contains a description of the contract for which market data is being requested.</param>
         /// <param name="genericTickList">comma delimited list of generic tick types.  Tick types can be found here: (new Generic Tick Types page) </param>
         /// <param name="snapshot">Allows client to request snapshot market data.</param>
-        public void ReqMktData(int tickerId, Contract contract, Collection<GenericTickType> genericTickList, bool snapshot)
+        public void RequestMarketData(int tickerId, Contract contract, Collection<GenericTickType> genericTickList, bool snapshot)
         {
             lock (this)
             {
@@ -1113,7 +1113,7 @@ namespace Krs.Ats.IBNet
                     send(contract.Exchange);
                     if (serverVersion >= 14)
                     {
-                        send(contract.PrimaryExch);
+                        send(contract.PrimaryExchange);
                     }
                     send(contract.Currency);
                     if (serverVersion >= 2)
@@ -1180,7 +1180,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Call the CancelHistoricalData method to stop receiving historical data results.
         /// </summary>
-        /// <param name="tickerId">the Id that was specified in the call to <see cref="ReqHistoricalData"/>.</param>
+        /// <param name="tickerId">the Id that was specified in the call to <see cref="RequestHistoricalData"/>.</param>
         public void CancelHistoricalData(int tickerId)
         {
             lock (this)
@@ -1221,7 +1221,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Call the cancelRealTimeBars() method to stop receiving real time bar results. 
         /// </summary>
-        /// <param name="tickerId">The Id that was specified in the call to <see cref="ReqRealTimeBars"/>.</param>
+        /// <param name="tickerId">The Id that was specified in the call to <see cref="RequestRealTimeBars"/>.</param>
         public void CancelRealTimeBars(int tickerId)
         {
             lock (this)
@@ -1357,7 +1357,7 @@ namespace Krs.Ats.IBNet
         /// 0 - all data is returned even where the market in question was outside of its regular trading hours.
         /// 1 - only data within the regular trading hours is returned, even if the requested time span falls partially or completely outside of the RTH.
         /// </param>
-        public void ReqHistoricalData(int tickerId, Contract contract, DateTime endDateTime, TimeSpan duration,
+        public void RequestHistoricalData(int tickerId, Contract contract, DateTime endDateTime, TimeSpan duration,
                                       BarSize barSizeSetting, HistoricalDataType whatToShow, int useRth)
         {
             if (contract == null)
@@ -1395,7 +1395,7 @@ namespace Krs.Ats.IBNet
                               : EnumDescConverter.GetEnumDescription(contract.Right)));
                     send(contract.Multiplier);
                     send(contract.Exchange);
-                    send(contract.PrimaryExch);
+                    send(contract.PrimaryExchange);
                     send(contract.Currency);
                     send(contract.LocalSymbol);
                     if (serverVersion >= 31)
@@ -1405,7 +1405,7 @@ namespace Krs.Ats.IBNet
                     if (serverVersion >= 20)
                     {
                         //yyyymmdd hh:mm:ss tmz
-                        send(endDateTime.ToUniversalTime().ToString("yyyyMMdd HH:mm:ss") + " GMT");
+                        send(endDateTime.ToUniversalTime().ToString("yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture) + " GMT");
                         send(EnumDescConverter.GetEnumDescription(barSizeSetting));
                     }
                     //Seconds are limited to a single day, must use longest possible
@@ -1487,7 +1487,7 @@ namespace Krs.Ats.IBNet
         /// Call this function to download all details for a particular underlying. the contract details will be received via the contractDetails() function on the EWrapper.
         /// </summary>
         /// <param name="contract">summary description of the contract being looked up.</param>
-        public void ReqContractDetails(Contract contract)
+        public void RequestContractDetails(Contract contract)
         {
             if (contract == null)
                 throw new ArgumentNullException("contract");
@@ -1560,11 +1560,11 @@ namespace Krs.Ats.IBNet
         /// ASK
         /// MIDPOINT
         /// </param>
-        /// <param name="useRTH">useRTH – Regular Trading Hours only. Valid values include:
+        /// <param name="useRth">useRth – Regular Trading Hours only. Valid values include:
         /// 0 = all data available during the time span requested is returned, including time intervals when the market in question was outside of regular trading hours.
         /// 1 = only data within the regular trading hours for the product requested is returned, even if the time time span falls partially or completely outside.
         /// </param>
-        public void ReqRealTimeBars(int tickerId, Contract contract, int barSize, RealTimeBarType whatToShow, bool useRTH)
+        public void RequestRealTimeBars(int tickerId, Contract contract, int barSize, RealTimeBarType whatToShow, bool useRth)
         {
             lock (this)
             {
@@ -1598,12 +1598,12 @@ namespace Krs.Ats.IBNet
                     send(EnumDescConverter.GetEnumDescription(contract.Right));
                     send(contract.Multiplier);
                     send(contract.Exchange);
-                    send(contract.PrimaryExch);
+                    send(contract.PrimaryExchange);
                     send(contract.Currency);
                     send(contract.LocalSymbol);
                     send(barSize);
                     send(EnumDescConverter.GetEnumDescription(whatToShow));
-                    send(useRTH);
+                    send(useRth);
                 }
                 catch (Exception e)
                 {
@@ -1622,7 +1622,7 @@ namespace Krs.Ats.IBNet
         /// <param name="tickerId">the ticker Id. Must be a unique value. When the market depth data returns, it will be identified by this tag. This is also used when canceling the market depth.</param>
         /// <param name="contract">this structure contains a description of the contract for which market depth data is being requested.</param>
         /// <param name="numberOfRows">specifies the number of market depth rows to return.</param>
-        public void ReqMktDepth(int tickerId, Contract contract, int numberOfRows)
+        public void RequestMarketDepth(int tickerId, Contract contract, int numberOfRows)
         {
             if (contract == null)
                 throw new ArgumentNullException("contract");
@@ -1686,7 +1686,7 @@ namespace Krs.Ats.IBNet
         /// After calling this method, market data for the specified Id will stop flowing.
         /// </summary>
         /// <param name="tickerId">the Id that was specified in the call to reqMktData().</param>
-        public void CancelMktData(int tickerId)
+        public void CancelMarketData(int tickerId)
         {
             lock (this)
             {
@@ -1721,7 +1721,7 @@ namespace Krs.Ats.IBNet
         /// After calling this method, market depth data for the specified Id will stop flowing.
         /// </summary>
         /// <param name="tickerId">the Id that was specified in the call to reqMktDepth().</param>
-        public void CancelMktDepth(int tickerId)
+        public void CancelMarketDepth(int tickerId)
         {
             lock (this)
             {
@@ -1917,7 +1917,7 @@ namespace Krs.Ats.IBNet
                     send(contract.Exchange);
                     if (serverVersion >= 14)
                     {
-                        send(contract.PrimaryExch);
+                        send(contract.PrimaryExchange);
                     }
                     send(contract.Currency);
                     if (serverVersion >= 2)
@@ -1929,7 +1929,7 @@ namespace Krs.Ats.IBNet
                     send(EnumDescConverter.GetEnumDescription(order.Action));
                     send(order.TotalQuantity);
                     send(EnumDescConverter.GetEnumDescription(order.OrderType));
-                    send(order.LmtPrice);
+                    send(order.LimitPrice);
                     send(order.AuxPrice);
 
                     // send extended order fields
@@ -2137,7 +2137,7 @@ namespace Krs.Ats.IBNet
         /// </summary>
         /// <param name="subscribe">If set to TRUE, the client will start receiving account and portfolio updates. If set to FALSE, the client will stop receiving this information.</param>
         /// <param name="acctCode">the account code for which to receive account and portfolio updates.</param>
-        public void ReqAccountUpdates(bool subscribe, String acctCode)
+        public void RequestAccountUpdates(bool subscribe, String acctCode)
         {
             lock (this)
             {
@@ -2178,7 +2178,7 @@ namespace Krs.Ats.IBNet
         /// When this method is called, the execution reports that meet the filter criteria are downloaded to the client via the execDetails() method.
         /// </summary>
         /// <param name="filter">the filter criteria used to determine which execution reports are returned.</param>
-        public void ReqExecutions(ExecutionFilter filter)
+        public void RequestExecutions(ExecutionFilter filter)
         {
             if (filter == null)
                 throw new ArgumentNullException("filter");
@@ -2262,7 +2262,7 @@ namespace Krs.Ats.IBNet
         /// 
         /// The client with a clientId of "0" will also receive the TWS-owned open orders. These orders will be associated with the client and a new orderId will be generated. This association will persist over multiple API and TWS sessions.
         /// </summary>
-        public void ReqOpenOrders()
+        public void RequestOpenOrders()
         {
             lock (this)
             {
@@ -2296,7 +2296,7 @@ namespace Krs.Ats.IBNet
         /// Returns one next valid Id...
         /// </summary>
         /// <param name="numberOfIds">Has No Effect</param>
-        public void ReqIds(int numberOfIds)
+        public void RequestIds(int numberOfIds)
         {
             lock (this)
             {
@@ -2329,8 +2329,8 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Call this method to start receiving news bulletins. Each bulletin will be returned by the updateNewsBulletin() method.
         /// </summary>
-        /// <param name="allMsgs">if set to TRUE, returns all the existing bulletins for the current day and any new ones. IF set to FALSE, will only return new bulletins.</param>
-        public void ReqNewsBulletins(bool allMsgs)
+        /// <param name="allMessages">if set to TRUE, returns all the existing bulletins for the current day and any new ones. IF set to FALSE, will only return new bulletins.</param>
+        public void RequestNewsBulletins(bool allMessages)
         {
             lock (this)
             {
@@ -2347,7 +2347,7 @@ namespace Krs.Ats.IBNet
                 {
                     send((int) OutgoingMessage.RequestNewsBulletins);
                     send(version);
-                    send(allMsgs);
+                    send(allMessages);
                 }
                 catch (Exception e)
                 {
@@ -2399,7 +2399,7 @@ namespace Krs.Ats.IBNet
         /// TWS orders can only be bound to clients with a clientId of “0”.
         /// </summary>
         /// <param name="autoBind">If set to TRUE, newly created TWS orders will be implicitly associated with the client. If set to FALSE, no association will be made.</param>
-        public void ReqAutoOpenOrders(bool autoBind)
+        public void RequestAutoOpenOrders(bool autoBind)
         {
             lock (this)
             {
@@ -2435,7 +2435,7 @@ namespace Krs.Ats.IBNet
         /// 
         /// No association is made between the returned orders and the requesting client.
         /// </summary>
-        public void ReqAllOpenOrders()
+        public void RequestAllOpenOrders()
         {
             lock (this)
             {
@@ -2470,7 +2470,7 @@ namespace Krs.Ats.IBNet
         /// 
         /// This request can only be made when connected to a Financial Advisor (FA) account.
         /// </summary>
-        public void ReqManagedAccts()
+        public void RequestManagedAccts()
         {
             lock (this)
             {
@@ -2596,7 +2596,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Returns the current system time on the server side.
         /// </summary>
-        public void ReqCurrentTime()
+        public void RequestCurrentTime()
         {
             lock (this)
             {
@@ -3009,7 +3009,7 @@ namespace Krs.Ats.IBNet
                         int version = ReadInt();
                         int id = ReadInt();
                         string orderstat = ReadStr();
-                        Krs.Ats.IBNet.OrderStatus status = ((orderstat == null || orderstat == "") ? Krs.Ats.IBNet.OrderStatus.None :
+                        Krs.Ats.IBNet.OrderStatus status = (string.IsNullOrEmpty(orderstat) ? Krs.Ats.IBNet.OrderStatus.None :
                             (Krs.Ats.IBNet.OrderStatus) EnumDescConverter.GetEnumValue(typeof (Krs.Ats.IBNet.OrderStatus), orderstat));
                         int filled = ReadInt();
                         int remaining = ReadInt();
@@ -3180,7 +3180,7 @@ namespace Krs.Ats.IBNet
                         order.Action = (ActionSide) EnumDescConverter.GetEnumValue(typeof (ActionSide), ReadStr());
                         order.TotalQuantity = ReadInt();
                         order.OrderType = (OrderType) EnumDescConverter.GetEnumValue(typeof (OrderType), ReadStr());
-                        order.LmtPrice = ReadDouble();
+                        order.LimitPrice = ReadDouble();
                         order.AuxPrice = ReadDouble();
                         order.Tif = (TimeInForce) EnumDescConverter.GetEnumValue(typeof (TimeInForce), ReadStr());
                         order.OcaGroup = ReadStr();
@@ -3226,7 +3226,7 @@ namespace Krs.Ats.IBNet
                         {
                             order.FAGroup = ReadStr();
                             string fam = ReadStr();
-                            order.FAMethod = ((fam == null || fam == "") ? FinancialAdvisorAllocationMethod.None : (FinancialAdvisorAllocationMethod)EnumDescConverter.GetEnumValue(typeof(FinancialAdvisorAllocationMethod), fam));
+                            order.FAMethod = (string.IsNullOrEmpty(fam) ? FinancialAdvisorAllocationMethod.None : (FinancialAdvisorAllocationMethod)EnumDescConverter.GetEnumValue(typeof(FinancialAdvisorAllocationMethod), fam));
                             order.FAPercentage = ReadStr();
                             order.FAProfile = ReadStr();
                         }
@@ -3239,7 +3239,7 @@ namespace Krs.Ats.IBNet
                         if (version >= 9)
                         {
                             rstr = ReadStr();
-                            order.Rule80A = ((rstr == null || rstr == "") ? AgentDescription.None : (AgentDescription)EnumDescConverter.GetEnumValue(typeof (AgentDescription), rstr));
+                            order.Rule80A = (string.IsNullOrEmpty(rstr) ? AgentDescription.None : (AgentDescription)EnumDescConverter.GetEnumValue(typeof (AgentDescription), rstr));
                             order.PercentOffset = ReadDouble();
                             order.SettlingFirm = ReadStr();
                             order.ShortSaleSlot = (ShortSaleSlot)ReadInt();
@@ -3288,7 +3288,7 @@ namespace Krs.Ats.IBNet
                             {
                                 // version 12 and up
                                 string dnoa = ReadStr();
-                                order.DeltaNeutralOrderType = ((dnoa == null || dnoa == "") ? OrderType.None : (OrderType)EnumDescConverter.GetEnumValue(typeof (OrderType), dnoa));
+                                order.DeltaNeutralOrderType = (string.IsNullOrEmpty(dnoa) ? OrderType.None : (OrderType)EnumDescConverter.GetEnumValue(typeof (OrderType), dnoa));
                                 order.DeltaNeutralAuxPrice = ReadDouble();
                             }
                             order.ContinuousUpdate = ReadInt();
@@ -3309,7 +3309,7 @@ namespace Krs.Ats.IBNet
                         {
                             order.BasisPoints = ReadDouble();
                             order.BasisPointsType = ReadInt();
-                            contract.ComboLegsDescrip = ReadStr();
+                            contract.ComboLegsDescription = ReadStr();
                         }
 
                         if (version >= 15)
@@ -3330,10 +3330,10 @@ namespace Krs.Ats.IBNet
                         if (version >= 16)
                         {
                             rstr = ReadStr();
-                            order.WhatIf = !(rstr == null || rstr == "" || rstr == "0");
+                            order.WhatIf = !(string.IsNullOrEmpty(rstr) || rstr == "0");
 
                             string ost = ReadStr();
-                            orderState.Status = ((ost == null || ost == "") ? Krs.Ats.IBNet.OrderStatus.None : (Krs.Ats.IBNet.OrderStatus)EnumDescConverter.GetEnumValue(typeof(Krs.Ats.IBNet.OrderStatus), ost));
+                            orderState.Status = (string.IsNullOrEmpty(rstr) ? Krs.Ats.IBNet.OrderStatus.None : (Krs.Ats.IBNet.OrderStatus)EnumDescConverter.GetEnumValue(typeof(Krs.Ats.IBNet.OrderStatus), ost));
                             orderState.InitMargin = ReadStr();
                             orderState.MaintMargin = ReadStr();
                             orderState.EquityWithLoan = ReadStr();
@@ -3588,12 +3588,11 @@ namespace Krs.Ats.IBNet
                         Console.WriteLine("Inbound Historical Data");
                         int version = ReadInt();
                         int reqId = ReadInt();
-                        String startDateStr;
-                        String endDateStr;
                         if (version >= 2)
                         {
-                            startDateStr = ReadStr();
-                            endDateStr = ReadStr();
+                            //Read Start Date String
+                            /*String startDateStr = */ReadStr();
+                            /*String endDateStr   = */ReadStr();
                             //completedIndicator += ("-" + startDateStr + "-" + endDateStr);
                         }
                         int itemCount = ReadInt();
@@ -3603,7 +3602,7 @@ namespace Krs.Ats.IBNet
                             //Comes in as seconds
                             //2 - dates are returned as a long integer specifying the number of seconds since 1/1/1970 GMT.
                             String date = ReadStr();
-                            long longDate = Int64.Parse(date);
+                            long longDate = Int64.Parse(date, CultureInfo.InvariantCulture);
                             DateTime timeStamp = new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc).AddSeconds(longDate).ToLocalTime();
                             double open = ReadDouble();
                             double high = ReadDouble();

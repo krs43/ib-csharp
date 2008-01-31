@@ -1,19 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRS.ATS.IBNet", "KRS.ATS.IBNet\KRS.ATS.IBNet.csproj", "{98672E16-97B1-4204-86CC-EA0009CA15F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Krs.Ats.IBNet", "Krs.Ats.IBNet\Krs.Ats.IBNet.csproj", "{98672E16-97B1-4204-86CC-EA0009CA15F4}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRS.ATS.TestApp", "KRS.ATS.TestApp\KRS.ATS.TestApp.csproj", "{6991EC5C-B18D-42BA-87B0-7A696F78AC77}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Krs.Ats.TestApp", "Krs.Ats.TestApp\Krs.Ats.TestApp.csproj", "{6991EC5C-B18D-42BA-87B0-7A696F78AC77}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VBTestApp", "VBTestApp\VBTestApp.vbproj", "{BA79D2A3-162C-4E76-A79C-B595197031CF}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Krs.Ats.VBTestApp", "Krs.Ats.VBTestApp\Krs.Ats.VBTestApp.vbproj", "{BA79D2A3-162C-4E76-A79C-B595197031CF}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"

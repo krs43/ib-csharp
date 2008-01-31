@@ -12,7 +12,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Undefined Outgoing Message
         /// </summary>
-        [Description("")] Underfined = 0,
+        [Description("")] Undefined = 0,
         /// <summary>
         /// Request Market Data
         /// </summary>

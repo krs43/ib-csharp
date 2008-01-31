@@ -5,7 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Update Market Depth L2 Event Arguments
     /// </summary>
-    public class UpdateMktDepthL2EventArgs : EventArgs
+    public class UpdateMarketDepthL2EventArgs : EventArgs
     {
         private readonly string marketMaker;
         private readonly MarketDepthOperation operation;
@@ -18,14 +18,14 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Full Constructor
         /// </summary>
-        /// <param name="tickerId">The ticker Id that was specified previously in the call to <see cref="IBClient.ReqMktDepth"/>.</param>
+        /// <param name="tickerId">The ticker Id that was specified previously in the call to <see cref="IBClient.RequestMarketDepth"/>.</param>
         /// <param name="position">Specifies the row id of this market depth entry.</param>
         /// <param name="marketMaker">Specifies the exchange hosting this order.</param>
         /// <param name="operation">Identifies the how this order should be applied to the market depth.</param>
         /// <param name="side">Identifies the side of the book that this order belongs to.</param>
         /// <param name="price">The order price.</param>
         /// <param name="size">The order size.</param>
-        public UpdateMktDepthL2EventArgs(int tickerId, int position, string marketMaker, MarketDepthOperation operation,
+        public UpdateMarketDepthL2EventArgs(int tickerId, int position, string marketMaker, MarketDepthOperation operation,
                                          MarketDepthSide side, double price, int size)
         {
             this.tickerId = tickerId;
@@ -38,7 +38,7 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// The ticker Id that was specified previously in the call to <see cref="IBClient.ReqMktDepth"/>.
+        /// The ticker Id that was specified previously in the call to <see cref="IBClient.RequestMarketDepth"/>.
         /// </summary>
         public int TickerId
         {

@@ -18,7 +18,7 @@ namespace Krs.Ats.IBNet
         /// Return the mid point between the bid and ask
         /// </summary>
         [Description("MIDPOINT")]
-        MidPoint,
+        Midpoint,
         /// <summary>
         /// Return Bid Prices only
         /// </summary>
