@@ -1419,7 +1419,7 @@ namespace Krs.Ats.IBNet
                     // Y (years)
                     // If no unit is specified, seconds are used. "years" is currently limited to one.
                     DateTime beginDateTime = endDateTime.Subtract(duration);
-                    if(endDateTime.AddDays(-1) < beginDateTime)
+                    if(endDateTime.AddDays(-1) <= beginDateTime)
                     {
                         //Seconds
                         send(Convert.ToInt32(duration.TotalSeconds) + " S");
@@ -2682,7 +2682,7 @@ namespace Krs.Ats.IBNet
         {
             // write string to data buffer; writer thread will
             // write it to ibSocket
-            if (str != null && str.Length > 0)
+            if (!string.IsNullOrEmpty(str))
             {
                 dos.Write(ToByteArray(str));
             }
@@ -3585,6 +3585,7 @@ namespace Krs.Ats.IBNet
 
                 case IncomingMessage.HistoricalData:
                     {
+                        //ToDo: Remove Console Lines
                         Console.WriteLine("Inbound Historical Data");
                         int version = ReadInt();
                         int reqId = ReadInt();
