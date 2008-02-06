@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Current Time Event Arguments
     /// </summary>
+    [Serializable()]
     public class CurrentTimeEventArgs : EventArgs
     {
         private readonly DateTime time;

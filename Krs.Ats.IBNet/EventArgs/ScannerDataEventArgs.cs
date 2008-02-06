@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Scanner Data Event Arguments
     /// </summary>
+    [Serializable()]
     public class ScannerDataEventArgs : EventArgs
     {
         private readonly string benchmark;

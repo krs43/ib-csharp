@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Historical Data Event Arguments
     /// </summary>
+    [Serializable()]
     public class HistoricalDataEventArgs : EventArgs
     {
         private readonly double close;

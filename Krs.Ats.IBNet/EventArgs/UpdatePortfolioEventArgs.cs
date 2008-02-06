@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Update Portfolio Event Arguments
     /// </summary>
+    [Serializable()]
     public class UpdatePortfolioEventArgs : EventArgs
     {
         private readonly string accountName;

@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Update Market Depth L2 Event Arguments
     /// </summary>
+    [Serializable()]
     public class UpdateMarketDepthL2EventArgs : EventArgs
     {
         private readonly string marketMaker;

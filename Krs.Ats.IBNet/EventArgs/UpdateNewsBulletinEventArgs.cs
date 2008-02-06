@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Update News Bulletin Event Arguments
     /// </summary>
+    [Serializable()]
     public class UpdateNewsBulletinEventArgs : EventArgs
     {
         private readonly string message;

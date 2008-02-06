@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Real Time Bar Event Arguments
     /// </summary>
+    [Serializable()]
     public class RealTimeBarEventArgs : EventArgs
     {
         private readonly double close;

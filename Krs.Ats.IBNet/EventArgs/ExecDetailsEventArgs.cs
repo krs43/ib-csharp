@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Exec Details Event Arguments
     /// </summary>
+    [Serializable()]
     public class ExecDetailsEventArgs : EventArgs
     {
         private readonly Contract contract;

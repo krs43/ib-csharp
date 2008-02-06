@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Receive Financial Advisor Event Arguments
     /// </summary>
+    [Serializable()]
     public class ReceiveFAEventArgs : EventArgs
     {
         private readonly FADataType faDataType;

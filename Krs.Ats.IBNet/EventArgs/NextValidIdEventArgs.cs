@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Next Valid Id Event Arguments
     /// </summary>
+    [Serializable()]
     public class NextValidIdEventArgs : EventArgs
     {
         private readonly int orderId;

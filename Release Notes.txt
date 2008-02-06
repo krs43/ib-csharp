@@ -3,6 +3,10 @@ Karl Schulze - www.dinosaurtech.com
 
 Release Notes
 
+9.4.0.9 Bug Fix and Clean up - 2/6/08
+* Made all EventArgs Serializable as well as the new enumeration FATypes.
+
+
 9.4.0.8 Code Clean up - 1/31/08
 * Ran Vs2008 Code Analysis Wizard / FxCop and implemented cleanup
 	* Numerous Spelling Changes

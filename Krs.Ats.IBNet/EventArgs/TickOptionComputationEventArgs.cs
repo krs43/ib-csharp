@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Tick Option Computation Event Arguments
     /// </summary>
+    [Serializable()]
     public class TickOptionComputationEventArgs : EventArgs
     {
         private readonly double delta;

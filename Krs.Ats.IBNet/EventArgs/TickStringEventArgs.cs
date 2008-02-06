@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Tick String Event Arguments
     /// </summary>
+    [Serializable()]
     public class TickStringEventArgs : EventArgs
     {
         private readonly int tickerId;

@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Tick EFP Event Arguments
     /// </summary>
+    [Serializable()]
     public class TickEfpEventArgs : EventArgs
     {
         private readonly double basisPoints;

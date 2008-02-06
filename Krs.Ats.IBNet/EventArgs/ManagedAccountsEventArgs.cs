@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Managed Accounts Event Arguments
     /// </summary>
+    [Serializable()]
     public class ManagedAccountsEventArgs : EventArgs
     {
         private readonly string accountsList;

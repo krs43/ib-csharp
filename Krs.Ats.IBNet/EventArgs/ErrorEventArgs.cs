@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Error Event Arguments
     /// </summary>
+    [Serializable()]
     public class ErrorEventArgs : EventArgs
     {
         private readonly ErrorMessage errorCode;

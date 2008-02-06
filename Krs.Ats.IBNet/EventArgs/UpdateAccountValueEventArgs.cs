@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Update Account Value Event Arguments
     /// </summary>
+    [Serializable()]
     public class UpdateAccountValueEventArgs : EventArgs
     {
         private readonly string accountName;

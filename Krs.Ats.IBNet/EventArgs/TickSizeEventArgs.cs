@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Tick Size Event Arguments
     /// </summary>
+    [Serializable()]
     public class TickSizeEventArgs : EventArgs
     {
         private readonly int size;

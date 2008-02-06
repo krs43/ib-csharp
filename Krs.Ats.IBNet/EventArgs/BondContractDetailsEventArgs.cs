@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Bond Contract Details Event Arguments
     /// </summary>
+    [Serializable()]
     public class BondContractDetailsEventArgs : EventArgs
     {
         private readonly ContractDetails contractDetails;

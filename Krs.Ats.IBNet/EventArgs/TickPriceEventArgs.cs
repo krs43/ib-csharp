@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Tick Price Event Arguments
     /// </summary>
+    [Serializable()]
     public class TickPriceEventArgs : EventArgs
     {
         private readonly bool canAutoExecute;

@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Scanner Parameters Event Arguments
     /// </summary>
+    [Serializable()]
     public class ScannerParametersEventArgs : EventArgs
     {
         private readonly string xml;

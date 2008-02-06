@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Open Order Event Arguments
     /// </summary>
+    [Serializable()]
     public class OpenOrderEventArgs : EventArgs
     {
         private readonly Contract contract;

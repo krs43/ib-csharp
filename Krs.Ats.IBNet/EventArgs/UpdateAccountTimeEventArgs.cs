@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Update Account Time Event Arguments
     /// </summary>
+    [Serializable()]
     public class UpdateAccountTimeEventArgs : EventArgs
     {
         private readonly string timestamp;

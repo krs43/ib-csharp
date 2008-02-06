@@ -6,6 +6,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Financial Advisor Allocation Method
     /// </summary>
+    [Serializable()]
     public enum FinancialAdvisorAllocationMethod
     {
         /// <summary>

@@ -5,6 +5,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Order Status Event Arguments
     /// </summary>
+    [Serializable()]
     public class OrderStatusEventArgs : EventArgs
     {
         private readonly double averageFillPrice;
