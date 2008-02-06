@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Diagnostics;
 
 namespace Krs.Ats.IBNet
 {
