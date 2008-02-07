@@ -18,7 +18,8 @@ namespace Krs.Ats.IBNet
         /// A market order that is submitted to execute as close to the closing price as possible.
         /// Non US Futures, Non US Options, Stocks
         /// </summary>
-        [Description("MKTCLS")] MarketOnClose,
+        //Changed from MKTCLS to MOC based on input from TWS
+        [Description("MOC")] MarketOnClose,
         /// <summary>
         /// A limit order is an order to buy or sell a contract at a specified price or better.
         /// Bonds, Forex, Futures, Future Options, Options, Stocks, Warrants
