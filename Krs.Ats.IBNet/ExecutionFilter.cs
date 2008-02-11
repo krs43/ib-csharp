@@ -27,6 +27,8 @@ namespace Krs.Ats.IBNet
         /// </summary>
         public ExecutionFilter()
         {
+            securityType = SecurityType.Undefined;
+            side = ActionSide.Undefined;
         }
 
         /// <summary>

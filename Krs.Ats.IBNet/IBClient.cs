@@ -2182,7 +2182,7 @@ namespace Krs.Ats.IBNet
         public void RequestExecutions(ExecutionFilter filter)
         {
             if (filter == null)
-                throw new ArgumentNullException("filter");
+                filter = new ExecutionFilter(0, "", DateTime.MinValue, "", SecurityType.Undefined, "", ActionSide.Undefined);
             lock (this)
             {
                 // not connected?
@@ -2209,9 +2209,9 @@ namespace Krs.Ats.IBNet
                         // The valid format for time is "yyyymmdd-hh:mm:ss"
                         send(filter.Time.ToString("yyyymmdd-hh:mm:ss", CultureInfo.InvariantCulture));
                         send(filter.Symbol);
-                        send(filter.SecurityType.ToString());
+                        send(EnumDescConverter.GetEnumDescription(filter.SecurityType));
                         send(filter.Exchange);
-                        send(filter.Side.ToString());
+                        send(EnumDescConverter.GetEnumDescription(filter.Side));
                     }
                 }
                 catch (Exception e)

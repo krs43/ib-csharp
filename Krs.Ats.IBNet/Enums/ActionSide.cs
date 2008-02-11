@@ -24,7 +24,6 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Sell Short as part of a combo leg
         /// </summary>
-        [Description("SSHORT")]
-         SShort
+        [Description("SSHORT")] SShort
     }
 }
