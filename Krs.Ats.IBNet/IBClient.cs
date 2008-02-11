@@ -477,10 +477,10 @@ namespace Krs.Ats.IBNet
         }
 
         private void historicalData(int reqId, DateTime date, double open, double high, double low, double close,
-                                    int volume, int count, double WAP, bool hasGaps)
+                                    int volume, int count, double WAP, bool hasGaps, int recordNumber, int recordTotal)
         {
             HistoricalDataEventArgs e =
-                new HistoricalDataEventArgs(reqId, date, open, high, low, close, volume, count, WAP, hasGaps);
+                new HistoricalDataEventArgs(reqId, date, open, high, low, close, volume, count, WAP, hasGaps, recordNumber, recordTotal);
             OnHistoricalData(e);
         }
 
@@ -3586,8 +3586,6 @@ namespace Krs.Ats.IBNet
 
                 case IncomingMessage.HistoricalData:
                     {
-                        //ToDo: Remove Console Lines
-                        Console.WriteLine("Inbound Historical Data");
                         int version = ReadInt();
                         int reqId = ReadInt();
                         if (version >= 2)
@@ -3598,7 +3596,6 @@ namespace Krs.Ats.IBNet
                             //completedIndicator += ("-" + startDateStr + "-" + endDateStr);
                         }
                         int itemCount = ReadInt();
-                        Console.WriteLine("Item Count: {0}", itemCount);
                         for (int ctr = 0; ctr < itemCount; ctr++)
                         {
                             //Comes in as seconds
@@ -3619,13 +3616,8 @@ namespace Krs.Ats.IBNet
                                 barCount = ReadInt();
                             }
                             historicalData(reqId, timeStamp, open, high, low, close, volume, barCount, WAP,
-                                           Boolean.Parse(hasGaps));
-                            Console.Write(".");
+                                           Boolean.Parse(hasGaps), ctr, itemCount);
                         }
-                        // send end of dataset marker
-                        Console.WriteLine();
-                        Console.WriteLine("Calling Complete");
-                        historicalData(reqId, DateTime.MinValue, - 1, - 1, - 1, - 1, - 1, - 1, - 1, false);
                         break;
                     }
 

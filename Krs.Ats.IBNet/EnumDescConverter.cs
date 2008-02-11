@@ -20,7 +20,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// EnumConverter supporting System.ComponentModel.DescriptionAttribute
     /// </summary>
-    public class EnumDescConverter
+    public static class EnumDescConverter
     {
         /// <summary>
         /// Gets Enum Value's Description Attribute

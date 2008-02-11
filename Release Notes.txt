@@ -3,10 +3,12 @@ Karl Schulze - www.dinosaurtech.com
 
 Release Notes
 
-9.4.0.9 Bug Fix and Clean up - 2/6/08
+9.4.0.9 Bug Fix and Clean up - 2/10/08
 * Made all EventArgs Serializable as well as the new enumeration FATypes.
 * Fixed bug in OrderType.MarketOnClose - changed Description from "MKTCLS" to "MOC"
 * Fixed RequestExecution method to allow you to pass a null or empty filter to get all executions.
+* Changed HistoricalRequest Response. Added two parameters to the event args that lets the user know how far the download is. Also no longer calls function after download completed with null entries, since you can determine that the call is complete by the Record Number / Record Count properties.
+* Made EnumDescConverter Static, as all methods were static.
 
 
 9.4.0.8 Code Clean up - 1/31/08

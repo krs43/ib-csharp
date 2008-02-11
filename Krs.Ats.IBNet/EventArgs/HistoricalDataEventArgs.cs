@@ -18,6 +18,8 @@ namespace Krs.Ats.IBNet
         private readonly int requestId;
         private readonly int volume;
         private readonly double wap;
+        private readonly int recordNumber;
+        private readonly int recordTotal;
 
         /// <summary>
         /// Full Constructor
@@ -34,8 +36,10 @@ namespace Krs.Ats.IBNet
         /// occurred during the time period the bar covers.</param>
         /// <param name="wap">Weighted average price during the time covered by the bar.</param>
         /// <param name="hasGaps">Whether or not there are gaps in the data.</param>
+        /// <param name="recordNumber">Current Record Number out of Record Total.</param>
+        /// <param name="recordTotal">Total Records Returned by Historical Request.</param>
         public HistoricalDataEventArgs(int requestId, DateTime date, double open, double high, double low, double close,
-                                       int volume, int count, double wap, bool hasGaps)
+                                       int volume, int count, double wap, bool hasGaps, int recordNumber, int recordTotal)
         {
             this.requestId = requestId;
             this.hasGaps = hasGaps;
@@ -47,6 +51,8 @@ namespace Krs.Ats.IBNet
             this.high = high;
             this.open = open;
             this.date = date;
+            this.recordNumber = recordNumber;
+            this.recordTotal = recordTotal;
         }
 
         /// <summary>
@@ -130,5 +136,22 @@ namespace Krs.Ats.IBNet
         {
             get { return hasGaps; }
         }
+
+        /// <summary>
+        /// Current Record Number out of Record Total
+        /// </summary>
+        public int RecordNumber
+        {
+            get { return recordNumber; }
+        }
+
+        /// <summary>
+        /// Total records returned by query
+        /// </summary>
+        public int RecordTotal
+        {
+            get { return recordTotal; }
+        } 
+
     }
 }
