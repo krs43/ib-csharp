@@ -37,9 +37,10 @@ namespace Krs.Ats.TestApp
             client.UpdateMarketDepth += client_UpdateMktDepth;
             client.RealTimeBar += client_RealTimeBar;
             client.OrderStatus += client_OrderStatus;
+            client.ExecDetails += new EventHandler<ExecDetailsEventArgs>(client_ExecDetails);
 
             Console.WriteLine("Connecting to IB.");
-            client.Connect("127.0.0.1", 7496, 10);
+            client.Connect("127.0.0.1", 7496, 0);
             ER2 = new Contract("ER2", "GLOBEX", SecurityType.Future, "USD", "200806");
             YmEcbot = new Contract("YM", "ECBOT", SecurityType.Future, "USD", "200806");
             ES = new Contract("ES", "GLOBEX", SecurityType.Future, "USD", "200806");
@@ -76,10 +77,20 @@ namespace Krs.Ats.TestApp
             BuyContract.OrderType = OrderType.Limit;
             BuyContract.TotalQuantity = 1;
             //client.PlaceOrder(502, ER2, BuyContract);
+
+            client.RequestExecutions(new ExecutionFilter());
+
             while(true)
             {
                 Thread.Sleep(100);
             }
+        }
+
+        static void client_ExecDetails(object sender, ExecDetailsEventArgs e)
+        {
+            Console.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",
+                e.Contract.Symbol, e.Execution.AccountNumber, e.Execution.ClientId, e.Execution.Exchange, e.Execution.ExecutionId,
+                e.Execution.Liquidation, e.Execution.OrderId, e.Execution.PermId, e.Execution.Price, e.Execution.Shares, e.Execution.Side, e.Execution.Time);
         }
 
         static void client_RealTimeBar(object sender, RealTimeBarEventArgs e)
