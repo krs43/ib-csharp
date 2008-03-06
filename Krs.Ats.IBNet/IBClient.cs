@@ -2859,6 +2859,7 @@ namespace Krs.Ats.IBNet
         /// </summary>
         internal void Start()
         {
+            readThread.Name = "IBClient Read Thread";
             if (!Stopping)
                 readThread.Start();
         }
