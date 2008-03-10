@@ -16,6 +16,11 @@ namespace Krs.Ats.IBNet
     /// </summary>
     public class IBClient : IDisposable
     {
+        #region Tracer
+        private GeneralTracer ibTrace = new GeneralTracer("ibInfo", "Interactive Brokers Parameter Info");
+        private GeneralTracer ibTickTrace = new GeneralTracer("ibTicks", "Interactive Brokers Tick Info");
+        #endregion
+
         #region IB Wrapper to Events
 
         /// <summary>
@@ -35,6 +40,7 @@ namespace Krs.Ats.IBNet
 
         private void tickPrice(int tickerId, TickType tickType, double price, bool canAutoExecute)
         {
+            GeneralTracer.WriteLineIf(ibTickTrace.TraceInfo, "IBEvent: TickPrice: tickerId: {0}, tickType: {1}, price: {2}, canAutoExecute: {3}", tickerId, tickType, price, canAutoExecute);
             TickPriceEventArgs e = new TickPriceEventArgs(tickerId, tickType, price, canAutoExecute);
             OnTickPrice(e);
         }
@@ -56,6 +62,7 @@ namespace Krs.Ats.IBNet
 
         private void tickSize(int tickerId, TickType tickType, int size)
         {
+            GeneralTracer.WriteLineIf(ibTickTrace.TraceInfo, "IBEvent: TickSize: tickerId: {0}, tickType: {1}, size: {2}", tickerId, tickType, size);
             TickSizeEventArgs e = new TickSizeEventArgs(tickerId, tickType, size);
             OnTickSize(e);
         }
@@ -282,6 +289,7 @@ namespace Krs.Ats.IBNet
 
         private void nextValidId(int orderId)
         {
+            GeneralTracer.WriteLineIf(ibTickTrace.TraceInfo, "IBEvent: NextValidId: orderId: {0}", orderId);
             NextValidIdEventArgs e = new NextValidIdEventArgs(orderId);
             OnNextValidId(e);
         }
@@ -613,6 +621,7 @@ namespace Krs.Ats.IBNet
         {
             lock (this)
             {
+                GeneralTracer.WriteLineIf(ibTrace.TraceError, "IBEvent: Error: tickerId: {0}, errorCode: {1}, errorMsg: {2}", tickerId, errorCode, errorMsg);
                 ErrorEventArgs e = new ErrorEventArgs(tickerId, errorCode, errorMsg);
                 OnError(e);
             }
@@ -822,11 +831,11 @@ namespace Krs.Ats.IBNet
 
                 // check server version
                 serverVersion = ReadInt();
-                Console.WriteLine("Server Version:" + serverVersion);
+                GeneralTracer.WriteLineIf(ibTrace.TraceInfo, "IBMethod: Connect: Server Version: {0}", serverVersion);
                 if (serverVersion >= 20)
                 {
                     twsTime = ReadStr();
-                    Console.WriteLine("TWS Time at connection:" + twsTime);
+                    GeneralTracer.WriteLineIf(ibTrace.TraceInfo, "IBMethod: Connect: TWS Time at connection: {0}", twsTime);
                     //Let's fire the servertime event
                 }
                 if (serverVersion < minimumServerVersion)

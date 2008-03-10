@@ -103,6 +103,7 @@
     <Compile Include="ExecutionFilter.cs" />
     <Compile Include="Enums\FADataType.cs" />
     <Compile Include="Enums\GenericTickType.cs" />
+    <Compile Include="GeneralTracer.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IBClient.cs" />
     <Compile Include="EventArgs\NextValidIdEventArgs.cs" />
