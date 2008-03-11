@@ -38,7 +38,7 @@ namespace Krs.Ats.IBNet
                 TickPrice(this, e);
         }
 
-        private void tickPrice(int tickerId, TickType tickType, double price, bool canAutoExecute)
+        private void tickPrice(int tickerId, TickType tickType, decimal price, bool canAutoExecute)
         {
             GeneralTracer.WriteLineIf(ibTickTrace.TraceInfo, "IBEvent: TickPrice: tickerId: {0}, tickType: {1}, price: {2}, canAutoExecute: {3}", tickerId, tickType, price, canAutoExecute);
             TickPriceEventArgs e = new TickPriceEventArgs(tickerId, tickType, price, canAutoExecute);
@@ -176,9 +176,9 @@ namespace Krs.Ats.IBNet
                 OrderStatus(this, e);
         }
 
-        private void orderStatus(int orderId, OrderStatus status, int filled, int remaining, double avgFillPrice,
+        private void orderStatus(int orderId, OrderStatus status, int filled, int remaining, decimal avgFillPrice,
                                  int permId,
-                                 int parentId, double lastFillPrice, int clientId, string whyHeld)
+                                 int parentId, decimal lastFillPrice, int clientId, string whyHeld)
         {
             OrderStatusEventArgs e = new OrderStatusEventArgs(orderId, status, filled, remaining,
                                                               avgFillPrice, permId, parentId, lastFillPrice, clientId, whyHeld);
@@ -242,8 +242,8 @@ namespace Krs.Ats.IBNet
                 UpdatePortfolio(this, e);
         }
 
-        private void updatePortfolio(Contract contract, int position, double marketPrice, double marketValue,
-                                     double averageCost, double unrealizedPNL, double realizedPNL, string accountName)
+        private void updatePortfolio(Contract contract, int position, decimal marketPrice, decimal marketValue,
+                                     decimal averageCost, decimal unrealizedPNL, decimal realizedPNL, string accountName)
         {
             UpdatePortfolioEventArgs e =
                 new UpdatePortfolioEventArgs(contract, position, marketPrice, marketValue, averageCost, unrealizedPNL,
@@ -375,7 +375,7 @@ namespace Krs.Ats.IBNet
         }
 
         private void updateMktDepth(int tickerId, int position, MarketDepthOperation operation, MarketDepthSide side,
-                                    double price, int size)
+                                    decimal price, int size)
         {
             UpdateMarketDepthEventArgs e = new UpdateMarketDepthEventArgs(tickerId, position, operation, side, price, size);
             OnUpdateMarketDepth(e);
@@ -398,7 +398,7 @@ namespace Krs.Ats.IBNet
 
         private void updateMktDepthL2(int tickerId, int position, string marketMaker, MarketDepthOperation operation,
                                       MarketDepthSide side,
-                                      double price, int size)
+                                      decimal price, int size)
         {
             UpdateMarketDepthL2EventArgs e =
                 new UpdateMarketDepthL2EventArgs(tickerId, position, marketMaker, operation, side, price, size);
@@ -484,7 +484,7 @@ namespace Krs.Ats.IBNet
                 HistoricalData(this, e);
         }
 
-        private void historicalData(int reqId, DateTime date, double open, double high, double low, double close,
+        private void historicalData(int reqId, DateTime date, decimal open, decimal high, decimal low, decimal close,
                                     int volume, int count, double WAP, bool hasGaps, int recordNumber, int recordTotal)
         {
             HistoricalDataEventArgs e =
@@ -574,7 +574,7 @@ namespace Krs.Ats.IBNet
                 RealTimeBar(this, e);
         }
 
-        private void realTimeBar(int reqId, long time, double open, double high, double low, double close, long volume, double wap, int count)
+        private void realTimeBar(int reqId, long time, decimal open, decimal high, decimal low, decimal close, long volume, double wap, int count)
         {
             RealTimeBarEventArgs e = new RealTimeBarEventArgs(reqId, time, open, high, low, close, volume, wap, count);
             OnRealTimeBar(e);
@@ -2724,6 +2724,11 @@ namespace Krs.Ats.IBNet
             send(Convert.ToString(val, CultureInfo.InvariantCulture));
         }
 
+        private void send(decimal val)
+        {
+            send(Convert.ToString(val, CultureInfo.InvariantCulture));
+        }
+
         private void sendMax(double val)
         {
             if (val == Double.MaxValue)
@@ -2890,7 +2895,7 @@ namespace Krs.Ats.IBNet
                         int version = ReadInt();
                         int tickerId = ReadInt();
                         int tickType = ReadInt();
-                        double price = ReadDouble();
+                        decimal price = ReadDecimal();
                         int size = 0;
                         if (version >= 2)
                         {
@@ -3024,7 +3029,7 @@ namespace Krs.Ats.IBNet
                             (Krs.Ats.IBNet.OrderStatus) EnumDescConverter.GetEnumValue(typeof (Krs.Ats.IBNet.OrderStatus), orderstat));
                         int filled = ReadInt();
                         int remaining = ReadInt();
-                        double avgFillPrice = ReadDouble();
+                        decimal avgFillPrice = ReadDecimal();
 
                         int permId = 0;
                         if (version >= 2)
@@ -3038,10 +3043,10 @@ namespace Krs.Ats.IBNet
                             parentId = ReadInt();
                         }
 
-                        double lastFillPrice = 0;
+                        decimal lastFillPrice = 0;
                         if (version >= 4)
                         {
-                            lastFillPrice = ReadDouble();
+                            lastFillPrice = ReadDecimal();
                         }
 
                         int clientId = 0;
@@ -3103,16 +3108,16 @@ namespace Krs.Ats.IBNet
                         }
 
                         int position = ReadInt();
-                        double marketPrice = ReadDouble();
-                        double marketValue = ReadDouble();
-                        double averageCost = 0.0;
-                        double unrealizedPNL = 0.0;
-                        double realizedPNL = 0.0;
+                        decimal marketPrice = ReadDecimal();
+                        decimal marketValue = ReadDecimal();
+                        decimal averageCost = 0.0m;
+                        decimal unrealizedPNL = 0.0m;
+                        decimal realizedPNL = 0.0m;
                         if (version >= 3)
                         {
-                            averageCost = ReadDouble();
-                            unrealizedPNL = ReadDouble();
-                            realizedPNL = ReadDouble();
+                            averageCost = ReadDecimal();
+                            unrealizedPNL = ReadDecimal();
+                            realizedPNL = ReadDecimal();
                         }
 
                         String accountName = null;
@@ -3540,7 +3545,7 @@ namespace Krs.Ats.IBNet
                         int position = ReadInt();
                         MarketDepthOperation operation = (MarketDepthOperation) ReadInt();
                         MarketDepthSide side = (MarketDepthSide) ReadInt();
-                        double price = ReadDouble();
+                        decimal price = ReadDecimal();
                         int size = ReadInt();
 
                         updateMktDepth(id, position, operation, side, price, size);
@@ -3556,7 +3561,7 @@ namespace Krs.Ats.IBNet
                         String marketMaker = ReadStr();
                         MarketDepthOperation operation = (MarketDepthOperation) ReadInt();
                         MarketDepthSide side = (MarketDepthSide) ReadInt();
-                        double price = ReadDouble();
+                        decimal price = ReadDecimal();
                         int size = ReadInt();
 
                         updateMktDepthL2(id, position, marketMaker, operation, side, price, size);
@@ -3613,10 +3618,10 @@ namespace Krs.Ats.IBNet
                             String date = ReadStr();
                             long longDate = Int64.Parse(date, CultureInfo.InvariantCulture);
                             DateTime timeStamp = new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc).AddSeconds(longDate).ToLocalTime();
-                            double open = ReadDouble();
-                            double high = ReadDouble();
-                            double low = ReadDouble();
-                            double close = ReadDouble();
+                            decimal open = ReadDecimal();
+                            decimal high = ReadDecimal();
+                            decimal low = ReadDecimal();
+                            decimal close = ReadDecimal();
                             int volume = ReadInt();
                             double WAP = ReadDouble();
                             String hasGaps = ReadStr();
@@ -3655,10 +3660,10 @@ namespace Krs.Ats.IBNet
                         ReadInt();
                         int reqId = ReadInt();
                         long time = ReadLong();
-                        double open = ReadDouble();
-                        double high = ReadDouble();
-                        double low = ReadDouble();
-                        double close = ReadDouble();
+                        decimal open = ReadDecimal();
+                        decimal high = ReadDecimal();
+                        decimal low = ReadDecimal();
+                        decimal close = ReadDecimal();
                         long volume = ReadLong();
                         double wap = ReadDouble();
                         int count = ReadInt();
@@ -3725,6 +3730,12 @@ namespace Krs.Ats.IBNet
         {
             String str = ReadStr();
             return str == null ? 0 : Double.Parse(str, CultureInfo.InvariantCulture);
+        }
+
+        private decimal ReadDecimal()
+        {
+            String str = ReadStr();
+            return str == null ? 0 : Decimal.Parse(str, CultureInfo.InvariantCulture);
         }
 
         private double ReadDoubleMax()
