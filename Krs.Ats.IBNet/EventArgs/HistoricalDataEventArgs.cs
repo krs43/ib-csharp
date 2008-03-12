@@ -9,7 +9,7 @@ namespace Krs.Ats.IBNet
     public class HistoricalDataEventArgs : EventArgs
     {
         private readonly decimal close;
-        private readonly int count;
+        private readonly int trades;
         private readonly DateTime date;
         private readonly bool hasGaps;
         private readonly decimal high;
@@ -32,19 +32,19 @@ namespace Krs.Ats.IBNet
         /// <param name="low">Low price during the time covered by the bar.</param>
         /// <param name="close">Bar closing price.</param>
         /// <param name="volume">Volume during the time covered by the bar.</param>
-        /// <param name="count">When TRADES historical data is returned, represents the number of trades that
+        /// <param name="trades">When TRADES historical data is returned, represents the number of trades that
         /// occurred during the time period the bar covers.</param>
         /// <param name="wap">Weighted average price during the time covered by the bar.</param>
         /// <param name="hasGaps">Whether or not there are gaps in the data.</param>
         /// <param name="recordNumber">Current Record Number out of Record Total.</param>
         /// <param name="recordTotal">Total Records Returned by Historical Request.</param>
         public HistoricalDataEventArgs(int requestId, DateTime date, decimal open, decimal high, decimal low, decimal close,
-                                       int volume, int count, double wap, bool hasGaps, int recordNumber, int recordTotal)
+                                       int volume, int trades, double wap, bool hasGaps, int recordNumber, int recordTotal)
         {
             this.requestId = requestId;
             this.hasGaps = hasGaps;
             this.wap = wap;
-            this.count = count;
+            this.trades = trades;
             this.volume = volume;
             this.close = close;
             this.low = low;
@@ -116,9 +116,9 @@ namespace Krs.Ats.IBNet
         /// When TRADES historical data is returned, represents the number of trades that
         /// occurred during the time period the bar covers.
         /// </summary>
-        public int Count
+        public int Trades
         {
-            get { return count; }
+            get { return trades; }
         }
 
         /// <summary>

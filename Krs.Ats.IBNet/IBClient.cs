@@ -485,10 +485,10 @@ namespace Krs.Ats.IBNet
         }
 
         private void historicalData(int reqId, DateTime date, decimal open, decimal high, decimal low, decimal close,
-                                    int volume, int count, double WAP, bool hasGaps, int recordNumber, int recordTotal)
+                                    int volume, int trades, double WAP, bool hasGaps, int recordNumber, int recordTotal)
         {
             HistoricalDataEventArgs e =
-                new HistoricalDataEventArgs(reqId, date, open, high, low, close, volume, count, WAP, hasGaps, recordNumber, recordTotal);
+                new HistoricalDataEventArgs(reqId, date, open, high, low, close, volume, trades, WAP, hasGaps, recordNumber, recordTotal);
             OnHistoricalData(e);
         }
 
@@ -1441,7 +1441,7 @@ namespace Krs.Ats.IBNet
                     }
                     else if (endDateTime.AddMonths(-1) < beginDateTime)
                     {
-                        send(Convert.ToInt32(duration.TotalDays / 7.0) + " W");
+                        send(Convert.ToInt32( Math.Ceiling(duration.TotalDays / 7.0)) + " W");
                     }
                     else if (endDateTime.AddYears(-1) < beginDateTime)
                     {
@@ -1869,7 +1869,7 @@ namespace Krs.Ats.IBNet
                 //Scale Orders Minimum Version is 35
                 if (serverVersion < 35)
                 {
-                    if (order.ScaleNumComponents != Int32.MaxValue || order.ScaleComponentSize != Int32.MaxValue || order.ScalePriceIncrement != Double.MaxValue)
+                    if (order.ScaleNumComponents != Int32.MaxValue || order.ScaleComponentSize != Int32.MaxValue || order.ScalePriceIncrement != decimal.MaxValue)
                     {
                         error(orderId, ErrorMessage.UpdateTws, "It does not support Scale orders.");
                         return;
@@ -2719,6 +2719,7 @@ namespace Krs.Ats.IBNet
             send(Convert.ToString(val, CultureInfo.InvariantCulture));
         }
 
+
         private void send(double val)
         {
             send(Convert.ToString(val, CultureInfo.InvariantCulture));
@@ -2744,6 +2745,18 @@ namespace Krs.Ats.IBNet
         private void sendMax(int val)
         {
             if (val == Int32.MaxValue)
+            {
+                sendEOL();
+            }
+            else
+            {
+                send(Convert.ToString(val, CultureInfo.InvariantCulture));
+            }
+        }
+
+        private void sendMax(decimal val)
+        {
+            if (val == decimal.MaxValue)
             {
                 sendEOL();
             }
@@ -3196,8 +3209,8 @@ namespace Krs.Ats.IBNet
                         order.Action = (ActionSide) EnumDescConverter.GetEnumValue(typeof (ActionSide), ReadStr());
                         order.TotalQuantity = ReadInt();
                         order.OrderType = (OrderType) EnumDescConverter.GetEnumValue(typeof (OrderType), ReadStr());
-                        order.LimitPrice = ReadDouble();
-                        order.AuxPrice = ReadDouble();
+                        order.LimitPrice = ReadDecimal();
+                        order.AuxPrice = ReadDecimal();
                         order.Tif = (TimeInForce) EnumDescConverter.GetEnumValue(typeof (TimeInForce), ReadStr());
                         order.OcaGroup = ReadStr();
                         order.Account = ReadStr();
@@ -3224,7 +3237,7 @@ namespace Krs.Ats.IBNet
                                 order.OutsideRth = ReadBoolFromInt();
                             }
                             order.Hidden = ReadInt() == 1;
-                            order.DiscretionaryAmt = ReadDouble();
+                            order.DiscretionaryAmt = ReadDecimal();
                         }
 
                         if (version >= 5)
@@ -3261,7 +3274,7 @@ namespace Krs.Ats.IBNet
                             order.ShortSaleSlot = (ShortSaleSlot)ReadInt();
                             order.DesignatedLocation = ReadStr();
                             order.AuctionStrategy = (AuctionStrategy) ReadInt();
-                            order.StartingPrice = ReadDouble();
+                            order.StartingPrice = ReadDecimal();
                             order.StockRefPrice = ReadDouble();
                             order.Delta = ReadDouble();
                             order.StockRangeLower = ReadDouble();
@@ -3280,7 +3293,7 @@ namespace Krs.Ats.IBNet
                             order.OcaType = (OcaType) ReadInt();
                             order.ETradeOnly = ReadBoolFromInt();
                             order.FirmQuoteOnly = ReadBoolFromInt();
-                            order.NbboPriceCap = ReadDouble();
+                            order.NbboPriceCap = ReadDecimal();
                         }
 
                         if (version >= 10)
@@ -3318,12 +3331,12 @@ namespace Krs.Ats.IBNet
 
                         if (version >= 13)
                         {
-                            order.TrailStopPrice = ReadDouble();
+                            order.TrailStopPrice = ReadDecimal();
                         }
 
                         if (version >= 14)
                         {
-                            order.BasisPoints = ReadDouble();
+                            order.BasisPoints = ReadDecimal();
                             order.BasisPointsType = ReadInt();
                             contract.ComboLegsDescription = ReadStr();
                         }
@@ -3332,7 +3345,7 @@ namespace Krs.Ats.IBNet
                         {
                             order.ScaleNumComponents = ReadIntMax();
                             order.ScaleComponentSize = ReadIntMax();
-                            order.ScalePriceIncrement = ReadDoubleMax();
+                            order.ScalePriceIncrement = ReadDecimalMax();
                         }
 
                         if (version >= 19)
@@ -3617,7 +3630,12 @@ namespace Krs.Ats.IBNet
                             //2 - dates are returned as a long integer specifying the number of seconds since 1/1/1970 GMT.
                             String date = ReadStr();
                             long longDate = Int64.Parse(date, CultureInfo.InvariantCulture);
-                            DateTime timeStamp = new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc).AddSeconds(longDate).ToLocalTime();
+                            //Check if date time string or seconds
+                            DateTime timeStamp;
+                            if(longDate < 30000000)
+                                timeStamp = new DateTime(Int32.Parse(date.Substring(0, 4)), Int32.Parse(date.Substring(4, 2)), Int32.Parse(date.Substring(6, 2)), 0, 0, 0, DateTimeKind.Utc).ToLocalTime();
+                            else
+                                timeStamp = new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc).AddSeconds(longDate).ToLocalTime();
                             decimal open = ReadDecimal();
                             decimal high = ReadDecimal();
                             decimal low = ReadDecimal();
@@ -3742,6 +3760,12 @@ namespace Krs.Ats.IBNet
         {
             String str = ReadStr();
             return (str == null || str.Length == 0) ? Double.MaxValue : Double.Parse(str, CultureInfo.InvariantCulture);
+        }
+
+        private decimal ReadDecimalMax()
+        {
+            String str = ReadStr();
+            return (str == null || str.Length == 0) ? decimal.MaxValue : decimal.Parse(str, CultureInfo.InvariantCulture);
         }
 
         #endregion
