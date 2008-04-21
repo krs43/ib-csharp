@@ -19,5 +19,10 @@ namespace Krs.Ats.IBNet.Contracts
             : base(symbol, exchange, SecurityType.Future, "USD", expiry)
         {
         }
+
+        public Future(string symbol, string exchange, string expiry, string currency)
+            : base(symbol, exchange, SecurityType.Future, currency, expiry)
+        {
+        }
     }
 }

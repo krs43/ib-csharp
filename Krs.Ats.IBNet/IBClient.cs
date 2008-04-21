@@ -2781,6 +2781,14 @@ namespace Krs.Ats.IBNet
 
         private readonly Thread readThread;
 
+        public Thread ReadThread
+        {
+            get
+            {
+                return readThread;
+            }
+        }
+
         /// <summary>
         /// Lock covering stopping and stopped
         /// </summary>
