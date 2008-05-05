@@ -116,12 +116,18 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Current Time
         /// </summary>
-        [Description("CURRENT_TIME")]
-        CurrentTime = 49,
+        [Description("CURRENT_TIME")] CurrentTime = 49,
         /// <summary>
         /// Real Time Bars
         /// </summary>
-        [Description("REAL_TIME_BARS")]
-		RealTimeBars = 50
+        [Description("REAL_TIME_BARS")] RealTimeBars = 50,
+        /// <summary>
+        /// Fundamental Data
+        /// </summary>
+        [Description("FUNDAMENTAL_DATA")] FundamentalData = 51,
+        /// <summary>
+        /// Contract Data End
+        /// </summary>
+        [Description("CONTRACT_DATA_END")] ContractDataEnd = 52
     }
 }

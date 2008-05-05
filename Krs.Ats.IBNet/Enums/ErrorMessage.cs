@@ -124,6 +124,14 @@ namespace Krs.Ats.IBNet
         /// </summary>
         [Description("Request Current Time Sending Error")] FailSendRequestCurrentTime = 531,
         /// <summary>
+        /// Failed to send fundamental data
+        /// </summary>
+        [Description("Request Fundamental Data Sending Error")] FailSendRequestFundData = 532,
+        /// <summary>
+        /// Cancel Fundamental Data Sending Error
+        /// </summary>
+        [Description("Cancel Fundamental Data Sending Error")] FailSendCancelFundData = 533,
+        /// <summary>
         /// No Valid ID for error message
         /// </summary>
         [Description("")] NoValidId = -1

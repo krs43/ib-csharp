@@ -33,6 +33,8 @@ namespace Krs.Ats.IBNet
         private double strike;
         private String symbol;
 
+        private UnderlyingComponent underlyingComponent;
+
         #endregion
 
         #region Constructors
@@ -271,6 +273,15 @@ namespace Krs.Ats.IBNet
         {
             get { return contractId; }
             set { contractId = value; }
+        }
+
+        /// <summary>
+        /// Underlying Component
+        /// </summary>
+        public UnderlyingComponent UnderlyingComponent
+        {
+            get { return underlyingComponent; }
+            set { underlyingComponent = value; }
         }
 
         #endregion

@@ -88,8 +88,8 @@ namespace Krs.Ats.IBNet
         private VolatilityType volatilityType; // 1=daily, 2=annual
 
         // SCALE ORDERS ONLY
-        private int scaleNumComponents;
-        private int scaleComponentSize;
+        private int scaleInitLevelSize;
+        private int scaleSubsLevelSize;
         private decimal scalePriceIncrement;
 
         // Clearing info
@@ -131,8 +131,8 @@ namespace Krs.Ats.IBNet
             trailStopPrice = decimal.MaxValue;
             basisPoints = decimal.MaxValue;
             basisPointsType = Int32.MaxValue;
-            scaleNumComponents = Int32.MaxValue;
-            scaleComponentSize = Int32.MaxValue;
+            scaleInitLevelSize = Int32.MaxValue;
+            scaleSubsLevelSize = Int32.MaxValue;
             scalePriceIncrement = decimal.MaxValue;
             faMethod = FinancialAdvisorAllocationMethod.None;
         }
@@ -694,19 +694,19 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// split order into X buckets
         /// </summary>
-        public int ScaleNumComponents
+        public int ScaleInitLevelSize
         {
-            get { return scaleNumComponents; }
-            set { scaleNumComponents = value; }
+            get { return scaleInitLevelSize; }
+            set { scaleInitLevelSize = value; }
         }
 
         /// <summary>
         /// split order so each bucket is of the size X
         /// </summary>
-        public int ScaleComponentSize
+        public int ScaleSubsLevelSize
         {
-            get { return scaleComponentSize; }
-            set { scaleComponentSize = value; }
+            get { return scaleSubsLevelSize; }
+            set { scaleSubsLevelSize = value; }
         }
 
         /// <summary>

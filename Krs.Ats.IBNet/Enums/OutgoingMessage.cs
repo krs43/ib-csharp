@@ -124,6 +124,14 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Cancel Real Time Bars
         /// </summary>
-        [Description("CANCEL_REAL_TIME_BARS")] CancelRealTimeBars = 51
+        [Description("CANCEL_REAL_TIME_BARS")] CancelRealTimeBars = 51,
+        /// <summary>
+        /// Request Fundamental Data
+        /// </summary>
+        [Description("REQ_FUNDAMENTAL_DATA")] RequestFundamentalData = 52,
+        /// <summary>
+        /// Cancel Fundamental Data
+        /// </summary>
+        [Description("CANCEL_FUNDAMENTAL_DATA")] CancelFundamentalData = 53
     }
 }

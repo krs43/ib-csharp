@@ -9,13 +9,16 @@ namespace Krs.Ats.IBNet
     public class BondContractDetailsEventArgs : EventArgs
     {
         private readonly ContractDetails contractDetails;
+        private readonly int requestId;
 
         /// <summary>
         /// Full Constructor
         /// </summary>
+        /// <param name="requestId">Request Id</param>
         /// <param name="contractDetails">This structure contains a full description of the bond contract being looked up.</param>
-        public BondContractDetailsEventArgs(ContractDetails contractDetails)
+        public BondContractDetailsEventArgs(int requestId, ContractDetails contractDetails)
         {
+            this.requestId = requestId;
             this.contractDetails = contractDetails;
         }
 
@@ -25,6 +28,14 @@ namespace Krs.Ats.IBNet
         public ContractDetails ContractDetails
         {
             get { return contractDetails; }
+        }
+
+        /// <summary>
+        /// Request Id
+        /// </summary>
+        public int RequestId
+        {
+            get { return requestId; }
         }
     }
 }

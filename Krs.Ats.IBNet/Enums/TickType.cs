@@ -198,6 +198,11 @@ namespace Krs.Ats.IBNet
         /// Shortable
         /// </summary>
         [Description("SHORTABLE")]
-		Shortable = 46
+		Shortable = 46,
+        /// <summary>
+        /// Fundamental Ratios
+        /// </summary>
+        [Description("FUNDAMENTAL_RATIOS")]
+        FundamentalRatios = 47
     }
 }

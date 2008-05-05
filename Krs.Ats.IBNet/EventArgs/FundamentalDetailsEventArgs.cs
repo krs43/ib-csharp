@@ -6,28 +6,28 @@ namespace Krs.Ats.IBNet
     /// Contract Details Event Arguments
     /// </summary>
     [Serializable()]
-    public class ContractDetailsEventArgs : EventArgs
+    public class FundamentalDetailsEventArgs : EventArgs
     {
-        private readonly ContractDetails contractDetails;
+        private readonly string data;
         private readonly int requestId;
 
         /// <summary>
         /// Full Constructor
         /// </summary>
         /// <param name="requestId">Request Id</param>
-        /// <param name="contractDetails">This structure contains a full description of the contract being looked up.</param>
-        public ContractDetailsEventArgs(int requestId, ContractDetails contractDetails)
+        /// <param name="data">Xml Data</param>
+        public FundamentalDetailsEventArgs(int requestId, string data)
         {
             this.requestId = requestId;
-            this.contractDetails = contractDetails;
+            this.data = data;
         }
 
         /// <summary>
-        /// This structure contains a full description of the contract being looked up.
+        /// Xml Data
         /// </summary>
-        public ContractDetails ContractDetails
+        public string Data
         {
-            get { return contractDetails; }
+            get { return data; }
         }
 
         /// <summary>

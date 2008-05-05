@@ -76,7 +76,7 @@ namespace Krs.Ats.TestApp
             BuyContract.LimitPrice = 820;
             BuyContract.OrderType = OrderType.Limit;
             BuyContract.TotalQuantity = 1;
-            //client.PlaceOrder(502, ER2, BuyContract);
+            client.PlaceOrder(502, ER2, BuyContract);
 
             client.RequestExecutions(new ExecutionFilter());
 

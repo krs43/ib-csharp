@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{98672E16-97B1-4204-86CC-EA0009CA15F4}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -85,6 +85,8 @@
     <Compile Include="Enums\VolatilityType.cs" />
     <Compile Include="EventArgs\BondContractDetailsEventArgs.cs" />
     <Compile Include="EventArgs\ConnectionClosedEventArgs.cs" />
+    <Compile Include="EventArgs\ContractDetailsEndEventArgs.cs" />
+    <Compile Include="EventArgs\FundamentalDetailsEventArgs.cs" />
     <Compile Include="EventArgs\ScannerDataEndEventArgs.cs" />
     <Compile Include="EventArgs\CurrentTimeEventArgs.cs" />
     <Compile Include="EventArgs\ErrorEventArgs.cs" />
@@ -132,6 +134,7 @@
     <Compile Include="EventArgs\UpdateMktDepthEventArgs.cs" />
     <Compile Include="EventArgs\UpdateNewsBulletinEventArgs.cs" />
     <Compile Include="EventArgs\UpdatePortfolioEventArgs.cs" />
+    <Compile Include="UnderlyingComponent.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

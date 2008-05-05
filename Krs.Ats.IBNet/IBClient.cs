@@ -309,9 +309,9 @@ namespace Krs.Ats.IBNet
                 ContractDetails(this, e);
         }
 
-        private void contractDetails(ContractDetails contractDetails)
+        private void contractDetails(int requestId, ContractDetails contractDetails)
         {
-            ContractDetailsEventArgs e = new ContractDetailsEventArgs(contractDetails);
+            ContractDetailsEventArgs e = new ContractDetailsEventArgs(requestId, contractDetails);
             OnContractDetails(e);
         }
 
@@ -330,10 +330,32 @@ namespace Krs.Ats.IBNet
                 BondContractDetails(this, e);
         }
 
-        private void bondContractDetails(ContractDetails contractDetails)
+        private void bondContractDetails(int requestId, ContractDetails contractDetails)
         {
-            BondContractDetailsEventArgs e = new BondContractDetailsEventArgs(contractDetails);
+            BondContractDetailsEventArgs e = new BondContractDetailsEventArgs(requestId, contractDetails);
             OnBondContractDetails(e);
+        }
+
+        /// <summary>
+        /// Called once all contract details for a given request are received.
+        /// This, for example, helps to define the end of an option chain.
+        /// </summary>
+        public event EventHandler<ContractDetailsEndEventArgs> ContractDetailsEnd;
+
+        /// <summary>
+        /// Called internally when the receive thread receives a Contract Details End Event.
+        /// </summary>
+        /// <param name="e">Contract Details End Event Arguments</param>
+        protected virtual void OnContractDetailsEnd(ContractDetailsEndEventArgs e)
+        {
+            if (ContractDetailsEnd != null)
+                ContractDetailsEnd(this, e);
+        }
+
+        private void contractDetailsEnd(int requestId)
+        {
+            ContractDetailsEndEventArgs e = new ContractDetailsEndEventArgs(requestId);
+            OnContractDetailsEnd(e);
         }
 
         /// <summary>
@@ -603,6 +625,27 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Reuters global fundamental market data
+        /// </summary>
+        public event EventHandler<FundamentalDetailsEventArgs> FundamentalData;
+
+        /// <summary>
+        /// Called internally when the receive thread receives a fundamental data event.
+        /// </summary>
+        /// <param name="e">Fundamental Data Event Arguments</param>
+        protected virtual void OnFundamentalData(FundamentalDetailsEventArgs e)
+        {
+            if (FundamentalData != null)
+                FundamentalData(this, e);
+        }
+
+        private void fundamentalData(int requestId, string data)
+        {
+            FundamentalDetailsEventArgs e = new FundamentalDetailsEventArgs(requestId, data);
+            OnFundamentalData(e);
+        }
+
+        /// <summary>
         /// This event is fired when there is an error with the communication or when TWS wants to send a message to the client.
         /// </summary>
         public event EventHandler<ErrorEventArgs> Error;
@@ -744,7 +787,7 @@ namespace Krs.Ats.IBNet
 
         #region Values
 
-        private const int clientVersion = 37;
+        private const int clientVersion = 38;
         private const int minimumServerVersion = 38;
 
         #endregion
@@ -791,7 +834,7 @@ namespace Krs.Ats.IBNet
         private bool connected; // true if we are connected
         private BinaryWriter dos; // the ibSocket output stream
         private TcpClient ibSocket; // the ibSocket
-        private int serverVersion = 1;
+        private int serverVersion = 0;
         private String twsTime;
 
         #endregion
@@ -1092,14 +1135,24 @@ namespace Krs.Ats.IBNet
                     return;
                 }
 
-                //35 is the minimum versio nfor snapshots
+                //35 is the minimum version for snapshots
                 if (serverVersion < 35 && snapshot)
                 {
                     error(tickerId, ErrorMessage.UpdateTws, "It does not support snapshot market data requests.");
                     return;
                 }
 
-                int version = 7;
+                //40 is the minimum version for the Underlying Component class
+                if (serverVersion < 40)
+                {
+                    if (contract.UnderlyingComponent != null)
+                    {
+                        error(tickerId, ErrorMessage.UpdateTws, "It does not support delta-neutral orders.");
+                        return;
+                    }
+                }
+
+                int version = 8;
 
                 try
                 {
@@ -1151,6 +1204,23 @@ namespace Krs.Ats.IBNet
                             }
                         }
                     }
+
+                    if (serverVersion >= 40)
+                    {
+                        if (contract.UnderlyingComponent != null)
+                        {
+                            UnderlyingComponent underComp = contract.UnderlyingComponent;
+                            send(true);
+                            send(underComp.ContractId);
+                            send(underComp.Delta);
+                            send(underComp.Price);
+                        }
+                        else
+                        {
+                            send(false);
+                        }
+                    }
+
                     if (serverVersion >= 31)
                     {
                         /*
@@ -1496,8 +1566,9 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Call this function to download all details for a particular underlying. the contract details will be received via the contractDetails() function on the EWrapper.
         /// </summary>
+        /// <param name="requestId">Request Id for Contract Details</param>
         /// <param name="contract">summary description of the contract being looked up.</param>
-        public void RequestContractDetails(Contract contract)
+        public void RequestContractDetails(int requestId, Contract contract)
         {
             if (contract == null)
                 throw new ArgumentNullException("contract");
@@ -1517,13 +1588,19 @@ namespace Krs.Ats.IBNet
                     return;
                 }
 
-                int version = 4;
+                int version = 5;
 
                 try
                 {
                     // send req mkt data msg
                     send((int) OutgoingMessage.RequestContractData);
                     send(version);
+
+                    //MIN_SERVER_VER_CONTRACT_DATA_CHAIN = 40
+                    if (serverVersion >= 40)
+                    {
+                        send(requestId);
+                    }
 
                     if(serverVersion >= 37)
                     {
@@ -1869,7 +1946,7 @@ namespace Krs.Ats.IBNet
                 //Scale Orders Minimum Version is 35
                 if (serverVersion < 35)
                 {
-                    if (order.ScaleNumComponents != Int32.MaxValue || order.ScaleComponentSize != Int32.MaxValue || order.ScalePriceIncrement != decimal.MaxValue)
+                    if (order.ScaleInitLevelSize != Int32.MaxValue || order.ScalePriceIncrement != Int32.MaxValue || order.ScalePriceIncrement != decimal.MaxValue)
                     {
                         error(orderId, ErrorMessage.UpdateTws, "It does not support Scale orders.");
                         return;
@@ -1903,7 +1980,25 @@ namespace Krs.Ats.IBNet
                     }
                 }
 
-                int version = 25;
+                if (serverVersion < 40)
+                {
+                    if (contract.UnderlyingComponent != null)
+                    {
+                        error(orderId, ErrorMessage.UpdateTws, "It does not support delta-neutral orders.");
+                        return;
+                    }
+                }
+
+                if (serverVersion < 40)
+                {
+                    if (order.ScaleSubsLevelSize != System.Int32.MaxValue)
+                    {
+                        error(orderId, ErrorMessage.UpdateTws, "It does not support Subsequent Level Size for Scale orders.");
+                        return;
+                    }
+                }
+
+                int version = 26;
 
                 // send place order msg
                 try
@@ -2115,8 +2210,16 @@ namespace Krs.Ats.IBNet
                     //Scale Orders require server version 35 or higher.
                     if (serverVersion >= 35)
                     {
-                        sendMax(order.ScaleNumComponents);
-                        sendMax(order.ScaleComponentSize);
+                        if (serverVersion >= 40)
+                        {
+                            sendMax(order.ScaleInitLevelSize);
+                            sendMax(order.ScaleSubsLevelSize);
+                        }
+                        else
+                        {
+                            send("");
+                            sendMax(order.ScaleInitLevelSize);
+                        }
                         sendMax(order.ScalePriceIncrement);
                     }
 
@@ -2124,6 +2227,22 @@ namespace Krs.Ats.IBNet
                     {
                         send(order.ClearingAccount);
                         send(order.ClearingIntent);
+                    }
+
+                    if (serverVersion >= 40)
+                    {
+                        if (contract.UnderlyingComponent != null)
+                        {
+                            UnderlyingComponent underComp = contract.UnderlyingComponent;
+                            send(true);
+                            send(underComp.ContractId);
+                            send(underComp.Delta);
+                            send(underComp.Price);
+                        }
+                        else
+                        {
+                            send(false);
+                        }
                     }
 
                     if(serverVersion >= 36)
@@ -2643,6 +2762,88 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Request Fundamental Data
+        /// </summary>
+        /// <param name="requestId">Request Id</param>
+        /// <param name="contract">Contract to request fundamental data for</param>
+        /// <param name="reportType">Report Type</param>
+        public virtual void RequestFundamentalData(int requestId, Contract contract, String reportType)
+        {
+            lock (this)
+            {
+                if (!connected)
+                {
+                    error(requestId, ErrorMessage.NotConnected);
+                    return;
+                }
+
+                if (serverVersion < 40)
+                {
+                    error(requestId, ErrorMessage.UpdateTws, "It does not support fundamental data requests.");
+                    return;
+                }
+
+                int version = 1;
+
+                try
+                {
+                    // send req fund data msg
+                    send((int)OutgoingMessage.RequestFundamentalData);
+                    send(version);
+                    send(requestId);
+
+                    // send contract fields
+                    send(contract.Symbol);
+                    send(EnumDescConverter.GetEnumDescription(contract.SecurityType));
+                    send(contract.Exchange);
+                    send(contract.PrimaryExchange);
+                    send(contract.Currency);
+                    send(contract.LocalSymbol);
+
+                    send(reportType);
+                }
+                catch (Exception e)
+                {
+                    error(requestId, ErrorMessage.FailSendRequestFundData, "" + e);
+                    close();
+                }
+            }
+        }
+
+        public virtual void CancelFundamentalData(int requestId)
+        {
+            lock (this)
+            {
+                if (!connected)
+                {
+                    error(requestId, ErrorMessage.NotConnected);
+                    return;
+                }
+
+                if (serverVersion < 40)
+                {
+                    error(requestId, ErrorMessage.UpdateTws, "It does not support fundamental data requests.");
+                    return;
+                }
+
+                int version = 1;
+
+                try
+                {
+                    // send req mkt data msg
+                    send((int)OutgoingMessage.CancelFundamentalData);
+                    send(version);
+                    send(requestId);
+                }
+                catch (Exception e)
+                {
+                    error(requestId, ErrorMessage.FailSendCancelFundData, "" + e);
+                    close();
+                }
+            }
+        }
+
+        /// <summary>
         /// The default level is ERROR. Refer to the API logging page for more details.
         /// </summary>
         /// <param name="serverLogLevel">
@@ -3122,6 +3323,13 @@ namespace Krs.Ats.IBNet
                         contract.Right = (rstr == null || rstr.Length <= 0 || rstr.Equals("?") || rstr.Equals("0")
                                               ? RightType.Undefined
                                               : (RightType) EnumDescConverter.GetEnumValue(typeof (RightType), rstr));
+
+                        if (version >= 7)
+                        {
+                            contract.Multiplier = ReadStr();
+                            contract.PrimaryExchange = ReadStr();
+                        }
+
                         contract.Currency = ReadStr();
                         if (version >= 2)
                         {
@@ -3145,6 +3353,11 @@ namespace Krs.Ats.IBNet
                         if (version >= 4)
                         {
                             accountName = ReadStr();
+                        }
+
+                        if (version == 6 && serverVersion == 39)
+                        {
+                            contract.PrimaryExchange = ReadStr();
                         }
 
                         updatePortfolio(contract, position, marketPrice, marketValue, averageCost, unrealizedPNL,
@@ -3351,8 +3564,17 @@ namespace Krs.Ats.IBNet
 
                         if (version >= 15)
                         {
-                            order.ScaleNumComponents = ReadIntMax();
-                            order.ScaleComponentSize = ReadIntMax();
+                            if (version >= 20)
+                            {
+                                order.ScaleInitLevelSize = ReadIntMax();
+                                order.ScaleSubsLevelSize = ReadIntMax();
+                            }
+                            else
+                            {
+                                /* int notSuppScaleNumComponents = */
+                                ReadIntMax();
+                                order.ScaleInitLevelSize = ReadIntMax();
+                            }
                             order.ScalePriceIncrement = ReadDecimalMax();
                         }
 
@@ -3360,6 +3582,18 @@ namespace Krs.Ats.IBNet
                         {
                             order.ClearingAccount = ReadStr();
                             order.ClearingIntent = ReadStr();
+                        }
+
+                        if (version >= 20)
+                        {
+                            if (ReadBoolFromInt())
+                            {
+                                UnderlyingComponent underComp = new UnderlyingComponent();
+                                underComp.ContractId = ReadInt();
+                                underComp.Delta = ReadDouble();
+                                underComp.Price = ReadDecimal();
+                                contract.UnderlyingComponent = underComp;
+                            }
                         }
 
                         OrderState orderState = new OrderState();
@@ -3441,6 +3675,13 @@ namespace Krs.Ats.IBNet
                 case IncomingMessage.ContractData:
                     {
                         int version = ReadInt();
+
+                        int reqId = -1;
+                        if (version >= 3)
+                        {
+                            reqId = ReadInt();
+                        }
+
                         ContractDetails contract = new ContractDetails();
                         contract.Summary.Symbol = ReadStr();
                         contract.Summary.SecurityType =
@@ -3466,13 +3707,20 @@ namespace Krs.Ats.IBNet
                         {
                             contract.PriceMagnifier = ReadInt();
                         }
-                        contractDetails(contract);
+                        contractDetails(reqId, contract);
                         break;
                     }
 
                 case IncomingMessage.BondContractData:
                     {
                         int version = ReadInt();
+
+                        int reqId = -1;
+                        if (version >= 3)
+                        {
+                            reqId = ReadInt();
+                        }
+
                         ContractDetails contract = new ContractDetails();
 
                         contract.Summary.Symbol = ReadStr();
@@ -3504,7 +3752,7 @@ namespace Krs.Ats.IBNet
                             contract.NextOptionPartial = ReadBoolFromInt();
                             contract.Notes = ReadStr();
                         }
-                        bondContractDetails(contract);
+                        bondContractDetails(reqId, contract);
                         break;
                     }
 
@@ -3552,6 +3800,11 @@ namespace Krs.Ats.IBNet
                         if (version >= 4)
                         {
                             exec.Liquidation = ReadInt();
+                        }
+                        if (version >= 6)
+                        {
+                            exec.CumQuantity = ReadInt();
+                            exec.AvgPrice = ReadDecimal();
                         }
 
                         execDetails(orderId, contract, exec);
@@ -3694,6 +3947,25 @@ namespace Krs.Ats.IBNet
                         double wap = ReadDouble();
                         int count = ReadInt();
                         realTimeBar(reqId, time, open, high, low, close, volume, wap, count);
+                        break;
+                    }
+
+                case IncomingMessage.FundamentalData:
+                    {
+                        /*int version =*/
+                        ReadInt();
+                        int reqId = ReadInt();
+                        string data = ReadStr();
+                        fundamentalData(reqId, data);
+                        break;
+                    }
+
+                case IncomingMessage.ContractDataEnd:
+                    {
+                        /*int version =*/
+                        ReadInt();
+                        int reqId = ReadInt();
+                        contractDetailsEnd(reqId);
                         break;
                     }
 				
