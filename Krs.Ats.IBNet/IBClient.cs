@@ -2972,6 +2972,18 @@ namespace Krs.Ats.IBNet
             send(val ? 1 : 0);
         }
 
+        private void send(bool? val)
+        {
+            if(val!=null)
+            {
+                send(val.Value);
+            }
+            else
+            {
+                send("");
+            }
+        }
+
         #endregion
 
         #endregion

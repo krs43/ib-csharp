@@ -41,7 +41,7 @@ namespace Krs.Ats.IBNet
         private String goodAfterTime; // FORMAT: 20060505 08:00:00 {time zone}
         private String goodTillDate; // FORMAT: 20060505 08:00:00 {time zone}
         private bool hidden;
-        private bool outsideRth;
+        private bool? outsideRth;
         private decimal limitPrice;
         private int minQty;
         private decimal nbboPriceCap;
@@ -336,7 +336,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// If set to true, allows triggering of orders outside of regular trading hours.
         /// </summary>
-        public bool OutsideRth
+        public bool? OutsideRth
         {
             get { return outsideRth; }
             set { outsideRth = value; }
