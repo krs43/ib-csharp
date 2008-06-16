@@ -40,7 +40,7 @@ namespace Krs.Ats.IBNet
 
         private void tickPrice(int tickerId, TickType tickType, decimal price, bool canAutoExecute)
         {
-            GeneralTracer.WriteLineIf(ibTickTrace.TraceInfo, "IBEvent: TickPrice: tickerId: {0}, tickType: {1}, price: {2}, canAutoExecute: {3}", tickerId, tickType, price, canAutoExecute);
+            //GeneralTracer.WriteLineIf(ibTickTrace.TraceInfo, "IBEvent: TickPrice: tickerId: {0}, tickType: {1}, price: {2}, canAutoExecute: {3}", tickerId, tickType, price, canAutoExecute);
             TickPriceEventArgs e = new TickPriceEventArgs(tickerId, tickType, price, canAutoExecute);
             OnTickPrice(e);
         }
@@ -62,7 +62,7 @@ namespace Krs.Ats.IBNet
 
         private void tickSize(int tickerId, TickType tickType, int size)
         {
-            GeneralTracer.WriteLineIf(ibTickTrace.TraceInfo, "IBEvent: TickSize: tickerId: {0}, tickType: {1}, size: {2}", tickerId, tickType, size);
+            //GeneralTracer.WriteLineIf(ibTickTrace.TraceInfo, "IBEvent: TickSize: tickerId: {0}, tickType: {1}, size: {2}", tickerId, tickType, size);
             TickSizeEventArgs e = new TickSizeEventArgs(tickerId, tickType, size);
             OnTickSize(e);
         }
@@ -289,7 +289,7 @@ namespace Krs.Ats.IBNet
 
         private void nextValidId(int orderId)
         {
-            GeneralTracer.WriteLineIf(ibTickTrace.TraceInfo, "IBEvent: NextValidId: orderId: {0}", orderId);
+            //GeneralTracer.WriteLineIf(ibTickTrace.TraceInfo, "IBEvent: NextValidId: orderId: {0}", orderId);
             NextValidIdEventArgs e = new NextValidIdEventArgs(orderId);
             OnNextValidId(e);
         }
@@ -788,7 +788,7 @@ namespace Krs.Ats.IBNet
         #region Values
 
         private const int clientVersion = 38;
-        private const int minimumServerVersion = 38;
+        private const int minimumServerVersion = 32;
 
         #endregion
 
