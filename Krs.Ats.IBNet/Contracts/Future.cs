@@ -24,5 +24,11 @@ namespace Krs.Ats.IBNet.Contracts
             : base(symbol, exchange, SecurityType.Future, currency, expiry)
         {
         }
+
+        public Future(string symbol, string exchange, string expiry, string currency, decimal multiplier)
+            : base(symbol, exchange, SecurityType.Future, currency, expiry)
+        {
+            Multiplier = multiplier.ToString();
+        }
     }
 }
