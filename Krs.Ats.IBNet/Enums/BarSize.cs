@@ -12,7 +12,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// 1 second bars
         /// </summary>
-        [Description("1 sec")] OneSecond = 1,
+        [Description("1 secs")] OneSecond = 1,
         /// <summary>
         /// 5 second bars
         /// </summary>
