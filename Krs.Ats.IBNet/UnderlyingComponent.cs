@@ -12,7 +12,7 @@ namespace Krs.Ats.IBNet
         #region Private Properties
         private int contractId;
         private double delta;
-        private double price;
+        private decimal price;
         #endregion
 
         #region Constructor
@@ -63,7 +63,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Price of underlying
         /// </summary>
-        public double Price
+        public decimal Price
         {
             get
             {

@@ -8,10 +8,10 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class OrderStatusEventArgs : EventArgs
     {
-        private readonly double averageFillPrice;
+        private readonly decimal averageFillPrice;
         private readonly int clientId;
         private readonly int filled;
-        private readonly double lastFillPrice;
+        private readonly decimal lastFillPrice;
         private readonly int orderId;
         private readonly int parentId;
         private readonly int permId;
@@ -38,8 +38,8 @@ namespace Krs.Ats.IBNet
         /// The TWS orders have a fixed clientId and orderId of 0 that distinguishes them from API orders.</param>
         /// <param name="whyHeld">This field is used to identify an order held when TWS is trying to locate shares for a short sell.
         /// The value used to indicate this is 'locate'.</param>
-        public OrderStatusEventArgs(int orderId, OrderStatus status, int filled, int remaining, double averageFillPrice,
-                                    int permId, int parentId, double lastFillPrice, int clientId, string whyHeld)
+        public OrderStatusEventArgs(int orderId, OrderStatus status, int filled, int remaining, decimal averageFillPrice,
+                                    int permId, int parentId, decimal lastFillPrice, int clientId, string whyHeld)
         {
             this.orderId = orderId;
             this.clientId = clientId;
@@ -123,7 +123,7 @@ namespace Krs.Ats.IBNet
         /// This parameter is valid only if the filled parameter value
         /// is greater than zero. Otherwise, the price parameter will be zero.
         /// </summary>
-        public double AverageFillPrice
+        public decimal AverageFillPrice
         {
             get { return averageFillPrice; }
         }
@@ -148,7 +148,7 @@ namespace Krs.Ats.IBNet
         /// The last price of the shares that have been executed. This parameter is valid
         /// only if the filled parameter value is greater than zero. Otherwise, the price parameter will be zero.
         /// </summary>
-        public double LastFillPrice
+        public decimal LastFillPrice
         {
             get { return lastFillPrice; }
         }

@@ -11,7 +11,7 @@ namespace Krs.Ats.IBNet
         private readonly string marketMaker;
         private readonly MarketDepthOperation operation;
         private readonly int position;
-        private readonly double price;
+        private readonly decimal price;
         private readonly MarketDepthSide side;
         private readonly int size;
         private readonly int tickerId;
@@ -27,7 +27,7 @@ namespace Krs.Ats.IBNet
         /// <param name="price">The order price.</param>
         /// <param name="size">The order size.</param>
         public UpdateMarketDepthL2EventArgs(int tickerId, int position, string marketMaker, MarketDepthOperation operation,
-                                         MarketDepthSide side, double price, int size)
+                                         MarketDepthSide side, decimal price, int size)
         {
             this.tickerId = tickerId;
             this.size = size;
@@ -82,7 +82,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// The order price.
         /// </summary>
-        public double Price
+        public decimal Price
         {
             get { return price; }
         }

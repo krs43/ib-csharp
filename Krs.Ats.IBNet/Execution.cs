@@ -22,7 +22,7 @@ namespace Krs.Ats.IBNet
         private ExecutionSide side;
         private String time;
         private int cumQuantity;
-        private double avgPrice;
+        private decimal avgPrice;
 
         #endregion
 
@@ -51,7 +51,7 @@ namespace Krs.Ats.IBNet
         /// <param name="liquidation">Identifies the position as one to be liquidated last should the need arise.</param>
         public Execution(int orderId, int clientId, String executionId, String time, String accountNumber,
                          String exchange, ExecutionSide side, int shares, double price, int permId, int liquidation,
-                         int cumQuantity, double avgPrice)
+                         int cumQuantity, decimal avgPrice)
         {
             this.orderId = orderId;
             this.clientId = clientId;
@@ -191,7 +191,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Average Price
         /// </summary>
-        public double AvgPrice
+        public decimal AvgPrice
         {
             get { return avgPrice; }
             set { avgPrice = value; }
