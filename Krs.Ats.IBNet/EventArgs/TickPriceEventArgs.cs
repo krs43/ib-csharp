@@ -9,7 +9,7 @@ namespace Krs.Ats.IBNet
     public class TickPriceEventArgs : EventArgs
     {
         private readonly bool canAutoExecute;
-        private readonly decimal price;
+        private readonly double price;
         private readonly int tickerId;
 
         private readonly TickType tickType;
@@ -21,7 +21,7 @@ namespace Krs.Ats.IBNet
         /// <param name="tickType">Specifies the type of price.</param>
         /// <param name="price">Specifies the price for the specified field.</param>
         /// <param name="canAutoExecute">specifies whether the price tick is available for automatic execution.</param>
-        public TickPriceEventArgs(int tickerId, TickType tickType, decimal price, bool canAutoExecute)
+        public TickPriceEventArgs(int tickerId, TickType tickType, double price, bool canAutoExecute)
         {
             this.tickerId = tickerId;
             this.canAutoExecute = canAutoExecute;
@@ -48,7 +48,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Specifies the price for the specified field.
         /// </summary>
-        public decimal Price
+        public double Price
         {
             get { return price; }
         }

@@ -14,8 +14,8 @@ namespace Krs.Ats.IBNet
         private ActionSide action;
         private bool allOrNone;
         private AuctionStrategy auctionStrategy; // 1=AUCTION_MATCH, 2=AUCTION_IMPROVEMENT, 3=AUCTION_TRANSPARENT
-        private decimal auxPrice;
-        private decimal basisPoints; // EFP orders only
+        private double auxPrice;
+        private double basisPoints; // EFP orders only
         private int basisPointsType; // EFP orders only
 
         // extended order fields
@@ -28,7 +28,7 @@ namespace Krs.Ats.IBNet
         private String designatedLocation; // set when slot=2 only.
 
         // SMART routing only
-        private decimal discretionaryAmt;
+        private double discretionaryAmt;
         private int displaySize;
         private bool eTradeOnly;
 
@@ -42,9 +42,9 @@ namespace Krs.Ats.IBNet
         private String goodTillDate; // FORMAT: 20060505 08:00:00 {time zone}
         private bool hidden;
         private bool? outsideRth;
-        private decimal limitPrice;
+        private double limitPrice;
         private int minQty;
-        private decimal nbboPriceCap;
+        private double nbboPriceCap;
         private String ocaGroup; // one cancels all group name
         private OcaType ocaType; // 1 = CANCEL_WITH_BLOCK, 2 = REDUCE_WITH_BLOCK, 3 = REDUCE_NON_BLOCK
 
@@ -68,7 +68,7 @@ namespace Krs.Ats.IBNet
                     // 1 if you hold the shares, 2 if they will be delivered from elsewhere.  Only for Action="SSHORT
 
         // BOX ORDERS ONLY
-        private decimal startingPrice;
+        private double startingPrice;
 
         // pegged to stock or VOL orders
         private double stockRangeLower;
@@ -77,7 +77,7 @@ namespace Krs.Ats.IBNet
         private bool sweepToFill;
         private TimeInForce tif; // "Time in Force" - DAY, GTC, etc.
         private int totalQuantity;
-        private decimal trailStopPrice; // for TRAILLIMIT orders only
+        private double trailStopPrice; // for TRAILLIMIT orders only
         private bool transmit; // if false, order will be created but not transmited
 
         private TriggerMethod triggerMethod;
@@ -90,7 +90,7 @@ namespace Krs.Ats.IBNet
         // SCALE ORDERS ONLY
         private int scaleInitLevelSize;
         private int scaleSubsLevelSize;
-        private decimal scalePriceIncrement;
+        private double scalePriceIncrement;
 
         // Clearing info
         private string account; // IB account
@@ -117,8 +117,8 @@ namespace Krs.Ats.IBNet
             designatedLocation = "";
             minQty = Int32.MaxValue;
             percentOffset = Double.MaxValue;
-            nbboPriceCap = decimal.MaxValue;
-            startingPrice = decimal.MaxValue;
+            nbboPriceCap = double.MaxValue;
+            startingPrice = double.MaxValue;
             stockRefPrice = Double.MaxValue;
             delta = Double.MaxValue;
             stockRangeLower = Double.MaxValue;
@@ -128,12 +128,12 @@ namespace Krs.Ats.IBNet
             deltaNeutralOrderType = OrderType.Empty;
             deltaNeutralAuxPrice = Double.MaxValue;
             referencePriceType = Int32.MaxValue;
-            trailStopPrice = decimal.MaxValue;
-            basisPoints = decimal.MaxValue;
+            trailStopPrice = double.MaxValue;
+            basisPoints = double.MaxValue;
             basisPointsType = Int32.MaxValue;
             scaleInitLevelSize = Int32.MaxValue;
             scaleSubsLevelSize = Int32.MaxValue;
-            scalePriceIncrement = decimal.MaxValue;
+            scalePriceIncrement = double.MaxValue;
             faMethod = FinancialAdvisorAllocationMethod.None;
         }
 
@@ -201,7 +201,7 @@ namespace Krs.Ats.IBNet
         /// In all other cases specify zero. For relative orders with no limit price,
         /// also specify zero.
         /// </summary>
-        public decimal LimitPrice
+        public double LimitPrice
         {
             get { return limitPrice; }
             set { limitPrice = value; }
@@ -211,7 +211,7 @@ namespace Krs.Ats.IBNet
         /// This is the STOP price for stop-limit orders, and the offset amount for
         /// relative orders. In all other cases, specify zero.
         /// </summary>
-        public decimal AuxPrice
+        public double AuxPrice
         {
             get { return auxPrice; }
             set { auxPrice = value; }
@@ -427,7 +427,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// For TRAILLIMIT orders only
         /// </summary>
-        public decimal TrailStopPrice
+        public double TrailStopPrice
         {
             get { return trailStopPrice; }
             set { trailStopPrice = value; }
@@ -510,7 +510,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// The amount off the limit price allowed for discretionary orders.
         /// </summary>
-        public decimal DiscretionaryAmt
+        public double DiscretionaryAmt
         {
             get { return discretionaryAmt; }
             set { discretionaryAmt = value; }
@@ -537,7 +537,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// The maximum Smart order distance from the NBBO.
         /// </summary>
-        public decimal NbboPriceCap
+        public double NbboPriceCap
         {
             get { return nbboPriceCap; }
             set { nbboPriceCap = value; }
@@ -558,7 +558,7 @@ namespace Krs.Ats.IBNet
         /// The starting price.
         /// </summary>
         /// <remarks>Valid on BOX orders only.</remarks>
-        public decimal StartingPrice
+        public double StartingPrice
         {
             get { return startingPrice; }
             set { startingPrice = value; }
@@ -676,7 +676,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// For EFP orders only
         /// </summary>
-        public decimal BasisPoints
+        public double BasisPoints
         {
             get { return basisPoints; }
             set { basisPoints = value; }
@@ -712,7 +712,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// price increment per bucket
         /// </summary>
-        public decimal ScalePriceIncrement
+        public double ScalePriceIncrement
         {
             get { return scalePriceIncrement; }
             set { scalePriceIncrement = value; }

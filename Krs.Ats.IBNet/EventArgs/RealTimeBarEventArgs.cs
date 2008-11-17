@@ -8,11 +8,11 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class RealTimeBarEventArgs : EventArgs
     {
-        private readonly decimal close;
+        private readonly double close;
         private readonly int count;
-        private readonly decimal high;
-        private readonly decimal low;
-        private readonly decimal open;
+        private readonly double high;
+        private readonly double low;
+        private readonly double open;
         private readonly int requestId;
         private readonly long time;
         private readonly long volume;
@@ -31,7 +31,7 @@ namespace Krs.Ats.IBNet
         /// <param name="volume">Volume during the time covered by the bar.</param>
         /// <param name="wap">Weighted average price during the time covered by the bar.</param>
         /// <param name="count">When TRADES historical data is returned, represents the number of trades that occurred during the time period the bar covers.</param>
-        public RealTimeBarEventArgs(int requestId, long time, decimal open, decimal high, decimal low, decimal close,
+        public RealTimeBarEventArgs(int requestId, long time, double open, double high, double low, double close,
                                     long volume, double wap, int count)
         {
             this.requestId = requestId;
@@ -65,7 +65,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Bar opening price.
         /// </summary>
-        public decimal Open
+        public double Open
         {
             get { return open; }
         }
@@ -73,7 +73,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// High price during the time covered by the bar.
         /// </summary>
-        public decimal High
+        public double High
         {
             get { return high; }
         }
@@ -81,7 +81,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Low price during the time covered by the bar.
         /// </summary>
-        public decimal Low
+        public double Low
         {
             get { return low; }
         }
@@ -89,7 +89,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Bar closing price.
         /// </summary>
-        public decimal Close
+        public double Close
         {
             get { return close; }
         }

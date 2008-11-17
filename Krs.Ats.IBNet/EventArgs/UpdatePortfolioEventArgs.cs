@@ -9,14 +9,14 @@ namespace Krs.Ats.IBNet
     public class UpdatePortfolioEventArgs : EventArgs
     {
         private readonly string accountName;
-        private readonly decimal averageCost;
+        private readonly double averageCost;
         private readonly Contract contract;
-        private readonly decimal marketPrice;
-        private readonly decimal marketValue;
+        private readonly double marketPrice;
+        private readonly double marketValue;
 
         private readonly int position;
-        private readonly decimal realizedPnl;
-        private readonly decimal unrealizedPnl;
+        private readonly double realizedPnl;
+        private readonly double unrealizedPnl;
 
         /// <summary>
         /// Full Constructor
@@ -33,8 +33,8 @@ namespace Krs.Ats.IBNet
         /// <param name="realizedPnl">Shows your profit on closed positions, which is the difference between your entry execution cost
         /// (execution price + commissions to open the position) and exit execution cost ((execution price + commissions to close the position)</param>
         /// <param name="accountName">The name of the account the message applies to.  Useful for Financial Advisor sub-account messages.</param>
-        public UpdatePortfolioEventArgs(Contract contract, int position, decimal marketPrice, decimal marketValue,
-                                        decimal averageCost, decimal unrealizedPnl, decimal realizedPnl, string accountName)
+        public UpdatePortfolioEventArgs(Contract contract, int position, double marketPrice, double marketValue,
+                                        double averageCost, double unrealizedPnl, double realizedPnl, string accountName)
         {
             this.contract = contract;
             this.accountName = accountName;
@@ -67,7 +67,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Unit price of the instrument.
         /// </summary>
-        public decimal MarketPrice
+        public double MarketPrice
         {
             get { return marketPrice; }
         }
@@ -75,7 +75,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// The total market value of the instrument.
         /// </summary>
-        public decimal MarketValue
+        public double MarketValue
         {
             get { return marketValue; }
         }
@@ -84,7 +84,7 @@ namespace Krs.Ats.IBNet
         /// The average cost per share is calculated by dividing your cost
         /// (execution price + commission) by the quantity of your position.
         /// </summary>
-        public decimal AverageCost
+        public double AverageCost
         {
             get { return averageCost; }
         }
@@ -92,7 +92,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// The difference between the current market value of your open positions and the average cost, or Value - Average Cost.
         /// </summary>
-        public decimal UnrealizedPnl
+        public double UnrealizedPnl
         {
             get { return unrealizedPnl; }
         }
@@ -101,7 +101,7 @@ namespace Krs.Ats.IBNet
         /// Shows your profit on closed positions, which is the difference between your entry execution cost
         /// (execution price + commissions to open the position) and exit execution cost ((execution price + commissions to close the position)
         /// </summary>
-        public decimal RealizedPnl
+        public double RealizedPnl
         {
             get { return realizedPnl; }
         }

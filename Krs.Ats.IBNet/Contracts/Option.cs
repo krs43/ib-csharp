@@ -19,7 +19,7 @@ namespace Krs.Ats.IBNet.Contracts
         /// <param name="right">Option Right (Put or Call). See <see cref="Contract.Right"/>.</param>
         /// <param name="strike">Option Strike Price. See <see cref="Contract.Strike"/>.</param>
         public Option(string equitySymbol, string optionSymbol, string expiry,
-        RightType right, decimal strike)
+        RightType right, double strike)
             : base(0, equitySymbol, SecurityType.Option, expiry, (double)strike,
         right, "100", "SMART", "USD", optionSymbol, "SMART")
         {
@@ -35,7 +35,7 @@ namespace Krs.Ats.IBNet.Contracts
         /// <param name="right">Option Right (Put or Call). See <see cref="Contract.Right"/>.</param>
         /// <param name="strike">Option Strike Price. See <see cref="Contract.Strike"/>.</param>
         public Option(string equitySymbol, string optionSymbol, int year, int month,
-        RightType right, decimal strike)
+        RightType right, double strike)
             : base(0, equitySymbol, SecurityType.Option, "", (double)strike,
         right, "100", "SMART", "USD", optionSymbol, "SMART")
         {
