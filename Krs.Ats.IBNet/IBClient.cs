@@ -359,6 +359,91 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Called once all the open orders for a given request are received.
+        /// </summary>
+        public event EventHandler<EventArgs> OpenOrderEnd;
+
+        /// <summary>
+        /// Called internally when the receive thread receives a Open Orders End Event.
+        /// </summary>
+        /// <param name="e">Empty Event Arguments</param>
+        protected virtual void OnOpenOrderEnd(EventArgs e)
+        {
+            if (OpenOrderEnd != null)
+                OpenOrderEnd(this, e);
+        }
+
+        private void openOrderEnd()
+        {
+            EventArgs e = new EventArgs();
+            OnOpenOrderEnd(e);
+        }
+
+        /// <summary>
+        /// Called once all Account Details for a given request are received.
+        /// </summary>
+        public event EventHandler<AccountDownloadEndEventArgs> AccountDownloadEnd;
+
+        /// <summary>
+        /// Called internally when the receive thread receives a Account Download End Event.
+        /// </summary>
+        /// <param name="e">Contract Details End Event Arguments</param>
+        protected virtual void OnAccountDownloadEnd(AccountDownloadEndEventArgs e)
+        {
+            if (AccountDownloadEnd != null)
+                AccountDownloadEnd(this, e);
+        }
+
+        private void accountDownloadEnd(string accountName)
+        {
+            AccountDownloadEndEventArgs e = new AccountDownloadEndEventArgs(accountName);
+            OnAccountDownloadEnd(e);
+        }
+
+        /// <summary>
+        /// Called once all contract details for a given request are received.
+        /// This, for example, helps to define the end of an option chain.
+        /// </summary>
+        public event EventHandler<ExecutionDataEndEventArgs> ExecutionDataEnd;
+
+        /// <summary>
+        /// Called internally when the receive thread receives a Contract Details End Event.
+        /// </summary>
+        /// <param name="e">Contract Details End Event Arguments</param>
+        protected virtual void OnExecutionDataEnd(ExecutionDataEndEventArgs e)
+        {
+            if (ExecutionDataEnd != null)
+                ExecutionDataEnd(this, e);
+        }
+
+        private void executionDataEnd(int requestId)
+        {
+            ExecutionDataEndEventArgs e = new ExecutionDataEndEventArgs(requestId);
+            OnExecutionDataEnd(e);
+        }
+
+        /// <summary>
+        /// Called once all execution data for a given request are received.
+        /// </summary>
+        public event EventHandler<DeltaNuetralValidationEventArgs> DeltaNuetralValidation;
+
+        /// <summary>
+        /// Called internally when the receive thread receives a Contract Details End Event.
+        /// </summary>
+        /// <param name="e">Contract Details End Event Arguments</param>
+        protected virtual void OnDeltaNuetralValidation(DeltaNuetralValidationEventArgs e)
+        {
+            if (DeltaNuetralValidation != null)
+                DeltaNuetralValidation(this, e);
+        }
+
+        private void deltaNuetralValidation(int requestId, UnderComp underComp)
+        {
+            DeltaNuetralValidationEventArgs e = new DeltaNuetralValidationEventArgs(requestId, underComp);
+            OnDeltaNuetralValidation(e);
+        }
+
+        /// <summary>
         /// This event fires in response to the <see cref="RequestExecutions"/> method or after an order is placed.
         /// </summary>
         public event EventHandler<ExecDetailsEventArgs> ExecDetails;
@@ -375,9 +460,9 @@ namespace Krs.Ats.IBNet
             }
         }
 
-        private void execDetails(int orderId, Contract contract, Execution execution)
+        private void execDetails(int reqId, int orderId, Contract contract, Execution execution)
         {
-            ExecDetailsEventArgs e = new ExecDetailsEventArgs(orderId, contract, execution);
+            ExecDetailsEventArgs e = new ExecDetailsEventArgs(reqId, orderId, contract, execution);
             OnExecDetails(e);
         }
 
@@ -787,7 +872,7 @@ namespace Krs.Ats.IBNet
 
         #region Values
 
-        private const int clientVersion = 38;
+        private const int clientVersion = 42;
         private const int minimumServerVersion = 32;
 
         #endregion
@@ -1998,7 +2083,16 @@ namespace Krs.Ats.IBNet
                     }
                 }
 
-                int version = 26;
+                if (serverVersion < 41)
+                {
+                    if (!string.IsNullOrEmpty(order.AlgoStrategy))
+                    {
+                        error(orderId, ErrorMessage.UpdateTws, "It does not support algo orders.");
+                        return;
+                    }
+                }
+
+                int version = 27;
 
                 // send place order msg
                 try
@@ -2245,6 +2339,27 @@ namespace Krs.Ats.IBNet
                         }
                     }
 
+                    if (serverVersion >= 41)
+                    {
+                        send(order.AlgoStrategy);
+                        if (!string.IsNullOrEmpty(order.AlgoStrategy))
+                        {
+                            if(order.AlgoParams == null)
+                            {
+                                send(0);
+                            }
+                            else
+                            {
+                                send(order.AlgoParams.Count);
+                                foreach(TagValue tagValue in order.AlgoParams)
+                                {
+                                    send(tagValue.Tag);
+                                    send(tagValue.Value);
+                                }
+                            }
+                        }
+                    }
+
                     if(serverVersion >= 36)
                     {
                         send(order.WhatIf);
@@ -2306,8 +2421,9 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// When this method is called, the execution reports that meet the filter criteria are downloaded to the client via the execDetails() method.
         /// </summary>
+        /// <param name="requestId">Id of the request</param>
         /// <param name="filter">the filter criteria used to determine which execution reports are returned.</param>
-        public void RequestExecutions(ExecutionFilter filter)
+        public void RequestExecutions(int requestId, ExecutionFilter filter)
         {
             if (filter == null)
                 filter = new ExecutionFilter(0, "", DateTime.MinValue, "", SecurityType.Undefined, "", ActionSide.Undefined);
@@ -2320,13 +2436,18 @@ namespace Krs.Ats.IBNet
                     return;
                 }
 
-                int version = 2;
+                int version = 3;
 
                 // send cancel order msg
                 try
                 {
                     send((int) OutgoingMessage.RequestExecutions);
                     send(version);
+
+                    if (serverVersion >= 42)
+                    {
+                        send(requestId);
+                    }
 
                     // Send the execution rpt filter data
                     if (serverVersion >= 9)
@@ -3428,7 +3549,7 @@ namespace Krs.Ats.IBNet
                         contract.Expiry = ReadStr();
                         contract.Strike = ReadDouble();
                         string rstr = ReadStr();
-                        contract.Right = (rstr == null || rstr.Length <= 0 || rstr.Equals("?")
+                        contract.Right = (string.IsNullOrEmpty(rstr) || rstr.Equals("?")
                                               ? RightType.Undefined
                                               : (RightType) EnumDescConverter.GetEnumValue(typeof (RightType), rstr));
                         contract.Exchange = ReadStr();
@@ -3608,6 +3729,26 @@ namespace Krs.Ats.IBNet
                             }
                         }
 
+                        if (version >= 21)
+                        {
+                            order.AlgoStrategy = ReadStr();
+                            if (!string.IsNullOrEmpty(order.AlgoStrategy))
+                            {
+                                int algoParamsCount = ReadInt();
+                                if (algoParamsCount > 0)
+                                {
+                                    order.AlgoParams = new Collection<TagValue>();
+                                    for (int i = 0; i < algoParamsCount; i++)
+                                    {
+                                        TagValue tagValue = new TagValue();
+                                        tagValue.Tag = ReadStr();
+                                        tagValue.Value = ReadStr();
+                                        order.AlgoParams.Add(tagValue);
+                                    }
+                                }
+                            }
+                        }
+
                         OrderState orderState = new OrderState();
 
                         if (version >= 16)
@@ -3719,6 +3860,11 @@ namespace Krs.Ats.IBNet
                         {
                             contract.PriceMagnifier = ReadInt();
                         }
+                        if (version >= 4)
+                        {
+                            contract.UnderConId = ReadInt();
+                        }
+
                         contractDetails(reqId, contract);
                         break;
                     }
@@ -3771,6 +3917,13 @@ namespace Krs.Ats.IBNet
                 case IncomingMessage.ExecutionData:
                     {
                         int version = ReadInt();
+
+                        int reqId = -1;
+                        if (version >= 7)
+                        {
+                            reqId = ReadInt();
+                        }
+
                         int orderId = ReadInt();
 
                         //Read Contract Fields
@@ -3785,7 +3938,7 @@ namespace Krs.Ats.IBNet
                         contract.Expiry = ReadStr();
                         contract.Strike = ReadDouble();
                         string rstr = ReadStr();
-                        contract.Right = (rstr == null || rstr.Length <= 0 || rstr.Equals("?")
+                        contract.Right = (string.IsNullOrEmpty(rstr) || rstr.Equals("?")
                                               ? RightType.Undefined
                                               : (RightType) EnumDescConverter.GetEnumValue(typeof (RightType), rstr));
                         contract.Exchange = ReadStr();
@@ -3819,7 +3972,7 @@ namespace Krs.Ats.IBNet
                             exec.AvgPrice = ReadDecimal();
                         }
 
-                        execDetails(orderId, contract, exec);
+                        execDetails(reqId, orderId, contract, exec);
                         break;
                     }
 
@@ -3978,6 +4131,43 @@ namespace Krs.Ats.IBNet
                         ReadInt();
                         int reqId = ReadInt();
                         contractDetailsEnd(reqId);
+                        break;
+                    }
+
+                case IncomingMessage.OpenOrderEnd:
+                    {
+                        /*int version =*/ ReadInt();
+                        openOrderEnd();
+                        break;
+                    }
+
+                case IncomingMessage.AccountDownloadEnd:
+                    {
+                        /*int version =*/ ReadInt();
+                        string accountName = ReadStr();
+                        accountDownloadEnd(accountName);
+                        break;
+                    }
+
+                case IncomingMessage.ExecutionDataEnd:
+                    {
+                        /*int version =*/ ReadInt();
+                        int reqId = ReadInt();
+                        executionDataEnd(reqId);
+                        break;
+                    }
+
+                case IncomingMessage.DeltaNuetralValidation:
+                    {
+                        /*int version =*/ ReadInt();
+                        int reqId = ReadInt();
+
+                        UnderComp underComp = new UnderComp();
+                        underComp.ConId = ReadInt();
+                        underComp.Delta = ReadDouble();
+                        underComp.Price = ReadDouble();
+
+                        deltaNuetralValidation(reqId, underComp);
                         break;
                     }
 				

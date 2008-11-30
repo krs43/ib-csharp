@@ -1,4 +1,5 @@
 using System;
+using System.Collections.ObjectModel;
 
 namespace Krs.Ats.IBNet
 {
@@ -97,6 +98,10 @@ namespace Krs.Ats.IBNet
         private string settlingFirm;
         private string clearingAccount; // True beneficiary of the order
         private string clearingIntent; // "" (Default), "IB", "Away", "PTA" (PostTrade)
+
+        // ALGO ORDERS ONLY
+        private string algoStrategy;
+        private Collection<TagValue> algoParams;
 
         // What-if
         private bool whatIf;
@@ -752,6 +757,24 @@ namespace Krs.Ats.IBNet
         {
             get { return clearingIntent; }
             set { clearingIntent = value; }
+        }
+
+        /// <summary>
+        /// Algorithm Strategy
+        /// </summary>
+        public string AlgoStrategy
+        {
+            get { return algoStrategy; }
+            set { algoStrategy = value; }
+        }
+
+        /// <summary>
+        /// List of Algorithm Parameters
+        /// </summary>
+        public Collection<TagValue> AlgoParams
+        {
+            get { return algoParams; }
+            set { algoParams = value; }
         }
 
         /// <summary>

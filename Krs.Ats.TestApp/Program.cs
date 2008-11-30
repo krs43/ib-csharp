@@ -78,7 +78,7 @@ namespace Krs.Ats.TestApp
             BuyContract.TotalQuantity = 1;
             client.PlaceOrder(502, ER2, BuyContract);
 
-            client.RequestExecutions(new ExecutionFilter());
+            client.RequestExecutions(34, new ExecutionFilter());
 
             while(true)
             {

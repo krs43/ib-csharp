@@ -17,6 +17,8 @@ namespace Krs.Ats.IBNet
         private Contract summary;
         private String tradingClass;
         private String validExchanges;
+        private int underConId;
+
         // BOND values
         private String cusip;
         private String ratings;
@@ -33,8 +35,7 @@ namespace Krs.Ats.IBNet
         private String nextOptionType;
         private bool nextOptionPartial;
         private String notes;
-
-
+        
         #endregion
 
         #region Constructors
@@ -43,7 +44,7 @@ namespace Krs.Ats.IBNet
         /// Default constructor
         /// </summary>
         public ContractDetails() :
-            this(new Contract(), null, null, 0, null, null)
+            this(new Contract(), null, null, 0, null, null, 0)
         {
         }
 
@@ -56,8 +57,9 @@ namespace Krs.Ats.IBNet
         /// <param name="minTick">The minimum price tick.</param>
         /// <param name="orderTypes">The list of valid order types for this contract.</param>
         /// <param name="validExchanges">The list of exchanges this contract is traded on.</param>
+        /// <param name="underConId">The Underlying Contract Id (for derivatives only)</param>
         public ContractDetails(Contract summary, String marketName, String tradingClass, double minTick,
-                               String orderTypes, String validExchanges)
+                               String orderTypes, String validExchanges, int underConId)
         {
             this.summary = summary;
             this.marketName = marketName;
@@ -65,6 +67,7 @@ namespace Krs.Ats.IBNet
             this.minTick = minTick;
             this.orderTypes = orderTypes;
             this.validExchanges = validExchanges;
+            this.underConId = underConId;
         }
 
         #endregion
@@ -134,6 +137,18 @@ namespace Krs.Ats.IBNet
         {
             get { return validExchanges; }
             set { validExchanges = value; }
+        }
+
+        /// <summary>
+        /// Underlying Contract Id
+        /// underConId (underlying contract ID), has been added to the
+        /// ContractDetails structure to allow unambiguous identification with the underlying contract
+        /// (you no longer have to match by symbol, etc.). This new field applies to derivatives only.
+        /// </summary>
+        public int UnderConId
+        {
+            get { return underConId; }
+            set { underConId = value; }
         }
 
         /// <summary>

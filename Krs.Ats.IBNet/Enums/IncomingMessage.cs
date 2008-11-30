@@ -128,6 +128,22 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Contract Data End
         /// </summary>
-        [Description("CONTRACT_DATA_END")] ContractDataEnd = 52
+        [Description("CONTRACT_DATA_END")] ContractDataEnd = 52,
+        /// <summary>
+        /// Received after the last open order message
+        /// </summary>
+        [Description("OPEN_ORDER_END")] OpenOrderEnd = 53,
+        /// <summary>
+        /// Received after the last account download message
+        /// </summary>
+        [Description("ACCT_DOWNLOAD_END")] AccountDownloadEnd = 54,
+        /// <summary>
+        /// Received after a complete list of executions
+        /// </summary>
+        [Description("EXECUTION_DATA_END")] ExecutionDataEnd = 55,
+        /// <summary>
+        /// Received after a delta nuetral validation
+        /// </summary>
+        [Description("DELTA_NEUTRAL_VALIDATION")] DeltaNuetralValidation = 56
     }
 }
