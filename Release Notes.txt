@@ -3,6 +3,10 @@ Karl Schulze - www.dinosaurtech.com
 
 Release Notes
 
+9.6.0.11 New Release - 11/30/08
+* Made all event handlers thread safe
+* Brought up to API 9.6
+
 9.5.0.10 New Release - 5/4/08
 * Made all prices decimals
 * Brought up to API 9.5
