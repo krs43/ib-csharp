@@ -23,12 +23,19 @@ namespace Krs.Ats.IBNet
 
         #region IB Wrapper to Events
 
-        static public void RaiseEvent<T>(EventHandler<T> @event, object sender, T e)
+        ///<summary>
+        /// Raise the event in a threadsafe manner
+        ///</summary>
+        ///<param name="event"></param>
+        ///<param name="sender"></param>
+        ///<param name="e"></param>
+        ///<typeparam name="T"></typeparam>
+        static private void RaiseEvent<T>(EventHandler<T> @event, object sender, T e)
         where T : EventArgs
         {
-            var handler = @event;
-            if (handler != null)
-                handler(sender, e);
+            EventHandler<T> handler = @event;
+            if (handler == null) return;
+            handler(sender, e);
         }
 
         /// <summary>
@@ -63,8 +70,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Tick Size Event Arguments</param>
         protected virtual void OnTickSize(TickSizeEventArgs e)
         {
-            if (TickSize != null)
-                TickSize(this, e);
+            RaiseEvent(TickSize, this, e);
         }
 
         private void tickSize(int tickerId, TickType tickType, int size)
@@ -87,8 +93,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Tick Option Computation Arguments</param>
         protected virtual void OnTickOptionComputation(TickOptionComputationEventArgs e)
         {
-            if (TickOptionComputation != null)
-                TickOptionComputation(this, e);
+            RaiseEvent(TickOptionComputation, this, e);
         }
 
         private void tickOptionComputation(int tickerId, TickType tickType, double impliedVol, double delta,
@@ -111,8 +116,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Tick Generic Event Arguments</param>
         protected virtual void OnTickGeneric(TickGenericEventArgs e)
         {
-            if (TickGeneric != null)
-                TickGeneric(this, e);
+            RaiseEvent(TickGeneric, this, e);
         }
 
         private void tickGeneric(int tickerId, TickType tickType, double value)
@@ -132,8 +136,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Tick String Event Arguments</param>
         protected virtual void OnTickString(TickStringEventArgs e)
         {
-            if (TickString != null)
-                TickString(this, e);
+            RaiseEvent(TickString, this, e);
         }
 
         private void tickString(int tickerId, TickType tickType, string value)
@@ -153,8 +156,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Tick Efp Arguments</param>
         protected virtual void OnTickEfp(TickEfpEventArgs e)
         {
-            if (TickEfp != null)
-                TickEfp(this, e);
+            RaiseEvent(TickEfp, this, e);
         }
 
         private void tickEfp(int tickerId, TickType tickType, double basisPoints, string formattedBasisPoints,
@@ -179,8 +181,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Order Status Event Arguments</param>
         protected virtual void OnOrderStatus(OrderStatusEventArgs e)
         {
-            if (OrderStatus != null)
-                OrderStatus(this, e);
+            RaiseEvent(OrderStatus, this, e);
         }
 
         private void orderStatus(int orderId, OrderStatus status, int filled, int remaining, decimal avgFillPrice,
@@ -203,8 +204,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Open Order Event Arguments</param>
         protected virtual void OnOpenOrder(OpenOrderEventArgs e)
         {
-            if (OpenOrder != null)
-                OpenOrder(this, e);
+            RaiseEvent(OpenOrder, this, e);
         }
 
         private void openOrder(int orderId, Contract contract, Order order, OrderState orderState)
@@ -224,8 +224,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Update Account Value Event Arguments</param>
         protected virtual void OnUpdateAccountValue(UpdateAccountValueEventArgs e)
         {
-            if (UpdateAccountValue != null)
-                UpdateAccountValue(this, e);
+            RaiseEvent(UpdateAccountValue, this, e);
         }
 
         private void updateAccountValue(string key, string value, string currency, string accountName)
@@ -245,8 +244,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Update Portfolio Event Arguments</param>
         protected virtual void OnUpdatePortfolio(UpdatePortfolioEventArgs e)
         {
-            if (UpdatePortfolio != null)
-                UpdatePortfolio(this, e);
+            RaiseEvent(UpdatePortfolio, this, e);
         }
 
         private void updatePortfolio(Contract contract, int position, decimal marketPrice, decimal marketValue,
@@ -269,8 +267,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Update Account Time Event Arguments</param>
         protected virtual void OnUpdateAccountTime(UpdateAccountTimeEventArgs e)
         {
-            if (UpdateAccountTime != null)
-                UpdateAccountTime(this, e);
+            RaiseEvent(UpdateAccountTime, this, e);
         }
 
         private void updateAccountTime(string timeStamp)
@@ -290,8 +287,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Next Valid Id Event Arguments</param>
         protected virtual void OnNextValidId(NextValidIdEventArgs e)
         {
-            if (NextValidId != null)
-                NextValidId(this, e);
+            RaiseEvent(NextValidId, this, e);
         }
 
         private void nextValidId(int orderId)
@@ -312,8 +308,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Contract Details Event Arguments</param>
         protected virtual void OnContractDetails(ContractDetailsEventArgs e)
         {
-            if (ContractDetails != null)
-                ContractDetails(this, e);
+            RaiseEvent(ContractDetails, this, e);
         }
 
         private void contractDetails(int requestId, ContractDetails contractDetails)
@@ -333,8 +328,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Bond Contract Details Event Arguments</param>
         protected virtual void OnBondContractDetails(BondContractDetailsEventArgs e)
         {
-            if (BondContractDetails != null)
-                BondContractDetails(this, e);
+            RaiseEvent(BondContractDetails, this, e);
         }
 
         private void bondContractDetails(int requestId, ContractDetails contractDetails)
@@ -355,8 +349,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Contract Details End Event Arguments</param>
         protected virtual void OnContractDetailsEnd(ContractDetailsEndEventArgs e)
         {
-            if (ContractDetailsEnd != null)
-                ContractDetailsEnd(this, e);
+            RaiseEvent(ContractDetailsEnd, this, e);
         }
 
         private void contractDetailsEnd(int requestId)
@@ -376,8 +369,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Empty Event Arguments</param>
         protected virtual void OnOpenOrderEnd(EventArgs e)
         {
-            if (OpenOrderEnd != null)
-                OpenOrderEnd(this, e);
+            RaiseEvent(OpenOrderEnd, this, e);
         }
 
         private void openOrderEnd()
@@ -397,8 +389,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Contract Details End Event Arguments</param>
         protected virtual void OnAccountDownloadEnd(AccountDownloadEndEventArgs e)
         {
-            if (AccountDownloadEnd != null)
-                AccountDownloadEnd(this, e);
+            RaiseEvent(AccountDownloadEnd, this, e);
         }
 
         private void accountDownloadEnd(string accountName)
@@ -419,8 +410,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Contract Details End Event Arguments</param>
         protected virtual void OnExecutionDataEnd(ExecutionDataEndEventArgs e)
         {
-            if (ExecutionDataEnd != null)
-                ExecutionDataEnd(this, e);
+            RaiseEvent(ExecutionDataEnd, this, e);
         }
 
         private void executionDataEnd(int requestId)
@@ -440,8 +430,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Contract Details End Event Arguments</param>
         protected virtual void OnDeltaNuetralValidation(DeltaNuetralValidationEventArgs e)
         {
-            if (DeltaNuetralValidation != null)
-                DeltaNuetralValidation(this, e);
+            RaiseEvent(DeltaNuetralValidation, this, e);
         }
 
         private void deltaNuetralValidation(int requestId, UnderComp underComp)
@@ -484,8 +473,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e"></param>
         protected virtual void OnUpdateMarketDepth(UpdateMarketDepthEventArgs e)
         {
-            if (UpdateMarketDepth != null)
-                UpdateMarketDepth(this, e);
+            RaiseEvent(UpdateMarketDepth, this, e);
         }
 
         private void updateMktDepth(int tickerId, int position, MarketDepthOperation operation, MarketDepthSide side,
@@ -506,8 +494,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Update Market Depth L2 Event Arguments</param>
         protected virtual void OnUpdateMarketDepthL2(UpdateMarketDepthL2EventArgs e)
         {
-            if (UpdateMarketDepthL2 != null)
-                UpdateMarketDepthL2(this, e);
+            RaiseEvent(UpdateMarketDepthL2, this, e);
         }
 
         private void updateMktDepthL2(int tickerId, int position, string marketMaker, MarketDepthOperation operation,
@@ -530,8 +517,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Update News Bulletin Event Arguments</param>
         protected virtual void OnUpdateNewsBulletin(UpdateNewsBulletinEventArgs e)
         {
-            if (UpdateNewsBulletin != null)
-                UpdateNewsBulletin(this, e);
+            RaiseEvent(UpdateNewsBulletin, this, e);
         }
 
         private void updateNewsBulletin(int msgId, NewsType msgType, string message, string origExchange)
@@ -552,8 +538,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Managed Accounts Event Arguments</param>
         protected virtual void OnManagedAccounts(ManagedAccountsEventArgs e)
         {
-            if (ManagedAccounts != null)
-                ManagedAccounts(this, e);
+            RaiseEvent(ManagedAccounts, this, e);
         }
 
         private void managedAccounts(string accountsList)
@@ -573,8 +558,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Receive FA Event Arguments</param>
         protected virtual void OnReceiveFA(ReceiveFAEventArgs e)
         {
-            if (ReceiveFA != null)
-                ReceiveFA(this, e);
+            RaiseEvent(ReceiveFA, this, e);
         }
 
         private void receiveFA(FADataType faDataType, string xml)
@@ -594,8 +578,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Historical Data Event Arguments</param>
         protected virtual void OnHistoricalData(HistoricalDataEventArgs e)
         {
-            if (HistoricalData != null)
-                HistoricalData(this, e);
+            RaiseEvent(HistoricalData, this, e);
         }
 
         private void historicalData(int reqId, DateTime date, decimal open, decimal high, decimal low, decimal close,
@@ -617,8 +600,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Scanner Parameters Event Arguments</param>
         protected virtual void OnScannerParameters(ScannerParametersEventArgs e)
         {
-            if (ScannerParameters != null)
-                ScannerParameters(this, e);
+            RaiseEvent(ScannerParameters, this, e);
         }
 
         private void scannerParameters(string xml)
@@ -638,8 +620,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Scanner Data Event Arguments</param>
         protected virtual void OnScannerData(ScannerDataEventArgs e)
         {
-            if (ScannerData != null)
-                ScannerData(this, e);
+            RaiseEvent(ScannerData, this, e);
         }
 
         private void scannerData(int reqId, int rank, ContractDetails contractDetails, string distance, string benchmark,
@@ -661,8 +642,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Scanner Data Event Arguments</param>
         protected virtual void OnScannerDataEnd(ScannerDataEndEventArgs e)
         {
-            if (ScannerDataEnd != null)
-                ScannerDataEnd(this, e);
+            RaiseEvent(ScannerDataEnd, this, e);
         }
 
         private void scannerDataEnd(int reqId)
@@ -684,8 +664,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Real Time Bar Event Arguments</param>
         protected virtual void OnRealTimeBar(RealTimeBarEventArgs e)
         {
-            if (RealTimeBar != null)
-                RealTimeBar(this, e);
+            RaiseEvent(RealTimeBar, this, e);
         }
 
         private void realTimeBar(int reqId, long time, decimal open, decimal high, decimal low, decimal close, long volume, double wap, int count)
@@ -705,8 +684,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Current Time Event Arguments</param>
         protected virtual void OnCurrentTime(CurrentTimeEventArgs e)
         {
-            if (CurrentTime != null)
-                CurrentTime(this, e);
+            RaiseEvent(CurrentTime, this, e);
         }
 
         private void currentTime(DateTime time)
@@ -727,8 +705,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Fundamental Data Event Arguments</param>
         protected virtual void OnFundamentalData(FundamentalDetailsEventArgs e)
         {
-            if (FundamentalData != null)
-                FundamentalData(this, e);
+            RaiseEvent(FundamentalData, this, e);
         }
 
         private void fundamentalData(int requestId, string data)
@@ -748,8 +725,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Error Event Arguments</param>
         protected virtual void OnError(ErrorEventArgs e)
         {
-            if (Error != null)
-                Error(this, e);
+            RaiseEvent(Error, this, e);
         }
 
         private void error(int tickerId, ErrorMessage errorCode, string errorMsg)
@@ -808,8 +784,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Connection Closed Event Arguments</param>
         protected virtual void OnConnectionClosed(ConnectionClosedEventArgs e)
         {
-            if (ConnectionClosed != null)
-                ConnectionClosed(this, e);
+            RaiseEvent(ConnectionClosed, this, e);
         }
 
         private void connectionClosed()
