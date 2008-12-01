@@ -23,6 +23,14 @@ namespace Krs.Ats.IBNet
 
         #region IB Wrapper to Events
 
+        static public void RaiseEvent<T>(EventHandler<T> @event, object sender, T e)
+        where T : EventArgs
+        {
+            var handler = @event;
+            if (handler != null)
+                handler(sender, e);
+        }
+
         /// <summary>
         /// This event is called when the market data changes. Prices are updated immediately with no delay.
         /// </summary>
@@ -34,8 +42,7 @@ namespace Krs.Ats.IBNet
         /// <param name="e">Tick Price event arguments</param>
         protected virtual void OnTickPrice(TickPriceEventArgs e)
         {
-            if (TickPrice != null)
-                TickPrice(this, e);
+            RaiseEvent(TickPrice, this, e);
         }
 
         private void tickPrice(int tickerId, TickType tickType, decimal price, bool canAutoExecute)
