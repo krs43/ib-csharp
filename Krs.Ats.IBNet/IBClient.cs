@@ -2438,7 +2438,7 @@ namespace Krs.Ats.IBNet
                         send(filter.AcctCode);
 
                         // The valid format for time is "yyyymmdd-hh:mm:ss"
-                        send(filter.Time.ToString("yyyymmdd-hh:mm:ss", CultureInfo.InvariantCulture));
+                        send(filter.Time.ToString("yyyyMMdd-hh:mm:ss", CultureInfo.InvariantCulture));
                         send(filter.Symbol);
                         send(EnumDescConverter.GetEnumDescription(filter.SecurityType));
                         send(filter.Exchange);
@@ -4217,7 +4217,32 @@ namespace Krs.Ats.IBNet
         private decimal ReadDecimal()
         {
             String str = ReadStr();
-            return str == null ? 0 : Decimal.Parse(str, CultureInfo.InvariantCulture);
+            if (string.IsNullOrEmpty(str))
+                return 0;
+            decimal retVal;
+            double dretVal;
+            if (decimal.TryParse(str, out retVal))
+            {
+                return retVal;
+            }
+            if (str == "1.7976931348623157E308")
+                return decimal.MaxValue;
+            if (double.TryParse(str, out dretVal))
+            {
+                try
+                {
+                    retVal = Convert.ToDecimal(dretVal);
+                }
+                catch (Exception)
+                {
+                    retVal = 0;
+                }
+            }
+            else
+            {
+                retVal = 0;
+            }
+            return retVal;
         }
 
         private double ReadDoubleMax()
