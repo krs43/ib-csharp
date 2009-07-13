@@ -4235,12 +4235,12 @@ namespace Krs.Ats.IBNet
                 }
                 catch (Exception)
                 {
-                    retVal = 0;
+                    retVal = decimal.MaxValue;
                 }
             }
             else
             {
-                retVal = 0;
+                retVal = decimal.MaxValue;
             }
             return retVal;
         }
@@ -4248,13 +4248,13 @@ namespace Krs.Ats.IBNet
         private double ReadDoubleMax()
         {
             String str = ReadStr();
-            return (str == null || str.Length == 0) ? Double.MaxValue : Double.Parse(str, CultureInfo.InvariantCulture);
+            return (string.IsNullOrEmpty(str)) ? Double.MaxValue : Double.Parse(str, CultureInfo.InvariantCulture);
         }
 
         private decimal ReadDecimalMax()
         {
             String str = ReadStr();
-            return (str == null || str.Length == 0) ? decimal.MaxValue : decimal.Parse(str, CultureInfo.InvariantCulture);
+            return (string.IsNullOrEmpty(str)) ? decimal.MaxValue : decimal.Parse(str, CultureInfo.InvariantCulture);
         }
 
         #endregion

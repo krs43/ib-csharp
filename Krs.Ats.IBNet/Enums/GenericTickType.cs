@@ -58,6 +58,10 @@ namespace Krs.Ats.IBNet
         /// Auction values (volume, price and imbalance)
         /// Returns TickType.AuctionVolume, TickType.AuctionPrice, TickType.AuctionImbalance
         /// </summary>
-        [Description("AuctionPrice")] AuctionPrice = 225
+        [Description("AuctionPrice")] AuctionPrice = 225,
+        /// <summary>
+        /// Shortable Ticks
+        /// </summary>
+        [Description("Shortable")] Shortable = 236
     }
 }
