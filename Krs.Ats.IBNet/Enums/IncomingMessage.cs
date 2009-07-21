@@ -144,6 +144,10 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Received after a delta nuetral validation
         /// </summary>
-        [Description("DELTA_NEUTRAL_VALIDATION")] DeltaNuetralValidation = 56
+        [Description("DELTA_NEUTRAL_VALIDATION")] DeltaNuetralValidation = 56,
+        /// <summary>
+        /// End of Tick Snapshot message
+        /// </summary>
+        [Description("TICK_SNAPSHOT_END")] TickSnapshotEnd = 57
     }
 }

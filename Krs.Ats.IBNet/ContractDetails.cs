@@ -18,6 +18,14 @@ namespace Krs.Ats.IBNet
         private String tradingClass;
         private String validExchanges;
         private int underConId;
+        private String longName;
+        private String contractMonth;
+        private String industry;
+        private String category;
+        private String subcategory;
+        private String timeZoneId;
+        private String tradingHours;
+        private String liquidHours;
 
         // BOND values
         private String cusip;
@@ -44,7 +52,7 @@ namespace Krs.Ats.IBNet
         /// Default constructor
         /// </summary>
         public ContractDetails() :
-            this(new Contract(), null, null, 0, null, null, 0)
+            this(new Contract(), null, null, 0, null, null, 0, null, null, null, null, null, null, null, null)
         {
         }
 
@@ -58,8 +66,18 @@ namespace Krs.Ats.IBNet
         /// <param name="orderTypes">The list of valid order types for this contract.</param>
         /// <param name="validExchanges">The list of exchanges this contract is traded on.</param>
         /// <param name="underConId">The Underlying Contract Id (for derivatives only)</param>
+        /// <param name="longName">Long Name</param>
+        /// <param name="contractMonth">The contract month. Typically the contract month of the underlying for a futures contract.</param>
+        /// <param name="industry">The industry classification of the underlying/product. For example, Financial.</param>
+        /// <param name="category">The industry category of the underlying. For example, InvestmentSvc.</param>
+        /// <param name="subcategory">The industry subcategory of the underlying. For example, Brokerage.</param>
+        /// <param name="timeZoneId">The ID of the time zone for the trading hours of the product. For example, EST.</param>
+        /// <param name="tradingHours">The trading hours of the product. For example, 20090507:0700-1830,1830-2330;20090508:CLOSED.</param>
+        /// <param name="liquidHours">The liquid trading hours of the product. For example, 20090507:0930-1600;20090508:CLOSED.</param>
         public ContractDetails(Contract summary, String marketName, String tradingClass, double minTick,
-                               String orderTypes, String validExchanges, int underConId)
+                               String orderTypes, String validExchanges, int underConId, String longName,
+                               String contractMonth, String industry, String category, String subcategory,
+                               String timeZoneId, String tradingHours, String liquidHours)
         {
             this.summary = summary;
             this.marketName = marketName;
@@ -68,6 +86,14 @@ namespace Krs.Ats.IBNet
             this.orderTypes = orderTypes;
             this.validExchanges = validExchanges;
             this.underConId = underConId;
+            this.longName = longName;
+            this.contractMonth = contractMonth;
+            this.industry = industry;
+            this.category = category;
+            this.subcategory = subcategory;
+            this.timeZoneId = timeZoneId;
+            this.tradingHours = tradingHours;
+            this.liquidHours = liquidHours;
         }
 
         #endregion
@@ -290,6 +316,78 @@ namespace Krs.Ats.IBNet
         {
             get { return notes; }
             set { notes = value; }
+        }
+
+        /// <summary>
+        /// Long Name
+        /// </summary>
+        public String LongName
+        {
+            get { return longName; }
+            set { longName = value; }
+        }
+
+        /// <summary>
+        /// The contract month. Typically the contract month of the underlying for a futures contract.
+        /// </summary>
+        public String ContractMonth
+        {
+            get { return contractMonth; }
+            set { contractMonth = value; }
+        }
+
+        /// <summary>
+        /// The industry classification of the underlying/product. For example, Financial.
+        /// </summary>
+        public String Industry
+        {
+            get { return industry; }
+            set { industry = value; }
+        }
+
+        /// <summary>
+        /// The industry category of the underlying. For example, InvestmentSvc.
+        /// </summary>
+        public String Category
+        {
+            get { return category; }
+            set { category = value; }
+        }
+
+        /// <summary>
+        /// The industry subcategory of the underlying. For example, Brokerage.
+        /// </summary>
+        public String Subcategory
+        {
+            get { return subcategory; }
+            set { subcategory = value; }
+        }
+
+        /// <summary>
+        /// The ID of the time zone for the trading hours of the product. For example, EST.
+        /// </summary>
+        public String TimeZoneId
+        {
+            get { return timeZoneId; }
+            set { timeZoneId = value; }
+        }
+
+        /// <summary>
+        /// The trading hours of the product. For example, 20090507:0700-1830,1830-2330;20090508:CLOSED.
+        /// </summary>
+        public String TradingHours
+        {
+            get { return tradingHours; }
+            set { tradingHours = value; }
+        }
+
+        /// <summary>
+        /// The liquid trading hours of the product. For example, 20090507:0930-1600;20090508:CLOSED.
+        /// </summary>
+        public String LiquidHours
+        {
+            get { return liquidHours; }
+            set { liquidHours = value; }
         }
 
         #endregion

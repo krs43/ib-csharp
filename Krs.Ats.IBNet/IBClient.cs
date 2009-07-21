@@ -793,6 +793,26 @@ namespace Krs.Ats.IBNet
             OnConnectionClosed(e);
         }
 
+        /// <summary>
+        /// Called once the tick snap shot is complete.
+        /// </summary>
+        public event EventHandler<TickSnapshotEndEventArgs> TickSnapshotEnd;
+
+        /// <summary>
+        /// Called internally when the receive thread receives a Tick Snapshot End Event.
+        /// </summary>
+        /// <param name="e">Contract Details End Event Arguments</param>
+        protected virtual void OnTickSnapshotEnd(TickSnapshotEndEventArgs e)
+        {
+            RaiseEvent(TickSnapshotEnd, this, e);
+        }
+
+        private void tickSnapshotEnd(int requestId)
+        {
+            TickSnapshotEndEventArgs e = new TickSnapshotEndEventArgs(requestId);
+            OnTickSnapshotEnd(e);
+        }
+
         #endregion
 
         #region Constructor / Destructor
@@ -854,7 +874,7 @@ namespace Krs.Ats.IBNet
 
         #region Values
 
-        private const int clientVersion = 42;
+        private const int clientVersion = 46;
         private const int minimumServerVersion = 32;
 
         #endregion
@@ -1191,7 +1211,8 @@ namespace Krs.Ats.IBNet
         /// <param name="contract">this structure contains a description of the contract for which market data is being requested.</param>
         /// <param name="genericTickList">comma delimited list of generic tick types.  Tick types can be found here: (new Generic Tick Types page) </param>
         /// <param name="snapshot">Allows client to request snapshot market data.</param>
-        public void RequestMarketData(int tickerId, Contract contract, Collection<GenericTickType> genericTickList, bool snapshot)
+        /// <param name="marketDataOff">Market Data Off - used in conjunction with RTVolume Generic tick type causes only volume data to be sent.</param>
+        public void RequestMarketData(int tickerId, Contract contract, Collection<GenericTickType> genericTickList, bool snapshot, bool marketDataOff)
         {
             lock (this)
             {
@@ -1297,16 +1318,14 @@ namespace Krs.Ats.IBNet
                          * 
                          * Therefore we are relying on TWS doing validation.
                          */
-                        string genList = "";
+                        StringBuilder genList = new StringBuilder();
                         if (genericTickList != null)
-                        {
-                            if (genericTickList.Count > 0)
-                                genList = ((int) genericTickList[0]).ToString(CultureInfo.InvariantCulture);
-                            for (int ix = 1; ix < genericTickList.Count; ix++)
-                                genList = genList + "," +
-                                          ((int) genericTickList[ix]).ToString(CultureInfo.InvariantCulture);
-                        }
-                        send(genList);
+                            genList.AppendFormat("{0},",
+                                                 ((int) genericTickList[0]).ToString(CultureInfo.InvariantCulture));
+                        if (marketDataOff)
+                            genList.AppendFormat("mdoff");
+
+                        send(genList.ToString().Trim(','));
                     }
                     //35 is the minum version for SnapShot
                     if (serverVersion >= 35)
@@ -1655,7 +1674,16 @@ namespace Krs.Ats.IBNet
                     return;
                 }
 
-                int version = 5;
+                if (serverVersion < 45)
+                {
+                    if (contract.SecIdType != SecurityIdType.None || !string.IsNullOrEmpty(contract.SecId))
+                    {
+                        error(ErrorMessage.UpdateTws, "It does not support secIdType and secId parameters.");
+                        return;
+                    }
+                }
+
+                const int version = 6;
 
                 try
                 {
@@ -1689,6 +1717,12 @@ namespace Krs.Ats.IBNet
                     if (serverVersion >= 31)
                     {
                         send(contract.IncludeExpired);
+                    }
+
+                    if (serverVersion >= 45)
+                    {
+                        send(EnumDescConverter.GetEnumDescription(contract.SecIdType));
+                        send(contract.SecId);
                     }
                 }
                 catch (Exception e)
@@ -2029,7 +2063,7 @@ namespace Krs.Ats.IBNet
                         for (int i = 0; i < contract.ComboLegs.Count; ++i)
                         {
                             comboLeg = (ComboLeg)contract.ComboLegs[i];
-                            if (comboLeg.ShortSaleSlot != 0 || (comboLeg.DesignatedLocation != null && comboLeg.DesignatedLocation.Length > 0))
+                            if (comboLeg.ShortSaleSlot != 0 || (!string.IsNullOrEmpty(comboLeg.DesignatedLocation)))
                             {
                                 error(orderId, ErrorMessage.UpdateTws, "It does not support SSHORT flag for combo legs.");
                                 return;
@@ -2074,7 +2108,26 @@ namespace Krs.Ats.IBNet
                     }
                 }
 
-                int version = 27;
+
+                if (serverVersion < 44)
+                {
+                    if (order.NotHeld)
+                    {
+                        error(ErrorMessage.UpdateTws, "It does not support notHeld parameter.");
+                        return;
+                    }
+                }
+
+                if (serverVersion < 45)
+                {
+                    if (contract.SecIdType != SecurityIdType.None || !string.IsNullOrEmpty(contract.SecId))
+                    {
+                        error(ErrorMessage.UpdateTws, "It does not support secIdType and secId parameters.");
+                        return;
+                    }
+                }
+
+                int version = (serverVersion < 44) ? 27 : 29;
 
                 // send place order msg
                 try
@@ -2104,6 +2157,11 @@ namespace Krs.Ats.IBNet
                     if (serverVersion >= 2)
                     {
                         send(contract.LocalSymbol);
+                    }
+                    if (serverVersion >= 45)
+                    {
+                        send(EnumDescConverter.GetEnumDescription(contract.SecIdType));
+                        send(contract.SecId);
                     }
 
                     // send main order fields
@@ -2304,6 +2362,9 @@ namespace Krs.Ats.IBNet
                         send(order.ClearingAccount);
                         send(order.ClearingIntent);
                     }
+
+                    if(serverVersion >= 44)
+                        send(order.NotHeld);
 
                     if (serverVersion >= 40)
                     {
@@ -3699,6 +3760,9 @@ namespace Krs.Ats.IBNet
                             order.ClearingIntent = ReadStr();
                         }
 
+                        if (version >= 22)
+                            order.NotHeld = ReadBoolFromInt();
+
                         if (version >= 20)
                         {
                             if (ReadBoolFromInt())
@@ -3846,6 +3910,21 @@ namespace Krs.Ats.IBNet
                         {
                             contract.UnderConId = ReadInt();
                         }
+                        if (version >= 5)
+                        {
+                            contract.LongName = ReadStr();
+                            contract.Summary.PrimaryExchange = ReadStr();
+                        }
+                        if (version >= 6)
+                        {
+                            contract.ContractMonth = ReadStr();
+                            contract.Industry = ReadStr();
+                            contract.Category = ReadStr();
+                            contract.Subcategory = ReadStr();
+                            contract.TimeZoneId = ReadStr();
+                            contract.TradingHours = ReadStr();
+                            contract.LiquidHours = ReadStr();
+                        }
 
                         contractDetails(reqId, contract);
                         break;
@@ -3891,6 +3970,10 @@ namespace Krs.Ats.IBNet
                             contract.NextOptionType = ReadStr();
                             contract.NextOptionPartial = ReadBoolFromInt();
                             contract.Notes = ReadStr();
+                        }
+                        if(version >= 4)
+                        {
+                            contract.LongName = ReadStr();
                         }
                         bondContractDetails(reqId, contract);
                         break;
@@ -4152,9 +4235,15 @@ namespace Krs.Ats.IBNet
                         deltaNuetralValidation(reqId, underComp);
                         break;
                     }
-				
+                case IncomingMessage.TickSnapshotEnd:
+                    {
+                        /*int version =*/ ReadInt();
+                        int reqId = ReadInt();
 
-                default:
+                        tickSnapshotEnd(reqId);
+                        break;
+                    }
+				default:
                     {
                         error(ErrorMessage.NoValidId);
                         return false;

@@ -17,8 +17,8 @@ Module Program
         Program.client.Connect("127.0.0.1", &H1D48, 10)
         Program.ER2 = New Future("ER2", "GLOBEX", "200803")
         Program.Goog = New Equity("GOOG")
-        Program.client.RequestMarketData(12, Program.ER2, Nothing, False)
-        Program.client.RequestMarketData(13, Program.Goog, Nothing, False)
+        Program.client.RequestMarketData(12, Program.ER2, Nothing, False, False)
+        Program.client.RequestMarketData(13, Program.Goog, Nothing, False, False)
         Do While True
             Threading.Thread.Sleep(100)
         Loop

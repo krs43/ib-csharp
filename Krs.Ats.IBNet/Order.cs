@@ -106,6 +106,9 @@ namespace Krs.Ats.IBNet
         // What-if
         private bool whatIf;
 
+        // Not Held
+        private bool notHeld;
+
         #endregion
 
         #region Constructor
@@ -140,6 +143,7 @@ namespace Krs.Ats.IBNet
             scaleSubsLevelSize = Int32.MaxValue;
             scalePriceIncrement = decimal.MaxValue;
             faMethod = FinancialAdvisorAllocationMethod.None;
+            notHeld = false;
         }
 
         #endregion
@@ -785,6 +789,15 @@ namespace Krs.Ats.IBNet
         {
             get { return whatIf; }
             set { whatIf = value; }
+        }
+
+        /// <summary>
+        /// Not Held
+        /// </summary>
+        public bool NotHeld
+        {
+            get { return notHeld; }
+            set { notHeld = value; }
         }
 
         #endregion

@@ -62,6 +62,10 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Shortable Ticks
         /// </summary>
-        [Description("Shortable")] Shortable = 236
+        [Description("Shortable")] Shortable = 236,
+        /// <summary>
+        /// Real Time Volume Tick Type
+        /// </summary>
+        [Description("RTVolume")] RealTimeVolume = 233,
     }
 }

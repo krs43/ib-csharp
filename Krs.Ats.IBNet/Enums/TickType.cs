@@ -192,17 +192,25 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Last Time Stamp
         /// </summary>
-        [Description("LAST_TIMESTAMP")]
-        LastTimestamp = 45,
+        [Description("LAST_TIMESTAMP")] LastTimestamp = 45,
         /// <summary>
         /// Shortable
         /// </summary>
-        [Description("SHORTABLE")]
-		Shortable = 46,
+        [Description("SHORTABLE")] Shortable = 46,
         /// <summary>
         /// Fundamental Ratios
         /// </summary>
-        [Description("FUNDAMENTAL_RATIOS")]
-        FundamentalRatios = 47
+        [Description("FUNDAMENTAL_RATIOS")] FundamentalRatios = 47,
+        /// <summary>
+        /// Real Time Volume
+        /// </summary>
+        [Description("RTVOLUME")] RealTimeVolume = 48,
+        /// <summary>
+        /// When trading is halted for a contract, TWS receives a special tick: haltedLast=1. When trading is resumed, TWS receives haltedLast=0. A new tick type, HALTED, tick ID = 49, is now available in regular market data via the API to indicate this halted state.
+        /// Possible values for this new tick type are:
+        /// 0 = Not halted 
+        /// 1 = Halted. 
+        ///  </summary>
+        [Description("HALTED")] Halted = 49
     }
 }

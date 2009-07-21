@@ -21,7 +21,7 @@ namespace Krs.Ats.IBNet.Contracts
         public Option(string equitySymbol, string optionSymbol, string expiry,
         RightType right, decimal strike)
             : base(0, equitySymbol, SecurityType.Option, expiry, (double)strike,
-        right, "100", "SMART", "USD", optionSymbol, "SMART")
+        right, "100", "SMART", "USD", optionSymbol, "SMART", SecurityIdType.None, string.Empty)
         {
         }
 
@@ -37,7 +37,7 @@ namespace Krs.Ats.IBNet.Contracts
         public Option(string equitySymbol, string optionSymbol, int year, int month,
         RightType right, decimal strike)
             : base(0, equitySymbol, SecurityType.Option, "", (double)strike,
-        right, "100", "SMART", "USD", optionSymbol, "SMART")
+        right, "100", "SMART", "USD", optionSymbol, "SMART", SecurityIdType.None, string.Empty)
         {
             StringBuilder ExpirationString = new StringBuilder();
             ExpirationString.AppendFormat("{0:0000}{1:00}", year, month);

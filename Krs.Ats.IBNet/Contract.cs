@@ -7,7 +7,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Class to describe a financial security.
     /// </summary>
-    /// <seealso href="http://www.interactivebrokers.com/php/webhelp/Interoperability/Socket_Client_Java/java_properties.htm#Contract">Interactive Brokers Contract Documentation</seealso>
+    /// <seealso href="http://www.interactivebrokers.com/php/apiUsersGuide/apiguide/java/contract.htm">Interactive Brokers Contract Documentation</seealso>
     [Serializable()]
     public class Contract
     {
@@ -24,6 +24,8 @@ namespace Krs.Ats.IBNet
         private bool includeExpired; // can not be set to true for orders.
         private String localSymbol;
         private String multiplier;
+        private SecurityIdType secIdType;        // CUSIP;SEDOL;ISIN;RIC
+        private String secId;
 
         private String primaryExchange;
                        // pick a non-aggregate (ie not the SMART exchange) exchange that the contract trades on.  DO NOT SET TO SMART.
@@ -43,7 +45,7 @@ namespace Krs.Ats.IBNet
         /// Undefined Contract Constructor
         ///</summary>
         public Contract() :
-            this(0, null, SecurityType.Undefined, null, 0, RightType.Undefined, null, null, null, null, null)
+            this(0, null, SecurityType.Undefined, null, 0, RightType.Undefined, null, null, null, null, null, SecurityIdType.None, string.Empty)
         {
         }
 
@@ -56,7 +58,7 @@ namespace Krs.Ats.IBNet
         /// <param name="currency">Specifies the currency.</param>
         /// <param name="expiry">The expiration date. Use the format YYYYMM.</param>
         public Contract(string symbol, string exchange, SecurityType securityType, string currency, string expiry) :
-            this(0, symbol, securityType, expiry, 0, RightType.Undefined, null, exchange, currency, null, null)
+            this(0, symbol, securityType, expiry, 0, RightType.Undefined, null, exchange, currency, null, null, SecurityIdType.None, string.Empty)
         {
         }
 
@@ -69,7 +71,7 @@ namespace Krs.Ats.IBNet
         /// <param name="currency">Specifies the currency.</param>
         public Contract(string symbol, string exchange, SecurityType securityType, string currency)
             :
-            this(0, symbol, securityType, null, 0, RightType.Undefined, null, exchange, currency, null, null)
+            this(0, symbol, securityType, null, 0, RightType.Undefined, null, exchange, currency, null, null, SecurityIdType.None, string.Empty)
         {
         }
 
@@ -88,8 +90,11 @@ namespace Krs.Ats.IBNet
         /// <param name="currency">Specifies the currency.</param>
         /// <param name="localSymbol">This is the local exchange symbol of the underlying asset.</param>
         /// <param name="primaryExchange">Identifies the listing exchange for the contract (do not list SMART).</param>
+        /// <param name="secIdType">Security identifier, when querying contract details or when placing orders.</param>
+        /// <param name="secId">Unique identifier for the secIdType.</param>
         public Contract(int contractId, String symbol, SecurityType securityType, String expiry, double strike, RightType right,
-                        String multiplier, string exchange, string currency, string localSymbol, string primaryExchange)
+                        String multiplier, string exchange, string currency, string localSymbol, string primaryExchange,
+                        SecurityIdType secIdType, string secId)
         {
             this.contractId = contractId;
             this.symbol = symbol;
@@ -103,6 +108,8 @@ namespace Krs.Ats.IBNet
             this.currency = currency;
             this.localSymbol = localSymbol;
             this.primaryExchange = primaryExchange;
+            this.secIdType = secIdType;
+            this.secId = secId;
         }
 
         /// <summary>
@@ -282,6 +289,34 @@ namespace Krs.Ats.IBNet
         {
             get { return underlyingComponent; }
             set { underlyingComponent = value; }
+        }
+
+        /// <summary>
+        /// Security identifier, when querying contract details or when placing orders. Supported identifiers are:
+        /// ISIN (Example: Apple: US0378331005)
+        /// CUSIP (Example: Apple: 037833100)
+        /// SEDOL (Consists of 6-AN + check digit. Example: BAE: 0263494)
+        /// RIC (Consists of exchange-independent RIC Root and a suffix identifying the exchange. Example: AAPL.O for Apple on NASDAQ.)
+        /// </summary>
+        public SecurityIdType SecIdType
+        {
+            get { return secIdType; }
+            set { secIdType = value; }
+        } 
+
+        /// <summary>
+        /// Unique identifier for the secIdType.
+        /// </summary>
+        public String SecId
+        {
+            get
+            {
+                return secId;
+            }
+            set
+            {
+                secId = value;
+            }
         }
 
         #endregion
