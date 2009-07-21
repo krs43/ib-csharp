@@ -3,6 +3,15 @@ Karl Schulze - www.dinosaurtech.com
 
 Release Notes
 
+9.6.3.13 New Release - 7/20/09
+* Update to Ib's 9.63 api
+* Add shortable tickType
+* Fixes to ReadDecimal
+* Fix 1 second barsize enum.
+* Fixed Bug with IBClient.ReadDecimal()
+* 
+Fixed bug in ExecutionFilter
+
 9.6.0.11 New Release - 11/30/08
 * Made all event handlers thread safe
 * Brought up to API 9.6
