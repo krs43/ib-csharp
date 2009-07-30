@@ -4305,7 +4305,7 @@ namespace Krs.Ats.IBNet
 
         private decimal ReadDecimal()
         {
-            var str = ReadStr();
+            String str = ReadStr();
             if (string.IsNullOrEmpty(str))
                 return 0;
             decimal retVal;
@@ -4321,7 +4321,7 @@ namespace Krs.Ats.IBNet
         private decimal ReadDecimalMax()
         {
             String str = ReadStr();
-            return (string.IsNullOrEmpty(str)) ? decimal.MaxValue : decimal.Parse(str, CultureInfo.InvariantCulture);
+            return (string.IsNullOrEmpty(str)) ? decimal.MaxValue : ReadDecimal();
         }
 
         #endregion
