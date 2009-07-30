@@ -4305,33 +4305,11 @@ namespace Krs.Ats.IBNet
 
         private decimal ReadDecimal()
         {
-            String str = ReadStr();
+            var str = ReadStr();
             if (string.IsNullOrEmpty(str))
                 return 0;
             decimal retVal;
-            double dretVal;
-            if (decimal.TryParse(str, out retVal))
-            {
-                return retVal;
-            }
-            if (str == "1.7976931348623157E308")
-                return decimal.MaxValue;
-            if (double.TryParse(str, out dretVal))
-            {
-                try
-                {
-                    retVal = Convert.ToDecimal(dretVal);
-                }
-                catch (Exception)
-                {
-                    retVal = decimal.MaxValue;
-                }
-            }
-            else
-            {
-                retVal = decimal.MaxValue;
-            }
-            return retVal;
+            return decimal.TryParse(str, out retVal) ? retVal : decimal.MaxValue;
         }
 
         private double ReadDoubleMax()
