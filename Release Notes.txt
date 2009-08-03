@@ -3,6 +3,10 @@ Karl Schulze - www.dinosaurtech.com
 
 Release Notes
 
+9.6.3.14 Bug Fix and Feature - 8/3/09
+* Added Overload to Request History to allow you to specify duration in a raw string
+* Further Fixed ReadDecimal Bug
+
 9.6.3.13 New Release - 7/20/09
 * Update to Ib's 9.63 api
 * Add shortable tickType
