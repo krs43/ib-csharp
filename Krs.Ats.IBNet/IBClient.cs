@@ -1426,7 +1426,6 @@ namespace Krs.Ats.IBNet
             }
         }
 		
-
         /// <summary>
         /// Call the reqHistoricalData() method to start receiving historical data results through the historicalData() EWrapper method. 
         /// </summary>
@@ -1526,6 +1525,147 @@ namespace Krs.Ats.IBNet
         public void RequestHistoricalData(int tickerId, Contract contract, DateTime endDateTime, TimeSpan duration,
                                       BarSize barSizeSetting, HistoricalDataType whatToShow, int useRth)
         {
+            string dur = string.Empty;
+
+            //Seconds are limited to a single day, must use longest possible
+            //time to convey duration
+            //This is the time span the request will cover, and is specified using the format:
+            // <integer /> <unit />, i.e., 1 D, where valid units are:
+            // S (seconds)
+            // D (days)
+            // W (weeks)
+            // M (months)
+            // Y (years)
+            // If no unit is specified, seconds are used. "years" is currently limited to one.
+            DateTime beginDateTime = endDateTime.Subtract(duration);
+            if(endDateTime.AddDays(-1) <= beginDateTime)
+            {
+                //Seconds
+                dur = Convert.ToInt32(duration.TotalSeconds) + " S";
+            }
+            else if (endDateTime.AddDays(-7) < beginDateTime)
+            {
+                //Days
+                dur = Convert.ToInt32(duration.TotalDays) + " D";
+            }
+            else if (endDateTime.AddMonths(-1) < beginDateTime)
+            {
+                dur = Convert.ToInt32( Math.Ceiling(duration.TotalDays / 7.0)) + " W";
+            }
+            else if (endDateTime.AddYears(-1) < beginDateTime)
+            {
+                int totalMonths = endDateTime.Month - beginDateTime.Month;
+                if (totalMonths < 0)
+                    totalMonths += 12;
+                dur = Convert.ToInt32(totalMonths) + " M";
+            }
+            else
+            {
+                dur = "1 Y";
+            }
+
+            RequestHistoricalData(tickerId, contract, endDateTime, dur, barSizeSetting, whatToShow, useRth);
+        }
+
+        /// <summary>
+        /// Call the reqHistoricalData() method to start receiving historical data results through the historicalData() EWrapper method. 
+        /// </summary>
+        /// <param name="tickerId">the Id for the request. Must be a unique value. When the data is received, it will be identified by this Id. This is also used when canceling the historical data request.</param>
+        /// <param name="contract">this structure contains a description of the contract for which market data is being requested.</param>
+        /// <param name="endDateTime">Date is sent after a .ToUniversalTime, so make sure the kind property is set correctly, and assumes GMT timezone. Use the format yyyymmdd hh:mm:ss tmz, where the time zone is allowed (optionally) after a space at the end.</param>
+        /// <param name="duration">This is the time span the request will cover, and is specified using the format:
+        /// <integer /> <unit />, i.e., 1 D, where valid units are:
+        /// S (seconds)
+        /// D (days)
+        /// W (weeks)
+        /// M (months)
+        /// Y (years)
+        /// If no unit is specified, seconds are used. "years" is currently limited to one.
+        /// </param>
+        /// <param name="barSizeSetting">
+        /// specifies the size of the bars that will be returned (within IB/TWS limits). Valid values include:
+        /// <list type="table">
+        /// <listheader>
+        ///     <term>Bar Size</term>
+        ///     <description>Parametric Value</description>
+        /// </listheader>
+        /// <item>
+        ///     <term>1 sec</term>
+        ///     <description>1</description>
+        /// </item>
+        /// <item>
+        ///     <term>5 secs</term>
+        ///     <description>2</description>
+        /// </item>
+        /// <item>
+        ///     <term>15 secs</term>
+        ///     <description>3</description>
+        /// </item>
+        /// <item>
+        ///     <term>30 secs</term>
+        ///     <description>4</description>
+        /// </item>
+        /// <item>
+        ///     <term>1 min</term>
+        ///     <description>5</description>
+        /// </item>
+        /// <item>
+        ///     <term>2 mins</term>
+        ///     <description>6</description>
+        /// </item>
+        /// <item>
+        ///     <term>5 mins</term>
+        ///     <description>7</description>
+        /// </item>
+        /// <item>
+        ///     <term>15 mins</term>
+        ///     <description>8</description>
+        /// </item>
+        /// <item>
+        ///     <term>30 mins</term>
+        ///     <description>9</description>
+        /// </item>
+        /// <item>
+        ///     <term>1 hour</term>
+        ///     <description>10</description>
+        /// </item>
+        /// <item>
+        ///     <term>1 day</term>
+        ///     <description>11</description>
+        /// </item>
+        /// <item>
+        ///     <term>1 week</term>
+        ///     <description></description>
+        /// </item>
+        /// <item>
+        ///     <term>1 month</term>
+        ///     <description></description>
+        /// </item>
+        /// <item>
+        ///     <term>3 months</term>
+        ///     <description></description>
+        /// </item>
+        /// <item>
+        ///     <term>1 year</term>
+        ///     <description></description>
+        /// </item>
+        /// </list>
+        /// </param>
+        /// <param name="whatToShow">determines the nature of data being extracted. Valid values include:
+        /// TRADES
+        /// MIDPOINT
+        /// BID
+        /// ASK
+        /// BID/ASK
+        /// </param>
+        /// <param name="useRth">
+        /// determines whether to return all data available during the requested time span, or only data that falls within regular trading hours. Valid values include:
+        /// 0 - all data is returned even where the market in question was outside of its regular trading hours.
+        /// 1 - only data within the regular trading hours is returned, even if the requested time span falls partially or completely outside of the RTH.
+        /// </param>
+        public void RequestHistoricalData(int tickerId, Contract contract, DateTime endDateTime, string duration,
+                                      BarSize barSizeSetting, HistoricalDataType whatToShow, int useRth)
+        {
             if (contract == null)
                 throw new ArgumentNullException("contract");
             lock (this)
@@ -1547,7 +1687,7 @@ namespace Krs.Ats.IBNet
                         return;
                     }
 
-                    send((int) OutgoingMessage.RequestHistoricalData);
+                    send((int)OutgoingMessage.RequestHistoricalData);
                     send(version);
                     send(tickerId);
 
@@ -1574,42 +1714,7 @@ namespace Krs.Ats.IBNet
                         send(endDateTime.ToUniversalTime().ToString("yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture) + " GMT");
                         send(EnumDescConverter.GetEnumDescription(barSizeSetting));
                     }
-                    //Seconds are limited to a single day, must use longest possible
-                    //time to convey duration
-                    //This is the time span the request will cover, and is specified using the format:
-                    // <integer /> <unit />, i.e., 1 D, where valid units are:
-                    // S (seconds)
-                    // D (days)
-                    // W (weeks)
-                    // M (months)
-                    // Y (years)
-                    // If no unit is specified, seconds are used. "years" is currently limited to one.
-                    DateTime beginDateTime = endDateTime.Subtract(duration);
-                    if(endDateTime.AddDays(-1) <= beginDateTime)
-                    {
-                        //Seconds
-                        send(Convert.ToInt32(duration.TotalSeconds) + " S");
-                    }
-                    else if (endDateTime.AddDays(-7) < beginDateTime)
-                    {
-                        //Days
-                        send(Convert.ToInt32(duration.TotalDays) + " D");
-                    }
-                    else if (endDateTime.AddMonths(-1) < beginDateTime)
-                    {
-                        send(Convert.ToInt32( Math.Ceiling(duration.TotalDays / 7.0)) + " W");
-                    }
-                    else if (endDateTime.AddYears(-1) < beginDateTime)
-                    {
-                        int totalMonths = endDateTime.Month - beginDateTime.Month;
-                        if (totalMonths < 0)
-                            totalMonths += 12;
-                        send(Convert.ToInt32(totalMonths) + " M");
-                    }
-                    else
-                    {
-                        send("1 Y");
-                    }
+                    send(duration);
                     send(useRth);
                     send(EnumDescConverter.GetEnumDescription(whatToShow));
                     if (serverVersion > 16)
@@ -1630,7 +1735,7 @@ namespace Krs.Ats.IBNet
                             ComboLeg comboLeg;
                             for (int i = 0; i < contract.ComboLegs.Count; i++)
                             {
-                                comboLeg = (ComboLeg) contract.ComboLegs[i];
+                                comboLeg = (ComboLeg)contract.ComboLegs[i];
                                 send(comboLeg.ConId);
                                 send(comboLeg.Ratio);
                                 send(EnumDescConverter.GetEnumDescription(comboLeg.Action));
@@ -4309,7 +4414,7 @@ namespace Krs.Ats.IBNet
             if (string.IsNullOrEmpty(str))
                 return 0;
             decimal retVal;
-            return decimal.TryParse(str, out retVal) ? retVal : decimal.MaxValue;
+            return decimal.TryParse(str, NumberStyles.Float, null, out retVal) ? retVal : decimal.MaxValue;
         }
 
         private double ReadDoubleMax()
