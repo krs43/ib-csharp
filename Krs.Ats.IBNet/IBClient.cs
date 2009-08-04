@@ -2604,7 +2604,7 @@ namespace Krs.Ats.IBNet
                         send(filter.AcctCode);
 
                         // The valid format for time is "yyyymmdd-hh:mm:ss"
-                        send(filter.Time.ToString("yyyyMMdd-hh:mm:ss", CultureInfo.InvariantCulture));
+                        send(filter.Time.ToUniversalTime().ToString("yyyyMMdd-HH:mm:ss", CultureInfo.InvariantCulture));
                         send(filter.Symbol);
                         send(EnumDescConverter.GetEnumDescription(filter.SecurityType));
                         send(filter.Exchange);
