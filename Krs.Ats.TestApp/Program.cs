@@ -10,7 +10,7 @@ namespace Krs.Ats.TestApp
     class Program
     {
         private static int NextOrderId = 0;
-        private static Contract ER2;
+        private static Contract TF;
         private static Contract TickNasdaq;
         private static Contract VolNasdaq;
         private static Contract AdNasdaq;
@@ -37,18 +37,18 @@ namespace Krs.Ats.TestApp
             client.UpdateMarketDepth += client_UpdateMktDepth;
             client.RealTimeBar += client_RealTimeBar;
             client.OrderStatus += client_OrderStatus;
-            client.ExecDetails += new EventHandler<ExecDetailsEventArgs>(client_ExecDetails);
+            client.ExecDetails += client_ExecDetails;
 
             Console.WriteLine("Connecting to IB.");
             client.Connect("127.0.0.1", 7496, 0);
-            ER2 = new Contract("ER2", "GLOBEX", SecurityType.Future, "USD", "200806");
-            YmEcbot = new Contract("YM", "ECBOT", SecurityType.Future, "USD", "200806");
-            ES = new Contract("ES", "GLOBEX", SecurityType.Future, "USD", "200806");
-            SPY = new Contract("SPY", "GLOBEX", SecurityType.Future, "USD", "200806");
-            ZN = new Contract("ZN", "ECBOT", SecurityType.Future, "USD", "200806");
-            ZB = new Contract("ZB", "ECBOT", SecurityType.Future, "USD", "200806");
-            ZT = new Contract("ZT", "ECBOT", SecurityType.Future, "USD", "200806");
-            ZF = new Contract("ZF", "ECBOT", SecurityType.Future, "USD", "200806");
+            TF = new Contract("TF", "NYBOT", SecurityType.Future, "USD", "200909");
+            YmEcbot = new Contract("YM", "ECBOT", SecurityType.Future, "USD", "200909");
+            ES = new Contract("ES", "GLOBEX", SecurityType.Future, "USD", "200909");
+            SPY = new Contract("SPY", "GLOBEX", SecurityType.Future, "USD", "200909");
+            ZN = new Contract("ZN", "ECBOT", SecurityType.Future, "USD", "200909");
+            ZB = new Contract("ZB", "ECBOT", SecurityType.Future, "USD", "200909");
+            ZT = new Contract("ZT", "ECBOT", SecurityType.Future, "USD", "200909");
+            ZF = new Contract("ZF", "ECBOT", SecurityType.Future, "USD", "200909");
 
             TickNasdaq = new Contract("TICK-NASD", "NASDAQ", SecurityType.Index, "USD");
             VolNasdaq = new Contract("VOL-NASD", "NASDAQ", SecurityType.Index, "USD");
@@ -73,12 +73,14 @@ namespace Krs.Ats.TestApp
             Order BuyContract = new Order();
             BuyContract.Action = ActionSide.Buy;
             BuyContract.OutsideRth = false;
-            BuyContract.LimitPrice = 820;
+            BuyContract.LimitPrice = 560;
             BuyContract.OrderType = OrderType.Limit;
             BuyContract.TotalQuantity = 1;
-            client.PlaceOrder(502, ER2, BuyContract);
+            //client.PlaceOrder(503, TF, BuyContract);
 
             client.RequestExecutions(34, new ExecutionFilter());
+
+            client.RequestAllOpenOrders();
 
             while(true)
             {
