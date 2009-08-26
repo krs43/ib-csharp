@@ -4414,7 +4414,7 @@ namespace Krs.Ats.IBNet
             if (string.IsNullOrEmpty(str))
                 return 0;
             decimal retVal;
-            return decimal.TryParse(str, NumberStyles.Float, null, out retVal) ? retVal : decimal.MaxValue;
+            return decimal.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out retVal) ? retVal : decimal.MaxValue;
         }
 
         private double ReadDoubleMax()
