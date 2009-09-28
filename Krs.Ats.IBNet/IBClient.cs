@@ -4393,7 +4393,7 @@ namespace Krs.Ats.IBNet
         private int ReadIntMax()
         {
             String str = ReadStr();
-            return (str == null || str.Length == 0) ? Int32.MaxValue : Int32.Parse(str, CultureInfo.InvariantCulture);
+            return (string.IsNullOrEmpty(str)) ? Int32.MaxValue : Int32.Parse(str, CultureInfo.InvariantCulture);
         }
 
         private long ReadLong()

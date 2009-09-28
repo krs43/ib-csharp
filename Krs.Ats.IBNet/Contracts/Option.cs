@@ -43,5 +43,5 @@ namespace Krs.Ats.IBNet.Contracts
             ExpirationString.AppendFormat("{0:0000}{1:00}", year, month);
             Expiry = ExpirationString.ToString();
         }
-    } 
+    }
 }
