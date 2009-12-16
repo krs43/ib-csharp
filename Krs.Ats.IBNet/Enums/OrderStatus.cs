@@ -57,6 +57,10 @@ namespace Krs.Ats.IBNet
         /// </summary>
         [Description("ApiPending")] ApiPending,
         /// <summary>
+        /// Api Cancelled
+        /// </summary>
+        [Description("ApiCancelled")] ApiCancelled,
+        /// <summary>
         /// No Order Status
         /// </summary>
         [Description("")] None
