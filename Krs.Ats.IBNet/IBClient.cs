@@ -505,6 +505,20 @@ namespace Krs.Ats.IBNet
                 new UpdateMarketDepthL2EventArgs(tickerId, position, marketMaker, operation, side, price, size);
             OnUpdateMarketDepthL2(e);
         }
+        /// <summary>
+        /// This method is triggered for any exceptions caught.
+        /// </summary>
+        public event EventHandler<ReportExceptionEventArgs> ReportException;
+
+        protected virtual void OnReportException(ReportExceptionEventArgs e) {
+        	RaiseEvent(ReportException, this, e);
+        }
+
+        private void exception(Exception ex)
+        {
+            ReportExceptionEventArgs e = new ReportExceptionEventArgs(ex);
+            OnReportException(e);
+        }
 
         /// <summary>
         /// This methodis triggered for each new bulletin if the client has subscribed (i.e. by calling the reqNewsBulletins() method.
@@ -3362,6 +3376,10 @@ namespace Krs.Ats.IBNet
             catch(IOException)
             {
                 
+            }
+            catch (Exception ex)
+            {
+                exception(ex);
             }
             finally
             {

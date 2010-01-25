@@ -88,6 +88,7 @@
     <Compile Include="EventArgs\ConnectionClosedEventArgs.cs" />
     <Compile Include="EventArgs\ContractDetailsEndEventArgs.cs" />
     <Compile Include="EventArgs\AccountDownloadEndEventArgs.cs" />
+    <Compile Include="EventArgs\ReportExceptionEventArgs.cs" />
     <Compile Include="EventArgs\TickSnapshotEndEventArgs.cs" />
     <Compile Include="EventArgs\DeltaNuetralValidationEventArgs.cs" />
     <Compile Include="EventArgs\ExecutionDataEndEventArgs.cs" />
