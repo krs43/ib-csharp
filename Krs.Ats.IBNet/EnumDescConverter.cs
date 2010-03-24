@@ -88,7 +88,8 @@ namespace Krs.Ats.IBNet
                     return fi.GetValue(fi.Name);
                 }
             }
-            return description;
+
+            throw new InvalidCastException(string.Concat("The received value ", description, " was unrecognized as an ", value.Name, " enum value."));
         }
     }
 }
