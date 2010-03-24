@@ -3379,6 +3379,9 @@ namespace Krs.Ats.IBNet
             }
             catch (Exception ex)
             {
+                if (throwExceptions)
+                    throw;
+
                 exception(ex);
             }
             finally
