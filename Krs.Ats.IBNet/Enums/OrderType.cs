@@ -87,6 +87,16 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Scale Order.
         /// </summary>
-        [Description("SCALE")] Scale
+        [Description("SCALE")] Scale,
+        /// <summary>
+        /// Market if Touched Order.
+        /// </summary>
+        [Description("MIT")]
+        MarketIfTouched,
+        /// <summary>
+        /// Limit if Touched Order.
+        /// </summary>
+        [Description("LIT")]
+        LimitIfTouched
     }
 }
