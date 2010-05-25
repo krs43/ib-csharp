@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly : AssemblyConfiguration("")]
 [assembly : AssemblyCompany("Dinosaurtech")]
 [assembly : AssemblyProduct("Krs.Ats.IBNet")]
-[assembly : AssemblyCopyright("Copyright © 2009")]
+[assembly : AssemblyCopyright("Copyright © 2010")]
 [assembly : AssemblyTrademark("")]
 [assembly : AssemblyCulture("")]
 
@@ -35,8 +35,8 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly : AssemblyVersion("9.6.3.15")]
-[assembly : AssemblyFileVersion("9.6.3.15")]
+[assembly : AssemblyVersion("9.6.4.16")]
+[assembly : AssemblyFileVersion("9.6.4.16")]
 
 //CLS Compliant
 
