@@ -211,6 +211,22 @@ namespace Krs.Ats.IBNet
         /// 0 = Not halted 
         /// 1 = Halted. 
         ///  </summary>
-        [Description("HALTED")] Halted = 49
+        [Description("HALTED")] Halted = 49,
+        /// <summary>
+        /// Bond Yield for Bid Price
+        /// </summary>
+        [Description("BID_YIELD")] BidYield = 50,
+        /// <summary>
+        /// Bond Yield for Ask Price
+        /// </summary>
+        [Description("ASK_YIELD")] AskYield = 51,
+        /// <summary>
+        /// Bond Yield for Last Price
+        /// </summary>
+        [Description("LAST_YIELD")] LastYield = 52,
+        /// <summary>
+        /// returns calculated implied volatility as a result of an calculateImpliedVolatility( ) request.
+        /// </summary>
+        [Description("CUST_OPTION_COMPUTATION")] CustOptionComputation = 49
     }
 }

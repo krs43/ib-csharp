@@ -132,6 +132,10 @@ namespace Krs.Ats.IBNet
         /// </summary>
         [Description("Cancel Fundamental Data Sending Error")] FailSendCancelFundData = 533,
         /// <summary>
+        /// Failed to send Request to Calculate Implied Volatility
+        /// </summary>
+        [Description("Request Calculate Implied Volatility Sending Error")] FailSendReqCalcImpliedVolatility = 534,
+        /// <summary>
         /// No Valid ID for error message
         /// </summary>
         [Description("")] NoValidId = -1

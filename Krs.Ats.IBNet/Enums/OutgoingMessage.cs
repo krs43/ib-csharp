@@ -132,6 +132,10 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Cancel Fundamental Data
         /// </summary>
-        [Description("CANCEL_FUNDAMENTAL_DATA")] CancelFundamentalData = 53
+        [Description("CANCEL_FUNDAMENTAL_DATA")] CancelFundamentalData = 53,
+        /// <summary>
+        /// Request Calculated Implied Volatility
+        /// </summary>
+        [Description("REQ_CALC_IMPLIED_VOLAT")] RequestCalcImpliedVolatility = 54
     }
 }

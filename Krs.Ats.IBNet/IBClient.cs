@@ -96,12 +96,10 @@ namespace Krs.Ats.IBNet
             RaiseEvent(TickOptionComputation, this, e);
         }
 
-        private void tickOptionComputation(int tickerId, TickType tickType, double impliedVol, double delta,
-                                           double modelPrice,
-                                           double pvDividend)
+        private void tickOptionComputation(int tickerId, TickType tickType, double impliedVol, double delta, double optPrice, double pvDividend, double gamma, double vega, double theta, double undPrice)
         {
             TickOptionComputationEventArgs e =
-                new TickOptionComputationEventArgs(tickerId, tickType, impliedVol, delta, modelPrice, pvDividend);
+                new TickOptionComputationEventArgs(tickerId, tickType, impliedVol, delta, optPrice, pvDividend, gamma, vega, theta, undPrice);
             OnTickOptionComputation(e);
         }
 
@@ -888,7 +886,7 @@ namespace Krs.Ats.IBNet
 
         #region Values
 
-        private const int clientVersion = 46;
+        private const int clientVersion = 47;
         private const int minimumServerVersion = 32;
 
         #endregion
@@ -1254,7 +1252,17 @@ namespace Krs.Ats.IBNet
                     }
                 }
 
-                int version = 8;
+                //46 is the minimum version for requesting contracts by conid
+                if (serverVersion < 47)
+                {
+                    if (contract.ContractId > 0)
+                    {
+                        error(tickerId, ErrorMessage.UpdateTws, "It does not support conId parameter.");
+                        return;
+                    }
+                }
+
+                int version = 9;
 
                 try
                 {
@@ -1262,6 +1270,8 @@ namespace Krs.Ats.IBNet
                     send((int) OutgoingMessage.RequestMarketData);
                     send(version);
                     send(tickerId);
+                    if (serverVersion >= 47)
+                        send(contract.ContractId);
 
                     //Send Contract Fields
                     send(contract.Symbol);
@@ -2246,7 +2256,16 @@ namespace Krs.Ats.IBNet
                     }
                 }
 
-                int version = (serverVersion < 44) ? 27 : 29;
+                if(serverVersion < 46)
+                {
+                    if (contract.ContractId > 0)
+                    {
+                        error(ErrorMessage.UpdateTws, "It does not support conId parameter.");
+                        return;
+                    }
+                }
+
+                int version = (serverVersion < 44) ? 27 : 30;
 
                 // send place order msg
                 try
@@ -2256,6 +2275,8 @@ namespace Krs.Ats.IBNet
                     send(orderId);
 
                     // send contract fields
+                    if (serverVersion >= 46)
+                        send(contract.ContractId);
                     send(contract.Symbol);
                     send(EnumDescConverter.GetEnumDescription(contract.SecurityType));
                     send(contract.Expiry);
@@ -3127,6 +3148,68 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Calculates the Implied Volatility based on the user-supplied option and underlying prices.
+        /// The calculated implied volatility is returned by tickOptionComputation( ) in a new tick type, CUST_OPTION_COMPUTATION, which is described below.
+        /// </summary>
+        /// <param name="requestId">Request Id</param>
+        /// <param name="contract">Contract</param>
+        /// <param name="optionPrice">Price of the option</param>
+        /// <param name="underPrice">Price of teh underlying of the option</param>
+        public virtual void RequestCalculateImpliedVolatility(int requestId, Contract contract, double optionPrice, double underPrice)
+        {    
+            lock(this)
+            {
+                if (!connected)
+                {
+                    error(requestId, ErrorMessage.NotConnected);
+                    return;
+                }
+
+                if (serverVersion < 49)
+                {
+                    error(ErrorMessage.UpdateTws, "It does not support calculate implied volatility requests.");
+                    return;
+                }
+
+                int version = 1;
+
+                try
+                {
+                    // send calculate implied volatility msg
+                    send((int)OutgoingMessage.RequestCalcImpliedVolatility);
+                    send(version);
+                    send(requestId);
+
+                    // send contract fields
+                    send(contract.ContractId);
+                    send(contract.Symbol);
+                    send(EnumDescConverter.GetEnumDescription(contract.SecurityType));
+                    send(contract.Expiry);
+                    send(contract.Strike);
+                    send(((contract.Right == RightType.Undefined)
+                              ? ""
+                              : EnumDescConverter.GetEnumDescription(contract.Right)));
+                    send(contract.Multiplier);
+                    send(contract.Exchange);
+                    send(contract.PrimaryExchange);
+                    send(contract.Currency);
+                    send(contract.LocalSymbol);
+
+                    send(optionPrice);
+                    send(underPrice);
+                }
+                catch (Exception e)
+                {
+                    if (!(e is ObjectDisposedException || e is IOException) || throwExceptions)
+                        throw;
+
+                    error(requestId, ErrorMessage.FailSendReqCalcImpliedVolatility, e);
+                    close();
+                }
+            }
+        }
+
+        /// <summary>
         /// The default level is ERROR. Refer to the API logging page for more details.
         /// </summary>
         /// <param name="serverLogLevel">
@@ -3473,7 +3556,7 @@ namespace Krs.Ats.IBNet
                     {
                         int version = ReadInt();
                         int tickerId = ReadInt();
-                        int tickType = ReadInt();
+                        TickType tickType = (TickType)ReadInt();
                         double impliedVol = ReadDouble();
                         if (impliedVol < 0)
                         {
@@ -3486,18 +3569,51 @@ namespace Krs.Ats.IBNet
                             // -2 is the "not yet computed" indicator
                             delta = Double.MaxValue;
                         }
-                        double modelPrice, pvDividend;
-                        if (tickType == (int) TickType.ModelOption)
-                        {
-                            // introduced in version == 5
-                            modelPrice = ReadDouble();
+
+                        double optPrice = Double.MaxValue;
+                        double pvDividend = Double.MaxValue;
+                        double gamma = Double.MaxValue;
+                        double vega = Double.MaxValue;
+                        double theta = Double.MaxValue;
+                        double undPrice = Double.MaxValue;
+                        if (version >= 6 || tickType == TickType.ModelOption)
+                        { // introduced in version == 5
+                            optPrice = ReadDouble();
+                            if (optPrice < 0)
+                            { // -1 is the "not yet computed" indicator
+                                optPrice = Double.MaxValue;
+                            }
                             pvDividend = ReadDouble();
+                            if (pvDividend < 0)
+                            { // -1 is the "not yet computed" indicator
+                                pvDividend = Double.MaxValue;
+                            }
                         }
-                        else
+                        if (version >= 6)
                         {
-                            modelPrice = pvDividend = Double.MaxValue;
+                            gamma = ReadDouble();
+                            if (Math.Abs(gamma) > 1)
+                            { // -2 is the "not yet computed" indicator
+                                gamma = Double.MaxValue;
+                            }
+                            vega = ReadDouble();
+                            if (Math.Abs(vega) > 1)
+                            { // -2 is the "not yet computed" indicator
+                                vega = Double.MaxValue;
+                            }
+                            theta = ReadDouble();
+                            if (Math.Abs(theta) > 1)
+                            { // -2 is the "not yet computed" indicator
+                                theta = Double.MaxValue;
+                            }
+                            undPrice = ReadDouble();
+                            if (undPrice < 0)
+                            { // -1 is the "not yet computed" indicator
+                                undPrice = Double.MaxValue;
+                            }
                         }
-                        tickOptionComputation(tickerId, (TickType) tickType, impliedVol, delta, modelPrice, pvDividend);
+
+                        tickOptionComputation(tickerId, (TickType) tickType, impliedVol, delta, optPrice, pvDividend, gamma, vega, theta, undPrice);
                         break;
                     }
 
