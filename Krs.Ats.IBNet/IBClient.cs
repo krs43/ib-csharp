@@ -4563,7 +4563,8 @@ namespace Krs.Ats.IBNet
         private decimal ReadDecimalMax()
         {
             String str = ReadStr();
-            return (string.IsNullOrEmpty(str)) ? decimal.MaxValue : ReadDecimal();
+            decimal retVal;
+            return (!string.IsNullOrEmpty(str) && decimal.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out retVal)) ? retVal : decimal.MaxValue;
         }
 
         #endregion
