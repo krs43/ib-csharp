@@ -61,6 +61,12 @@ namespace Krs.Ats.IBNet
         /// </summary>
         [Description("ApiCancelled")] ApiCancelled,
         /// <summary>
+        /// Indicates that there is an error with this order
+        /// This order status is not sent by TWS and should be explicitly set by the API developer when an error has occured.
+        /// </summary>
+        [Description("Error")]
+        Error,
+        /// <summary>
         /// No Order Status
         /// </summary>
         [Description("")] None
