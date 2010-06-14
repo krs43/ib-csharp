@@ -509,7 +509,7 @@ namespace Krs.Ats.IBNet
         public event EventHandler<ReportExceptionEventArgs> ReportException;
 
         protected virtual void OnReportException(ReportExceptionEventArgs e) {
-        	RaiseEvent(ReportException, this, e);
+            RaiseEvent(ReportException, this, e);
         }
 
         private void exception(Exception ex)
@@ -1449,7 +1449,7 @@ namespace Krs.Ats.IBNet
                 }
             }
         }
-		
+        
         /// <summary>
         /// Call the reqHistoricalData() method to start receiving historical data results through the historicalData() EWrapper method. 
         /// </summary>
@@ -1931,7 +1931,7 @@ namespace Krs.Ats.IBNet
                 }
             }
         }
-		
+        
 
         /// <summary>
         /// Call this method to request market depth for a specific contract. The market depth will be returned by the updateMktDepth() and updateMktDepthL2() methods.
@@ -3700,7 +3700,7 @@ namespace Krs.Ats.IBNet
                         {
                             whyHeld = ReadStr();
                         }
-						
+                        
 
                         orderStatus(id, status, filled, remaining, avgFillPrice, permId, parentId, lastFillPrice,
                                     clientId, whyHeld);
@@ -4485,7 +4485,7 @@ namespace Krs.Ats.IBNet
                         tickSnapshotEnd(reqId);
                         break;
                     }
-				default:
+                default:
                     {
                         error(ErrorMessage.NoValidId);
                         return false;
