@@ -836,6 +836,7 @@ namespace Krs.Ats.IBNet
         {
             readThread = new Thread(Run);
             readThread.IsBackground = true;
+            readThread.Name = "IBClient Read Thread";
         }
 
         /// <summary>
@@ -3480,7 +3481,6 @@ namespace Krs.Ats.IBNet
         /// </summary>
         internal void Start()
         {
-            readThread.Name = "IBClient Read Thread";
             if (!Stopping)
                 readThread.Start();
         }
