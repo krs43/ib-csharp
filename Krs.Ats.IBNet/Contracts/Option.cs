@@ -43,5 +43,20 @@ namespace Krs.Ats.IBNet.Contracts
             ExpirationString.AppendFormat("{0:0000}{1:00}", year, month);
             Expiry = ExpirationString.ToString();
         }
+
+        /// <summary>
+        /// Creates an Option Contract
+        /// </summary>
+        /// <param name="symbol">This is the symbol of the underlying asset.</param>
+        /// <param name="exchange">The order destination, such as Smart.</param>
+        /// <param name="securityType">This is the security type.</param>
+        /// <param name="currency">Specifies the currency.</param>
+        /// <param name="expiry">The expiration date. Use the format YYYYMM.</param>
+        /// <param name="strike">The strike price.</param>
+        /// <param name="right">Specifies a Put or Call.</param>
+        public Option(string symbol, string exchange, SecurityType securityType, string currency, string expiry, double strike, RightType right) :
+            base(0, symbol, securityType, expiry, strike, right, null, exchange, currency, null, null, SecurityIdType.None, string.Empty)
+        {
+        }
     }
 }
