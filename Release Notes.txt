@@ -3,6 +3,13 @@ Karl Schulze - www.dinosaurtech.com
 
 Release Notes
 
+9.6.4.16 New Api Release - 7/14/10
+* Added support for the 9.64 Ib Release
+* Added user provided patch to allow for connect/disconnect
+* Added user provided error status to orderstatus enum
+* Cleaned up code
+* Fixed ReadDecimalMax and ReadDecimal functions.
+
 9.6.3.14 Bug Fix and Feature - 8/3/09
 * Added Overload to Request History to allow you to specify duration in a raw string
 * Further Fixed ReadDecimal Bug
