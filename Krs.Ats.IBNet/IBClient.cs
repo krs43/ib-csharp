@@ -1550,46 +1550,38 @@ namespace Krs.Ats.IBNet
         public void RequestHistoricalData(int tickerId, Contract contract, DateTime endDateTime, TimeSpan duration,
                                       BarSize barSizeSetting, HistoricalDataType whatToShow, int useRth)
         {
-            string dur = string.Empty;
-
-            //Seconds are limited to a single day, must use longest possible
-            //time to convey duration
-            //This is the time span the request will cover, and is specified using the format:
-            // <integer /> <unit />, i.e., 1 D, where valid units are:
-            // S (seconds)
-            // D (days)
-            // W (weeks)
-            // M (months)
-            // Y (years)
-            // If no unit is specified, seconds are used. "years" is currently limited to one.
             DateTime beginDateTime = endDateTime.Subtract(duration);
-            if(endDateTime.AddDays(-1) <= beginDateTime)
-            {
-                //Seconds
-                dur = Convert.ToInt32(duration.TotalSeconds) + " S";
-            }
-            else if (endDateTime.AddDays(-7) < beginDateTime)
-            {
-                //Days
-                dur = Convert.ToInt32(duration.TotalDays) + " D";
-            }
-            else if (endDateTime.AddMonths(-1) < beginDateTime)
-            {
-                dur = Convert.ToInt32( Math.Ceiling(duration.TotalDays / 7.0)) + " W";
-            }
-            else if (endDateTime.AddYears(-1) < beginDateTime)
-            {
-                int totalMonths = endDateTime.Month - beginDateTime.Month;
-                if (totalMonths < 0)
-                    totalMonths += 12;
-                dur = Convert.ToInt32(totalMonths) + " M";
-            }
-            else
-            {
-                dur = "1 Y";
-            }
 
+            string dur = ConvertPeriodtoIb(beginDateTime, endDateTime);
             RequestHistoricalData(tickerId, contract, endDateTime, dur, barSizeSetting, whatToShow, useRth);
+        }
+
+        /// <summary>
+        /// used for reqHistoricalData
+        /// </summary>
+        protected static string ConvertPeriodtoIb(DateTime StartTime, DateTime EndTime)
+        {
+            TimeSpan period = EndTime.Subtract(StartTime);
+            double secs = period.TotalSeconds;
+            long unit;
+
+            if (secs < 1)
+                throw new ArgumentOutOfRangeException("Period cannot be less than 1 second.");
+            if (secs < 86400)
+            {
+                unit = (long) Math.Ceiling(secs);
+                return string.Concat(unit, " S");
+            }
+            double days = secs/86400;
+
+            unit = (long) Math.Ceiling(days);
+            if (unit <= 34)
+                return string.Concat(unit, " D");
+            double weeks = days/7;
+            unit = (long) Math.Ceiling(weeks);
+            if (unit > 52)
+                throw new ArgumentOutOfRangeException("Period cannot be bigger than 52 weeks.");
+            return string.Concat(unit, " W");
         }
 
         /// <summary>
