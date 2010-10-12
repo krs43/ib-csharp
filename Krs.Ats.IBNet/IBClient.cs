@@ -1055,7 +1055,6 @@ namespace Krs.Ats.IBNet
                 {
                     // stop Reader thread
                     Stop();
-                    readThread.Abort();
 
                     // close ibSocket
                     if (ibSocket != null)
