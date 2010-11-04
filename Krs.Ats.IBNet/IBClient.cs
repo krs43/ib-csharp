@@ -1055,6 +1055,7 @@ namespace Krs.Ats.IBNet
                 {
                     // stop Reader thread
                     Stop();
+                    readThread.Abort();
 
                     // close ibSocket
                     if (ibSocket != null)
@@ -3448,7 +3449,7 @@ namespace Krs.Ats.IBNet
                 // loop until thread is terminated
                 while (!Stopping && ProcessMsg((IncomingMessage) ReadInt())) ;
             }
-            catch(IOException)
+            catch(IOException e)
             {
                 
             }

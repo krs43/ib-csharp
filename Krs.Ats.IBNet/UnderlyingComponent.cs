@@ -7,6 +7,7 @@ namespace Krs.Ats.IBNet
     /// <summary>
     /// Underlying Component
     /// </summary>
+    [Serializable]
     public class UnderlyingComponent
     {
         #region Private Properties

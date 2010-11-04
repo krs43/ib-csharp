@@ -227,6 +227,6 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// returns calculated implied volatility as a result of an calculateImpliedVolatility( ) request.
         /// </summary>
-        [Description("CUST_OPTION_COMPUTATION")] CustOptionComputation = 49
+        [Description("CUST_OPTION_COMPUTATION")] CustOptionComputation = 53
     }
 }

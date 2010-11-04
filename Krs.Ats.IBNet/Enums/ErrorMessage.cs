@@ -138,6 +138,6 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// No Valid ID for error message
         /// </summary>
-        [Description("")] NoValidId = -1
+        [Description("No Valid Id")] NoValidId = -1
     }
 }
