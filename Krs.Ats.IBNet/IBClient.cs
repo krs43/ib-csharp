@@ -4225,6 +4225,10 @@ namespace Krs.Ats.IBNet
 
                         int orderId = ReadInt();
 
+                        //Handle the 2^31-1 == 0 bug
+                        if (orderId == 2147483647)
+                            orderId = 0;
+
                         //Read Contract Fields
                         Contract contract = new Contract();
                         if(version >= 5)
@@ -4516,6 +4520,7 @@ namespace Krs.Ats.IBNet
         private int ReadInt()
         {
             String str = ReadStr();
+
             return str == null ? 0 : Int32.Parse(str, CultureInfo.InvariantCulture);
         }
 
