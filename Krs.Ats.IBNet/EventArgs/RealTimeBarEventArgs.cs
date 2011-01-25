@@ -46,6 +46,14 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Uninitialized Constructor for Serialization
+        /// </summary>
+        public RealTimeBarEventArgs()
+        {
+            
+        }
+
+        /// <summary>
         /// The ticker Id of the request to which this bar is responding.
         /// </summary>
         public int RequestId

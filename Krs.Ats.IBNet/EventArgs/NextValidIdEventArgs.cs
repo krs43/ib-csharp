@@ -21,6 +21,14 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Uninitialized Constructor for Serialization
+        /// </summary>
+        public NextValidIdEventArgs()
+        {
+            
+        }
+
+        /// <summary>
         /// The next available order Id received from TWS upon connection.
         /// Increment all successive orders by one based on this Id.
         /// </summary>

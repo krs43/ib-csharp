@@ -8,20 +8,28 @@ namespace Krs.Ats.IBNet
 	[Serializable()]
 	public class ReportExceptionEventArgs : EventArgs
 	{
-	    private Exception error;
-	    
-	    /// <summary>
-	    /// Full constructor.
-	    /// </summary>
-	    /// <param name="error">The exception that was thrown.</param>
-	    public ReportExceptionEventArgs(Exception error)
-	    {
+		private Exception error;
+		
+		/// <summary>
+		/// Full constructor.
+		/// </summary>
+		/// <param name="error">The exception that was thrown.</param>
+		public ReportExceptionEventArgs(Exception error)
+		{
 				this.error = error;
-	    }
+		}
+
+		/// <summary>
+		/// Uninitialized Constructor for Serialization
+		/// </summary>
+		public ReportExceptionEventArgs()
+		{
+			
+		}
 	
-	    /// <summary>
-	    /// The exception that was thrown.
-	    /// </summary>
+		/// <summary>
+		/// The exception that was thrown.
+		/// </summary>
 		public Exception Error {
 			get { return error; }
 		}

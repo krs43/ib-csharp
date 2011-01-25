@@ -20,6 +20,14 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Uninitialized Constructor for Serialization
+        /// </summary>
+        public AccountDownloadEndEventArgs()
+        {
+            
+        }
+
+        /// <summary>
         /// Request Id
         /// </summary>
         public string AccountName

@@ -24,6 +24,14 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Uninitialized Constructor for Serialization
+        /// </summary>
+        public ReceiveFAEventArgs()
+        {
+            
+        }
+
+        /// <summary>
         /// Specifies the type of Financial Advisor configuration data being received from TWS.
         /// </summary>
         /// <remarks>Valid values include:

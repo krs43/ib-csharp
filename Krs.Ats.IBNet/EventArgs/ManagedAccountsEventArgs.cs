@@ -20,6 +20,14 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Uninitialized Constructor for Serialization
+        /// </summary>
+        public ManagedAccountsEventArgs()
+        {
+            
+        }
+
+        /// <summary>
         /// The comma delimited list of FA managed accounts.
         /// </summary>
         public string AccountsList

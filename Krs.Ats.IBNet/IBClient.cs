@@ -508,6 +508,10 @@ namespace Krs.Ats.IBNet
         /// </summary>
         public event EventHandler<ReportExceptionEventArgs> ReportException;
 
+        /// <summary>
+        /// Called internally when a exception is being thrown
+        /// </summary>
+        /// <param name="e"></param>
         protected virtual void OnReportException(ReportExceptionEventArgs e) {
             RaiseEvent(ReportException, this, e);
         }
@@ -519,7 +523,7 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// This methodis triggered for each new bulletin if the client has subscribed (i.e. by calling the reqNewsBulletins() method.
+        /// This method is triggered for each new bulletin if the client has subscribed (i.e. by calling the reqNewsBulletins() method.
         /// </summary>
         public event EventHandler<UpdateNewsBulletinEventArgs> UpdateNewsBulletin;
 
@@ -1371,7 +1375,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Call the CancelHistoricalData method to stop receiving historical data results.
         /// </summary>
-        /// <param name="tickerId">the Id that was specified in the call to <see cref="RequestHistoricalData"/>.</param>
+        /// <param name="tickerId">the Id that was specified in the call to <see cref="RequestHistoricalData(int,Contract,DateTime,TimeSpan,BarSize,HistoricalDataType,int)"/>.</param>
         public void CancelHistoricalData(int tickerId)
         {
             lock (this)
@@ -1410,7 +1414,7 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Call the cancelRealTimeBars() method to stop receiving real time bar results. 
+        /// Call the CancelRealTimeBars() method to stop receiving real time bar results. 
         /// </summary>
         /// <param name="tickerId">The Id that was specified in the call to <see cref="RequestRealTimeBars"/>.</param>
         public void CancelRealTimeBars(int tickerId)
@@ -3107,6 +3111,10 @@ namespace Krs.Ats.IBNet
             }
         }
 
+        /// <summary>
+        /// Call this method to stop receiving Reuters global fundamental data.
+        /// </summary>
+        /// <param name="requestId">The ID of the data request.</param>
         public virtual void CancelFundamentalData(int requestId)
         {
             lock (this)
@@ -3353,6 +3361,9 @@ namespace Krs.Ats.IBNet
 
         private readonly Thread readThread;
 
+        /// <summary>
+        /// Thread that is reading and parsing the network stream
+        /// </summary>
         public Thread ReadThread
         {
             get
@@ -3449,7 +3460,7 @@ namespace Krs.Ats.IBNet
                 // loop until thread is terminated
                 while (!Stopping && ProcessMsg((IncomingMessage) ReadInt())) ;
             }
-            catch(IOException e)
+            catch(IOException)
             {
                 
             }

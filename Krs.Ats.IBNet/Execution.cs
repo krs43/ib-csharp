@@ -49,6 +49,8 @@ namespace Krs.Ats.IBNet
         /// <param name="price">The order execution price.</param>
         /// <param name="permId">The TWS id used to identify orders, remains the same over TWS sessions.</param>
         /// <param name="liquidation">Identifies the position as one to be liquidated last should the need arise.</param>
+        /// <param name="cumQuantity">Cumulative quantity. Used in regular trades, combo trades and legs of the combo.</param>
+        /// <param name="avgPrice">Average price. Used in regular trades, combo trades and legs of the combo.</param>
         public Execution(int orderId, int clientId, String executionId, String time, String accountNumber,
                          String exchange, ExecutionSide side, int shares, double price, int permId, int liquidation,
                          int cumQuantity, decimal avgPrice)

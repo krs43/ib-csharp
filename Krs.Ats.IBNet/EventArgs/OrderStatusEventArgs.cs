@@ -53,6 +53,23 @@ namespace Krs.Ats.IBNet
             this.whyHeld = whyHeld;
         }
 
+        ///<summary>
+        /// Parameterless OrderStatusEventArgs Constructor for serialization
+        ///</summary>
+        public OrderStatusEventArgs()
+        {
+            this.orderId = -1;
+            this.clientId = -1;
+            this.lastFillPrice = -1;
+            this.parentId = -1;
+            this.permId = -1;
+            this.averageFillPrice = -1;
+            this.remaining = -1;
+            this.filled = -1;
+            this.status = OrderStatus.Error; //OrderStatus.None;
+            this.whyHeld = "";
+        }
+        
         /// <summary>
         /// The order Id that was specified previously in the call to placeOrder().
         /// </summary>

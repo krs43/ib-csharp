@@ -28,6 +28,18 @@ namespace Krs.Ats.IBNet
             this.orderState = orderState;
         }
 
+        ///<summary>
+        /// Parameterless OpenOrderEventArgs Constructor
+        ///</summary>
+        public OpenOrderEventArgs()
+        {
+            this.orderId = -1;
+            this.order = new Order();
+            this.contract = new Contract();
+            this.orderState = new OrderState();
+        }
+
+
         /// <summary>
         /// The order Id assigned by TWS. Used to cancel or update the order.
         /// </summary>

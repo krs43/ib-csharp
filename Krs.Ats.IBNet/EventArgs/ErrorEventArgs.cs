@@ -26,6 +26,14 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Uninitialized Constructor for Serialization
+        /// </summary>
+        public ErrorEventArgs()
+        {
+            
+        }
+
+        /// <summary>
         /// This is the orderId or tickerId of the request that generated the error.
         /// </summary>
         public int TickerId

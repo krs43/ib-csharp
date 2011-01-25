@@ -23,6 +23,14 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Uninitialized Constructor for Serialization
+        /// </summary>
+        public DeltaNuetralValidationEventArgs()
+        {
+            
+        }
+
+        /// <summary>
         /// Request Id
         /// </summary>
         public int RequestId

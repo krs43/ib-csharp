@@ -23,6 +23,14 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Uninitialized Constructor for Serialization
+        /// </summary>
+        public ContractDetailsEventArgs()
+        {
+            
+        }
+
+        /// <summary>
         /// This structure contains a full description of the contract being looked up.
         /// </summary>
         public ContractDetails ContractDetails

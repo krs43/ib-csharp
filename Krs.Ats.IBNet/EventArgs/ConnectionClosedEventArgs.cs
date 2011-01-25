@@ -8,5 +8,12 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class ConnectionClosedEventArgs : EventArgs
     {
+        /// <summary>
+        /// Uninitialized Constructor for Serialization
+        /// </summary>
+        public ConnectionClosedEventArgs()
+        {
+            
+        }
     }
 }

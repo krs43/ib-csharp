@@ -36,6 +36,14 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+		/// Uninitialized Constructor for Serialization
+		/// </summary>
+        public UpdateMarketDepthEventArgs()
+		{
+			
+		}
+
+        /// <summary>
         /// The ticker Id that was specified previously in the call to reqMktDepth().
         /// </summary>
         public int TickerId

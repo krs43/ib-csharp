@@ -23,6 +23,14 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Uninitialized Constructor for Serialization
+        /// </summary>
+        public FundamentalDetailsEventArgs()
+        {
+            
+        }
+
+        /// <summary>
         /// Xml Data
         /// </summary>
         public string Data

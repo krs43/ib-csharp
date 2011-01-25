@@ -29,6 +29,14 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Uninitialized Constructor for Serialization
+        /// </summary>
+        public ExecDetailsEventArgs()
+        {
+            
+        }
+
+        /// <summary>
         /// The order Id that was specified previously in the call to placeOrder().
         /// </summary>
         public int OrderId

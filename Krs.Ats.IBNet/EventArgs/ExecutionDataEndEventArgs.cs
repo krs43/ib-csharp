@@ -20,6 +20,14 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Uninitialized Constructor for Serialization
+        /// </summary>
+        public ExecutionDataEndEventArgs()
+        {
+            
+        }
+
+        /// <summary>
         /// Request Id
         /// </summary>
         public int RequestId

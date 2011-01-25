@@ -20,6 +20,14 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Uninitialized Constructor for Serialization
+        /// </summary>
+        public CurrentTimeEventArgs()
+        {
+            
+        }
+
+        /// <summary>
         /// Current system time on the server side in UTC
         /// </summary>
         public DateTime Time
