@@ -42,6 +42,10 @@ namespace Krs.Ats.IBNet
         /// </summary>
         [Description("BOND")] Bond,
         /// <summary>
+        /// Warrant
+        /// </summary>
+        [Description("WAR")] Warrant,
+        /// <summary>
         /// Undefined Security Type
         /// </summary>
         [Description("")] Undefined
