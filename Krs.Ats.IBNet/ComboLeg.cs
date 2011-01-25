@@ -44,6 +44,20 @@ namespace Krs.Ats.IBNet
 		/// <param name="openClose">Specifies whether the order is an open or close order. Retail customers must use <see cref="ComboOpenClose.Same"/>. See property <see cref="ComboLeg.OpenClose"/></param>
 		/// <param name="shortSaleSlot">ShortSaleSlot of Third Party requires DesignatedLocation to be specified. Non-empty DesignatedLocation values for all other cases will cause orders to be rejected. See Property <see cref="ComboLeg.ShortSaleSlot"/></param>
 		/// <param name="designatedLocation">Use only when shortSaleSlot value = 2. See Property <see cref="ComboLeg.DesignatedLocation"/></param>
+		public ComboLeg(int conId, int ratio, ActionSide action, String exchange, ComboOpenClose openClose, ShortSaleSlot shortSaleSlot, string designatedLocation) : this(conId, ratio, action, exchange, openClose, shortSaleSlot, designatedLocation, -1)
+		{
+		}
+
+		/// <summary>
+		/// Initialize the ComboLeg
+		/// </summary>
+		/// <param name="conId">The unique contract identifier specifying the security. See property <see cref="ComboLeg.ConId"/>.</param>
+		/// <param name="ratio">Select the relative number of contracts for the leg you are constructing. See property <see cref="ComboLeg.Ratio"/>.</param>
+		/// <param name="action">The side (buy or sell) for the leg you are constructing. See property <see cref="ComboLeg.Action"/></param>
+		/// <param name="exchange">The exchange to which the complete combination order will be routed. See property <see cref="ComboLeg.Exchange"/>.</param>
+		/// <param name="openClose">Specifies whether the order is an open or close order. Retail customers must use <see cref="ComboOpenClose.Same"/>. See property <see cref="ComboLeg.OpenClose"/></param>
+		/// <param name="shortSaleSlot">ShortSaleSlot of Third Party requires DesignatedLocation to be specified. Non-empty DesignatedLocation values for all other cases will cause orders to be rejected. See Property <see cref="ComboLeg.ShortSaleSlot"/></param>
+		/// <param name="designatedLocation">Use only when shortSaleSlot value = 2. See Property <see cref="ComboLeg.DesignatedLocation"/></param>
 		/// <param name="exemptCode">Short Sale Exempt Code. See Property <see cref="ComboLeg.ExemptCode"/></param>
 		public ComboLeg(int conId, int ratio, ActionSide action, String exchange, ComboOpenClose openClose, ShortSaleSlot shortSaleSlot, string designatedLocation, int exemptCode)
 		{
