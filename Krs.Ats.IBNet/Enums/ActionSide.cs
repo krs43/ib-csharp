@@ -24,6 +24,11 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Sell Short as part of a combo leg
         /// </summary>
-        [Description("SSHORT")] SShort
+        [Description("SSHORT")] SShort,
+        /// <summary>
+        /// Short Sale Exempt action.
+        /// SSHORTX allows some orders to be marked as exempt from the new SEC Rule 201
+        /// </summary>
+        [Description("SSHORTX")] SShortX
     }
 }

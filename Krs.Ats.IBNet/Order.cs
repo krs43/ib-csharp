@@ -67,6 +67,7 @@ namespace Krs.Ats.IBNet
 
         private ShortSaleSlot shortSaleSlot;
                     // 1 if you hold the shares, 2 if they will be delivered from elsewhere.  Only for Action="SSHORT
+        private int exemptCode; //Code for short sale exemption orders
 
         // BOX ORDERS ONLY
         private decimal startingPrice;
@@ -144,6 +145,7 @@ namespace Krs.Ats.IBNet
             scalePriceIncrement = decimal.MaxValue;
             faMethod = FinancialAdvisorAllocationMethod.None;
             notHeld = false;
+            exemptCode = -1;
         }
 
         #endregion
@@ -798,6 +800,15 @@ namespace Krs.Ats.IBNet
         {
             get { return notHeld; }
             set { notHeld = value; }
+        }
+
+        /// <summary>
+        /// Exempt Code for Short Sale Exemption Orders
+        /// </summary>
+        public int ExemptCode
+        {
+            get { return exemptCode; }
+            set { exemptCode = value; }
         }
 
         #endregion

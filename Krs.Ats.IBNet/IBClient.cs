@@ -891,8 +891,8 @@ namespace Krs.Ats.IBNet
 
         #region Values
 
-        private const int clientVersion = 47;
-        private const int minimumServerVersion = 32;
+        private const int clientVersion = 48;
+        private const int minimumServerVersion = 38;
 
         #endregion
 
@@ -2262,7 +2262,31 @@ namespace Krs.Ats.IBNet
                     }
                 }
 
-                int version = (serverVersion < 44) ? 27 : 30;
+                if (serverVersion < 52)
+                {
+                    if (order.ExemptCode != -1)
+                    {
+                        error(ErrorMessage.UpdateTws, "It does not support exemptCode parameter.");
+                        return;
+                    }
+                }
+
+                if (serverVersion < 52)
+                {
+                    if (contract.ComboLegs.Count > 0)
+                    {
+                        foreach(var comboLeg in contract.ComboLegs)
+                        {
+                            if (comboLeg.ExemptCode != -1)
+                            {
+                                error(ErrorMessage.UpdateTws, "It does not support exemptCode parameter.");
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                int version = (serverVersion < 44) ? 27 : 31;
 
                 // send place order msg
                 try
@@ -2369,6 +2393,8 @@ namespace Krs.Ats.IBNet
                                     send((int)comboLeg.ShortSaleSlot);
                                     send(comboLeg.DesignatedLocation);
                                 }
+                                if (serverVersion >= 51)
+                                    send(comboLeg.ExemptCode);
                             }
                         }
                     }
@@ -2406,6 +2432,10 @@ namespace Krs.Ats.IBNet
                         send((int)order.ShortSaleSlot); // 0 only for retail, 1 or 2 only for institution.
                         send(order.DesignatedLocation); // only populate when order.shortSaleSlot = 2.
                     }
+
+                    if (serverVersion >= 51)
+                        send(order.ExemptCode);
+
                     if (serverVersion >= 19)
                     {
                         send((int)order.OcaType);
@@ -3915,6 +3945,10 @@ namespace Krs.Ats.IBNet
                             order.SettlingFirm = ReadStr();
                             order.ShortSaleSlot = (ShortSaleSlot)ReadInt();
                             order.DesignatedLocation = ReadStr();
+                            if (serverVersion == 51)
+                                ReadInt();  //exempt code
+                            else if (version >= 23)
+                                order.ExemptCode = ReadInt();
                             order.AuctionStrategy = (AuctionStrategy) ReadInt();
                             order.StartingPrice = ReadDecimal();
                             order.StockRefPrice = ReadDouble();

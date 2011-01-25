@@ -227,6 +227,18 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// returns calculated implied volatility as a result of an calculateImpliedVolatility( ) request.
         /// </summary>
-        [Description("CUST_OPTION_COMPUTATION")] CustOptionComputation = 53
+        [Description("CUST_OPTION_COMPUTATION")] CustOptionComputation = 53,
+        /// <summary>
+        /// Trades
+        /// </summary>
+        [Description("TRADE_COUNT")] TradeCount = 54,
+        /// <summary>
+        /// Trades per Minute
+        /// </summary>
+        [Description("TRADE_RATE")] TradeRate = 55,
+        /// <summary>
+        /// Volume per Minute
+        /// </summary>
+        [Description("VOLUME_RATE")] VolumeRate = 56
     }
 }
