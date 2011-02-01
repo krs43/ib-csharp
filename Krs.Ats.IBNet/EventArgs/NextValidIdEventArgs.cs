@@ -8,7 +8,7 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class NextValidIdEventArgs : EventArgs
     {
-        private readonly int orderId;
+        private int orderId;
 
         /// <summary>
         /// Full Constructor
@@ -35,6 +35,7 @@ namespace Krs.Ats.IBNet
         public int OrderId
         {
             get { return orderId; }
-        }
+			set { orderId = value; }
+		}
     }
 }

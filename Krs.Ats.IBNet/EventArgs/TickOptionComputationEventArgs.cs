@@ -8,17 +8,17 @@ namespace Krs.Ats.IBNet
 	[Serializable()]
 	public class TickOptionComputationEventArgs : EventArgs
 	{
-		private readonly double delta;
-		private readonly double impliedVol;
-		private readonly double optionPrice;
-		private readonly double pvDividend;
-		private readonly int tickerId;
-		private readonly double gamma;
-		private readonly double vega;
-		private readonly double theta;
-		private readonly double underlyingPrice;
+		private double delta;
+		private double impliedVol;
+		private double optionPrice;
+		private double pvDividend;
+		private int tickerId;
+		private double gamma;
+		private double vega;
+		private double theta;
+		private double underlyingPrice;
 
-		private readonly TickType tickType;
+		private TickType tickType;
 
 		/// <summary>
 		/// Full Constructor
@@ -61,6 +61,7 @@ namespace Krs.Ats.IBNet
 		public int TickerId
 		{
 			get { return tickerId; }
+			set { tickerId = value; }
 		}
 
 		/// <summary>
@@ -70,6 +71,7 @@ namespace Krs.Ats.IBNet
 		public TickType TickType
 		{
 			get { return tickType; }
+			set { tickType = value; }
 		}
 
 		/// <summary>
@@ -78,6 +80,7 @@ namespace Krs.Ats.IBNet
 		public double ImpliedVol
 		{
 			get { return impliedVol; }
+			set { impliedVol = value; }
 		}
 
 		/// <summary>
@@ -86,6 +89,7 @@ namespace Krs.Ats.IBNet
 		public double Delta
 		{
 			get { return delta; }
+			set { delta = value; }
 		}
 
 		/// <summary>
@@ -94,6 +98,7 @@ namespace Krs.Ats.IBNet
 		public double OptionPrice
 		{
 			get { return optionPrice; }
+			set { optionPrice = value; }
 		}
 
 		/// <summary>
@@ -102,6 +107,7 @@ namespace Krs.Ats.IBNet
 		public double PVDividend
 		{
 			get { return pvDividend; }
+			set { pvDividend = value; }
 		}
 
 		/// <summary>
@@ -110,6 +116,7 @@ namespace Krs.Ats.IBNet
 		public double Gamma
 		{
 			get { return gamma; }
+			set { gamma = value; }
 		}
 
 		/// <summary>
@@ -118,6 +125,7 @@ namespace Krs.Ats.IBNet
 		public double Vega
 		{
 			get { return vega; }
+			set { vega = value; }
 		}
 
 		/// <summary>
@@ -126,6 +134,7 @@ namespace Krs.Ats.IBNet
 		public double Theta
 		{
 			get { return theta; }
+			set { theta = value; }
 		}
 
 		/// <summary>
@@ -134,6 +143,7 @@ namespace Krs.Ats.IBNet
 		public double UnderlyingPrice
 		{
 			get { return underlyingPrice; }
+			set { underlyingPrice = value; }
 		}
 	}
 }

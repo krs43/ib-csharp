@@ -8,9 +8,9 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class ErrorEventArgs : EventArgs
     {
-        private readonly ErrorMessage errorCode;
-        private readonly string errorMsg;
-        private readonly int tickerId;
+        private ErrorMessage errorCode;
+        private string errorMsg;
+        private int tickerId;
 
         /// <summary>
         /// Full Constructor
@@ -39,7 +39,8 @@ namespace Krs.Ats.IBNet
         public int TickerId
         {
             get { return tickerId; }
-        }
+			set { tickerId = value; }
+		}
 
         /// <summary>
         /// Error codes are documented in the Error Codes topic.
@@ -48,7 +49,8 @@ namespace Krs.Ats.IBNet
         public ErrorMessage ErrorCode
         {
             get { return errorCode; }
-        }
+			set { errorCode = value; }
+		}
 
         /// <summary>
         /// This is the textual description of the error, also documented in the Error Codes topic.
@@ -57,6 +59,7 @@ namespace Krs.Ats.IBNet
         public string ErrorMsg
         {
             get { return errorMsg; }
-        }
+			set { errorMsg = value; }
+		}
     }
 }

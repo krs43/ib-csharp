@@ -8,7 +8,7 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class CurrentTimeEventArgs : EventArgs
     {
-        private readonly DateTime time;
+        private DateTime time;
 
         /// <summary>
         /// Full Constructor
@@ -33,6 +33,7 @@ namespace Krs.Ats.IBNet
         public DateTime Time
         {
             get { return time; }
-        }
+			set { time = value; }
+		}
     }
 }

@@ -8,15 +8,15 @@ namespace Krs.Ats.IBNet
 	[Serializable()]
 	public class UpdatePortfolioEventArgs : EventArgs
 	{
-		private readonly string accountName;
-		private readonly decimal averageCost;
-		private readonly Contract contract;
-		private readonly decimal marketPrice;
-		private readonly decimal marketValue;
+		private string accountName;
+		private decimal averageCost;
+		private Contract contract;
+		private decimal marketPrice;
+		private decimal marketValue;
 
-		private readonly int position;
-		private readonly decimal realizedPnl;
-		private readonly decimal unrealizedPnl;
+		private int position;
+		private decimal realizedPnl;
+		private decimal unrealizedPnl;
 
 		/// <summary>
 		/// Full Constructor
@@ -61,6 +61,7 @@ namespace Krs.Ats.IBNet
 		public Contract Contract
 		{
 			get { return contract; }
+			set { contract = value; }
 		}
 
 		/// <summary>
@@ -70,6 +71,7 @@ namespace Krs.Ats.IBNet
 		public int Position
 		{
 			get { return position; }
+			set { position = value; }
 		}
 
 		/// <summary>
@@ -78,6 +80,7 @@ namespace Krs.Ats.IBNet
 		public decimal MarketPrice
 		{
 			get { return marketPrice; }
+			set { marketPrice = value; }
 		}
 
 		/// <summary>
@@ -86,6 +89,7 @@ namespace Krs.Ats.IBNet
 		public decimal MarketValue
 		{
 			get { return marketValue; }
+			set { marketValue = value; }
 		}
 
 		/// <summary>
@@ -95,6 +99,7 @@ namespace Krs.Ats.IBNet
 		public decimal AverageCost
 		{
 			get { return averageCost; }
+			set { averageCost = value; }
 		}
 
 		/// <summary>
@@ -103,6 +108,7 @@ namespace Krs.Ats.IBNet
 		public decimal UnrealizedPnl
 		{
 			get { return unrealizedPnl; }
+			set { unrealizedPnl = value; }
 		}
 
 		/// <summary>
@@ -112,6 +118,7 @@ namespace Krs.Ats.IBNet
 		public decimal RealizedPnl
 		{
 			get { return realizedPnl; }
+			set { realizedPnl = value; }
 		}
 
 		/// <summary>
@@ -120,6 +127,7 @@ namespace Krs.Ats.IBNet
 		public string AccountName
 		{
 			get { return accountName; }
+			set { accountName = value; }
 		}
 	}
 }

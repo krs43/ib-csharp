@@ -8,7 +8,7 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class AccountDownloadEndEventArgs : EventArgs
     {
-        private readonly string accountName;
+        private string accountName;
 
         /// <summary>
         /// Full Constructor
@@ -33,6 +33,7 @@ namespace Krs.Ats.IBNet
         public string AccountName
         {
             get { return accountName; }
-        }
+			set { accountName = value; }
+		}
     }
 }

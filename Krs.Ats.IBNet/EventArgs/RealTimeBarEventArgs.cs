@@ -8,15 +8,15 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class RealTimeBarEventArgs : EventArgs
     {
-        private readonly decimal close;
-        private readonly int count;
-        private readonly decimal high;
-        private readonly decimal low;
-        private readonly decimal open;
-        private readonly int requestId;
-        private readonly long time;
-        private readonly long volume;
-        private readonly double wap;
+        private decimal close;
+        private int count;
+        private decimal high;
+        private decimal low;
+        private decimal open;
+        private int requestId;
+        private long time;
+        private long volume;
+        private double wap;
 
         /// <summary>
         /// Real Time Bar Event Arguments
@@ -59,7 +59,8 @@ namespace Krs.Ats.IBNet
         public int RequestId
         {
             get { return requestId; }
-        }
+			set { requestId = value; }
+		}
 
         /// <summary>
         /// The date-time stamp of the start of the bar.
@@ -68,7 +69,8 @@ namespace Krs.Ats.IBNet
         public long Time
         {
             get { return time; }
-        }
+			set { time = value; }
+		}
 
         /// <summary>
         /// Bar opening price.
@@ -76,7 +78,8 @@ namespace Krs.Ats.IBNet
         public decimal Open
         {
             get { return open; }
-        }
+			set { open = value; }
+		}
 
         /// <summary>
         /// High price during the time covered by the bar.
@@ -84,7 +87,8 @@ namespace Krs.Ats.IBNet
         public decimal High
         {
             get { return high; }
-        }
+			set { high = value; }
+		}
 
         /// <summary>
         /// Low price during the time covered by the bar.
@@ -92,7 +96,8 @@ namespace Krs.Ats.IBNet
         public decimal Low
         {
             get { return low; }
-        }
+			set { low = value; }
+		}
 
         /// <summary>
         /// Bar closing price.
@@ -100,7 +105,8 @@ namespace Krs.Ats.IBNet
         public decimal Close
         {
             get { return close; }
-        }
+			set { close = value; }
+		}
 
         /// <summary>
         /// Volume during the time covered by the bar.
@@ -108,7 +114,8 @@ namespace Krs.Ats.IBNet
         public long Volume
         {
             get { return volume; }
-        }
+			set { volume = value; }
+		}
 
         /// <summary>
         /// Weighted average price during the time covered by the bar.
@@ -116,7 +123,8 @@ namespace Krs.Ats.IBNet
         public double Wap
         {
             get { return wap; }
-        }
+			set { wap = value; }
+		}
 
         /// <summary>
         /// When TRADES historical data is returned, represents the number of trades that occurred during the time period the bar covers.
@@ -124,6 +132,7 @@ namespace Krs.Ats.IBNet
         public int Count
         {
             get { return count; }
-        }
+			set { count = value; }
+		}
     }
 }

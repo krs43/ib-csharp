@@ -8,7 +8,7 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class ExecutionDataEndEventArgs : EventArgs
     {
-        private readonly int requestId;
+        private int requestId;
 
         /// <summary>
         /// Full Constructor
@@ -33,6 +33,7 @@ namespace Krs.Ats.IBNet
         public int RequestId
         {
             get { return requestId; }
-        }
+			set { requestId = value; }
+		}
     }
 }

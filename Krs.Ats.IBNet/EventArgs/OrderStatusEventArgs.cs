@@ -8,17 +8,17 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class OrderStatusEventArgs : EventArgs
     {
-        private readonly decimal averageFillPrice;
-        private readonly int clientId;
-        private readonly int filled;
-        private readonly decimal lastFillPrice;
-        private readonly int orderId;
-        private readonly int parentId;
-        private readonly int permId;
-        private readonly int remaining;
-        private readonly string whyHeld;
+        private decimal averageFillPrice;
+        private int clientId;
+        private int filled;
+        private decimal lastFillPrice;
+        private int orderId;
+        private int parentId;
+        private int permId;
+        private int remaining;
+        private string whyHeld;
 
-        private readonly OrderStatus status;
+        private OrderStatus status;
 
         /// <summary>
         /// Full Constructor
@@ -76,7 +76,8 @@ namespace Krs.Ats.IBNet
         public int OrderId
         {
             get { return orderId; }
-        }
+			set { orderId = value; }
+		}
 
         /// <summary>
         /// The order status.
@@ -117,7 +118,8 @@ namespace Krs.Ats.IBNet
         public OrderStatus Status
         {
             get { return status; }
-        }
+			set { status = value; }
+		}
 
         /// <summary>
         /// Specifies the number of shares that have been executed.
@@ -125,7 +127,8 @@ namespace Krs.Ats.IBNet
         public int Filled
         {
             get { return filled; }
-        }
+			set { filled = value; }
+		}
 
         /// <summary>
         /// Specifies the number of shares still outstanding.
@@ -133,7 +136,8 @@ namespace Krs.Ats.IBNet
         public int Remaining
         {
             get { return remaining; }
-        }
+			set { remaining = value; }
+		}
 
         /// <summary>
         /// The average price of the shares that have been executed.
@@ -143,7 +147,8 @@ namespace Krs.Ats.IBNet
         public decimal AverageFillPrice
         {
             get { return averageFillPrice; }
-        }
+			set { averageFillPrice = value; }
+		}
 
         /// <summary>
         /// The TWS id used to identify orders. Remains the same over TWS sessions.
@@ -151,7 +156,8 @@ namespace Krs.Ats.IBNet
         public int PermId
         {
             get { return permId; }
-        }
+			set { permId = value; }
+		}
 
         /// <summary>
         /// The order ID of the parent order, used for bracket and auto trailing stop orders.
@@ -159,7 +165,8 @@ namespace Krs.Ats.IBNet
         public int ParentId
         {
             get { return parentId; }
-        }
+			set { parentId = value; }
+		}
 
         /// <summary>
         /// The last price of the shares that have been executed. This parameter is valid
@@ -168,7 +175,8 @@ namespace Krs.Ats.IBNet
         public decimal LastFillPrice
         {
             get { return lastFillPrice; }
-        }
+			set { lastFillPrice = value; }
+		}
 
         /// <summary>
         /// The ID of the client (or TWS) that placed the order.
@@ -177,7 +185,8 @@ namespace Krs.Ats.IBNet
         public int ClientId
         {
             get { return clientId; }
-        }
+			set { clientId = value; }
+		}
 
         /// <summary>
         /// This field is used to identify an order held when TWS is trying to locate shares for a short sell.
@@ -187,6 +196,7 @@ namespace Krs.Ats.IBNet
         public string WhyHeld
         {
             get { return whyHeld; }
-        }
+			set { whyHeld = value; }
+		}
     }
 }

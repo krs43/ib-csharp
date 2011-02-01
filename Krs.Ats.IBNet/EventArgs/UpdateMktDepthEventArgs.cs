@@ -8,12 +8,12 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class UpdateMarketDepthEventArgs : EventArgs
     {
-        private readonly MarketDepthOperation operation;
-        private readonly int position;
-        private readonly decimal price;
-        private readonly MarketDepthSide side;
-        private readonly int size;
-        private readonly int tickerId;
+        private MarketDepthOperation operation;
+        private int position;
+        private decimal price;
+        private MarketDepthSide side;
+        private int size;
+        private int tickerId;
 
         /// <summary>
         /// Full Constructor
@@ -49,7 +49,8 @@ namespace Krs.Ats.IBNet
         public int TickerId
         {
             get { return tickerId; }
-        }
+			set { tickerId = value; }
+		}
 
         /// <summary>
         /// Specifies the row Id of this market depth entry.
@@ -57,7 +58,8 @@ namespace Krs.Ats.IBNet
         public int Position
         {
             get { return position; }
-        }
+			set { position = value; }
+		}
 
         /// <summary>
         /// Identifies how this order should be applied to the market depth.
@@ -66,7 +68,8 @@ namespace Krs.Ats.IBNet
         public MarketDepthOperation Operation
         {
             get { return operation; }
-        }
+			set { operation = value; }
+		}
 
         /// <summary>
         /// Identifies the side of the book that this order belongs to.
@@ -75,7 +78,8 @@ namespace Krs.Ats.IBNet
         public MarketDepthSide Side
         {
             get { return side; }
-        }
+			set { side = value; }
+		}
 
         /// <summary>
         /// The order price.
@@ -83,7 +87,8 @@ namespace Krs.Ats.IBNet
         public decimal Price
         {
             get { return price; }
-        }
+			set { price = value; }
+		}
 
         /// <summary>
         /// The order size.
@@ -91,6 +96,7 @@ namespace Krs.Ats.IBNet
         public int Size
         {
             get { return size; }
-        }
+			set { size = value; }
+		}
     }
 }

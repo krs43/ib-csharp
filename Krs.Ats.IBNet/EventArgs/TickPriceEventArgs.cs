@@ -8,11 +8,11 @@ namespace Krs.Ats.IBNet
 	[Serializable()]
 	public class TickPriceEventArgs : EventArgs
 	{
-		private readonly bool canAutoExecute;
-		private readonly decimal price;
-		private readonly int tickerId;
+		private bool canAutoExecute;
+		private decimal price;
+		private int tickerId;
 
-		private readonly TickType tickType;
+		private TickType tickType;
 
 		/// <summary>
 		/// Full Constructor
@@ -43,6 +43,7 @@ namespace Krs.Ats.IBNet
 		public int TickerId
 		{
 			get { return tickerId; }
+			set { tickerId = value; }
 		}
 
 		/// <summary>
@@ -51,6 +52,7 @@ namespace Krs.Ats.IBNet
 		public TickType TickType
 		{
 			get { return tickType; }
+			set { tickType = value; }
 		}
 
 		/// <summary>
@@ -59,6 +61,7 @@ namespace Krs.Ats.IBNet
 		public decimal Price
 		{
 			get { return price; }
+			set { price = value; }
 		}
 
 		/// <summary>
@@ -70,6 +73,7 @@ namespace Krs.Ats.IBNet
 		public bool CanAutoExecute
 		{
 			get { return canAutoExecute; }
+			set { canAutoExecute = value; }
 		}
 	}
 }

@@ -32,6 +32,7 @@ namespace Krs.Ats.IBNet
 		/// </summary>
 		public Exception Error {
 			get { return error; }
+			set { error = value; }
 		}
 	
 	}

@@ -8,13 +8,13 @@ namespace Krs.Ats.IBNet
 	[Serializable()]
 	public class UpdateMarketDepthL2EventArgs : EventArgs
 	{
-		private readonly string marketMaker;
-		private readonly MarketDepthOperation operation;
-		private readonly int position;
-		private readonly decimal price;
-		private readonly MarketDepthSide side;
-		private readonly int size;
-		private readonly int tickerId;
+		private string marketMaker;
+		private MarketDepthOperation operation;
+		private int position;
+		private decimal price;
+		private MarketDepthSide side;
+		private int size;
+		private int tickerId;
 
 		/// <summary>
 		/// Full Constructor
@@ -52,6 +52,7 @@ namespace Krs.Ats.IBNet
 		public int TickerId
 		{
 			get { return tickerId; }
+			set { tickerId = value; }
 		}
 
 		/// <summary>
@@ -60,6 +61,7 @@ namespace Krs.Ats.IBNet
 		public int Position
 		{
 			get { return position; }
+			set { position = value; }
 		}
 
 		/// <summary>
@@ -68,6 +70,7 @@ namespace Krs.Ats.IBNet
 		public string MarketMaker
 		{
 			get { return marketMaker; }
+			set { marketMaker = value; }
 		}
 
 		/// <summary>
@@ -77,6 +80,7 @@ namespace Krs.Ats.IBNet
 		public MarketDepthOperation Operation
 		{
 			get { return operation; }
+			set { operation = value; }
 		}
 
 		/// <summary>
@@ -85,6 +89,7 @@ namespace Krs.Ats.IBNet
 		public MarketDepthSide Side
 		{
 			get { return side; }
+			set { side = value; }
 		}
 
 		/// <summary>
@@ -93,6 +98,7 @@ namespace Krs.Ats.IBNet
 		public decimal Price
 		{
 			get { return price; }
+			set { price = value; }
 		}
 
 		/// <summary>
@@ -101,6 +107,7 @@ namespace Krs.Ats.IBNet
 		public int Size
 		{
 			get { return size; }
+			set { size = value; }
 		}
 	}
 }

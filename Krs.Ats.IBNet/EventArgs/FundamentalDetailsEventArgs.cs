@@ -8,8 +8,8 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class FundamentalDetailsEventArgs : EventArgs
     {
-        private readonly string data;
-        private readonly int requestId;
+        private string data;
+        private int requestId;
 
         /// <summary>
         /// Full Constructor
@@ -36,7 +36,8 @@ namespace Krs.Ats.IBNet
         public string Data
         {
             get { return data; }
-        }
+			set { data = value; }
+		}
 
         /// <summary>
         /// Request Id
@@ -44,6 +45,7 @@ namespace Krs.Ats.IBNet
         public int RequestId
         {
             get { return requestId; }
-        }
+			set { requestId = value; }
+		}
     }
 }

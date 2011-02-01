@@ -8,7 +8,7 @@ namespace Krs.Ats.IBNet
 	[Serializable()]
 	public class UpdateAccountTimeEventArgs : EventArgs
 	{
-		private readonly string timestamp;
+		private string timestamp;
 
 		/// <summary>
 		/// Full Constructor
@@ -33,6 +33,7 @@ namespace Krs.Ats.IBNet
 		public string Timestamp
 		{
 			get { return timestamp; }
+			set { timestamp = value; }
 		}
 	}
 }

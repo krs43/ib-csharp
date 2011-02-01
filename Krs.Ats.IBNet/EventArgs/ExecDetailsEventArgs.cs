@@ -8,10 +8,10 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class ExecDetailsEventArgs : EventArgs
     {
-        private readonly Contract contract;
-        private readonly Execution execution;
-        private readonly int orderId;
-        private readonly int requestId;
+        private Contract contract;
+        private Execution execution;
+        private int orderId;
+        private int requestId;
 
         /// <summary>
         /// Full Constructor
@@ -42,7 +42,8 @@ namespace Krs.Ats.IBNet
         public int OrderId
         {
             get { return orderId; }
-        }
+			set { orderId = value; }
+		}
 
         /// <summary>
         /// Request Id
@@ -50,7 +51,8 @@ namespace Krs.Ats.IBNet
         public int RequestId
         {
             get { return requestId; }
-        }
+			set { requestId = value; }
+		}
 
         /// <summary>
         /// This structure contains a full description of the contract that was executed.
@@ -59,7 +61,8 @@ namespace Krs.Ats.IBNet
         public Contract Contract
         {
             get { return contract; }
-        }
+			set { contract = value; }
+		}
 
         /// <summary>
         /// This structure contains addition order execution details.
@@ -68,6 +71,7 @@ namespace Krs.Ats.IBNet
         public Execution Execution
         {
             get { return execution; }
-        }
+			set { execution = value; }
+		}
     }
 }

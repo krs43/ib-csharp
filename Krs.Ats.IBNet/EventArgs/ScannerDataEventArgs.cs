@@ -8,13 +8,13 @@ namespace Krs.Ats.IBNet
 	[Serializable()]
 	public class ScannerDataEventArgs : EventArgs
 	{
-		private readonly string benchmark;
-		private readonly ContractDetails contractDetails;
-		private readonly string distance;
-		private readonly string legsStr;
-		private readonly string projection;
-		private readonly int rank;
-		private readonly int requestId;
+		private string benchmark;
+		private ContractDetails contractDetails;
+		private string distance;
+		private string legsStr;
+		private string projection;
+		private int rank;
+		private int requestId;
 
 		/// <summary>
 		/// Full Constructor
@@ -52,6 +52,7 @@ namespace Krs.Ats.IBNet
 		public int RequestId
 		{
 			get { return requestId; }
+			set { requestId = value; }
 		}
 
 		/// <summary>
@@ -60,6 +61,7 @@ namespace Krs.Ats.IBNet
 		public int Rank
 		{
 			get { return rank; }
+			set { rank = value; }
 		}
 
 		/// <summary>
@@ -68,6 +70,7 @@ namespace Krs.Ats.IBNet
 		public ContractDetails ContractDetails
 		{
 			get { return contractDetails; }
+			set { contractDetails = value; }
 		}
 
 		/// <summary>
@@ -76,6 +79,7 @@ namespace Krs.Ats.IBNet
 		public string Distance
 		{
 			get { return distance; }
+			set { distance = value; }
 		}
 
 		/// <summary>
@@ -84,6 +88,7 @@ namespace Krs.Ats.IBNet
 		public string Benchmark
 		{
 			get { return benchmark; }
+			set { benchmark = value; }
 		}
 
 		/// <summary>
@@ -92,6 +97,7 @@ namespace Krs.Ats.IBNet
 		public string Projection
 		{
 			get { return projection; }
+			set { projection = value; }
 		}
 
 		/// <summary>
@@ -100,6 +106,7 @@ namespace Krs.Ats.IBNet
 		public string LegsStr
 		{
 			get { return legsStr; }
+			set { legsStr = value; }
 		}
 	}
 }

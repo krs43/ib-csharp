@@ -8,16 +8,16 @@ namespace Krs.Ats.IBNet
 	[Serializable()]
 	public class TickEfpEventArgs : EventArgs
 	{
-		private readonly double basisPoints;
-		private readonly double dividendImpact;
-		private readonly double dividendsToExpiry;
-		private readonly string formattedBasisPoints;
-		private readonly string futureExpiry;
-		private readonly int holdDays;
-		private readonly double impliedFuture;
-		private readonly int tickerId;
+		private double basisPoints;
+		private double dividendImpact;
+		private double dividendsToExpiry;
+		private string formattedBasisPoints;
+		private string futureExpiry;
+		private int holdDays;
+		private double impliedFuture;
+		private int tickerId;
 
-		private readonly TickType tickType;
+		private TickType tickType;
 
 		/// <summary>
 		/// Full Constructor
@@ -61,6 +61,7 @@ namespace Krs.Ats.IBNet
 		public int TickerId
 		{
 			get { return tickerId; }
+			set { tickerId = value; }
 		}
 
 		/// <summary>
@@ -70,6 +71,7 @@ namespace Krs.Ats.IBNet
 		public TickType TickType
 		{
 			get { return tickType; }
+			set { tickType = value; }
 		}
 
 		/// <summary>
@@ -79,6 +81,7 @@ namespace Krs.Ats.IBNet
 		public double BasisPoints
 		{
 			get { return basisPoints; }
+			set { basisPoints = value; }
 		}
 
 		/// <summary>
@@ -87,6 +90,7 @@ namespace Krs.Ats.IBNet
 		public string FormattedBasisPoints
 		{
 			get { return formattedBasisPoints; }
+			set { formattedBasisPoints = value; }
 		}
 
 		/// <summary>
@@ -95,14 +99,16 @@ namespace Krs.Ats.IBNet
 		public double ImpliedFuture
 		{
 			get { return impliedFuture; }
+			set { impliedFuture = value; }
 		}
 
 		/// <summary>
 		/// Number of “hold days” until the expiry of the EFP.
 		/// </summary>
-		public double HoldDays
+		public int HoldDays
 		{
 			get { return holdDays; }
+			set { holdDays = value; }
 		}
 
 		/// <summary>
@@ -111,6 +117,7 @@ namespace Krs.Ats.IBNet
 		public string FutureExpiry
 		{
 			get { return futureExpiry; }
+			set { futureExpiry = value; }
 		}
 
 		/// <summary>
@@ -119,6 +126,7 @@ namespace Krs.Ats.IBNet
 		public double DividendImpact
 		{
 			get { return dividendImpact; }
+			set { dividendImpact = value; }
 		}
 
 		/// <summary>
@@ -127,6 +135,7 @@ namespace Krs.Ats.IBNet
 		public double DividendsToExpiry
 		{
 			get { return dividendsToExpiry; }
+			set { dividendsToExpiry = value; }
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class ManagedAccountsEventArgs : EventArgs
     {
-        private readonly string accountsList;
+        private string accountsList;
 
         /// <summary>
         /// Full Constructor
@@ -33,6 +33,7 @@ namespace Krs.Ats.IBNet
         public string AccountsList
         {
             get { return accountsList; }
-        }
+			set { accountsList = value; }
+		}
     }
 }

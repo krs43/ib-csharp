@@ -8,9 +8,9 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class ReceiveFAEventArgs : EventArgs
     {
-        private readonly FADataType faDataType;
+        private FADataType faDataType;
 
-        private readonly string xml;
+        private string xml;
 
         /// <summary>
         /// Full Constructor
@@ -42,7 +42,8 @@ namespace Krs.Ats.IBNet
         public FADataType FADataType
         {
             get { return faDataType; }
-        }
+			set { faDataType = value; }
+		}
 
         /// <summary>
         /// The XML string containing the previously requested FA configuration information.
@@ -50,6 +51,7 @@ namespace Krs.Ats.IBNet
         public string Xml
         {
             get { return xml; }
-        }
+			set { xml = value; }
+		}
     }
 }

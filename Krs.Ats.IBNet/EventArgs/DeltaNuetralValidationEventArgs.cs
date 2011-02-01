@@ -8,8 +8,8 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class DeltaNuetralValidationEventArgs : EventArgs
     {
-        private readonly int requestId;
-        private readonly UnderComp underComp;
+        private int requestId;
+        private UnderComp underComp;
 
         /// <summary>
         /// Full Constructor
@@ -36,7 +36,8 @@ namespace Krs.Ats.IBNet
         public int RequestId
         {
             get { return requestId; }
-        }
+			set { requestId = value; }
+		}
 
         /// <summary>
         /// Underlying Component
@@ -44,6 +45,7 @@ namespace Krs.Ats.IBNet
         public UnderComp UnderComp
         {
             get { return underComp; }
-        }
+			set { underComp = value; }
+		}
     }
 }

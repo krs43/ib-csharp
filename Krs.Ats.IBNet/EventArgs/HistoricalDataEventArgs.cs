@@ -8,18 +8,18 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class HistoricalDataEventArgs : EventArgs
     {
-        private readonly decimal close;
-        private readonly int trades;
-        private readonly DateTime date;
-        private readonly bool hasGaps;
-        private readonly decimal high;
-        private readonly decimal low;
-        private readonly decimal open;
-        private readonly int requestId;
-        private readonly int volume;
-        private readonly double wap;
-        private readonly int recordNumber;
-        private readonly int recordTotal;
+        private decimal close;
+        private int trades;
+        private DateTime date;
+        private bool hasGaps;
+        private decimal high;
+        private decimal low;
+        private decimal open;
+        private int requestId;
+        private int volume;
+        private double wap;
+        private int recordNumber;
+        private int recordTotal;
 
         /// <summary>
         /// Full Constructor
@@ -69,7 +69,8 @@ namespace Krs.Ats.IBNet
         public int RequestId
         {
             get { return requestId; }
-        }
+			set { requestId = value; }
+		}
 
         /// <summary>
         /// The date-time stamp of the start of the bar.
@@ -78,7 +79,8 @@ namespace Krs.Ats.IBNet
         public DateTime Date
         {
             get { return date; }
-        }
+			set { date = value; }
+		}
 
         /// <summary>
         /// Bar opening price.
@@ -86,7 +88,8 @@ namespace Krs.Ats.IBNet
         public decimal Open
         {
             get { return open; }
-        }
+			set { open = value; }
+		}
 
         /// <summary>
         /// High price during the time covered by the bar.
@@ -94,7 +97,8 @@ namespace Krs.Ats.IBNet
         public decimal High
         {
             get { return high; }
-        }
+			set { high = value; }
+		}
 
         /// <summary>
         /// Low price during the time covered by the bar.
@@ -102,7 +106,8 @@ namespace Krs.Ats.IBNet
         public decimal Low
         {
             get { return low; }
-        }
+			set { low = value; }
+		}
 
         /// <summary>
         /// Bar closing price.
@@ -110,7 +115,8 @@ namespace Krs.Ats.IBNet
         public decimal Close
         {
             get { return close; }
-        }
+			set { close = value; }
+		}
 
         /// <summary>
         /// Volume during the time covered by the bar.
@@ -118,7 +124,8 @@ namespace Krs.Ats.IBNet
         public int Volume
         {
             get { return volume; }
-        }
+			set { volume = value; }
+		}
 
         /// <summary>
         /// When TRADES historical data is returned, represents the number of trades that
@@ -127,7 +134,8 @@ namespace Krs.Ats.IBNet
         public int Trades
         {
             get { return trades; }
-        }
+			set { trades = value; }
+		}
 
         /// <summary>
         /// Weighted average price during the time covered by the bar.
@@ -135,7 +143,8 @@ namespace Krs.Ats.IBNet
         public double Wap
         {
             get { return wap; }
-        }
+			set { wap = value; }
+		}
 
         /// <summary>
         /// Whether or not there are gaps in the data.
@@ -143,7 +152,8 @@ namespace Krs.Ats.IBNet
         public bool HasGaps
         {
             get { return hasGaps; }
-        }
+			set { hasGaps = value; }
+		}
 
         /// <summary>
         /// Current Record Number out of Record Total
@@ -151,7 +161,8 @@ namespace Krs.Ats.IBNet
         public int RecordNumber
         {
             get { return recordNumber; }
-        }
+			set { recordNumber = value; }
+		}
 
         /// <summary>
         /// Total records returned by query
@@ -159,7 +170,8 @@ namespace Krs.Ats.IBNet
         public int RecordTotal
         {
             get { return recordTotal; }
-        } 
+			set { recordTotal = value; }
+		} 
 
     }
 }

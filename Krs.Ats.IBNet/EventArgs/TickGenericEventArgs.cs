@@ -8,11 +8,11 @@ namespace Krs.Ats.IBNet
 	[Serializable()]
 	public class TickGenericEventArgs : EventArgs
 	{
-		private readonly int tickerId;
+		private int tickerId;
 
-		private readonly TickType tickType;
+		private TickType tickType;
 
-		private readonly double value;
+		private double value;
 
 		/// <summary>
 		/// Full Constructor
@@ -41,6 +41,7 @@ namespace Krs.Ats.IBNet
 		public int TickerId
 		{
 			get { return tickerId; }
+			set { tickerId = value; }
 		}
 
 		/// <summary>
@@ -50,6 +51,7 @@ namespace Krs.Ats.IBNet
 		public TickType TickType
 		{
 			get { return tickType; }
+			set { tickType = value; }
 		}
 
 		/// <summary>
@@ -58,6 +60,7 @@ namespace Krs.Ats.IBNet
 		public double Value
 		{
 			get { return value; }
+			set { value = value; }
 		}
 	}
 }

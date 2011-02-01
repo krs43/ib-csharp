@@ -8,11 +8,11 @@ namespace Krs.Ats.IBNet
 	[Serializable()]
 	public class UpdateAccountValueEventArgs : EventArgs
 	{
-		private readonly string accountName;
-		private readonly string currency;
-		private readonly string key;
+		private string accountName;
+		private string currency;
+		private string key;
 
-		private readonly string value;
+		private string value;
 
 		/// <summary>
 		/// Full Constructor
@@ -43,6 +43,7 @@ namespace Krs.Ats.IBNet
 		public string Key
 		{
 			get { return key; }
+			set { key = value; }
 		}
 
 		/// <summary>
@@ -51,6 +52,7 @@ namespace Krs.Ats.IBNet
 		public string Value
 		{
 			get { return value; }
+			set { value = value; }
 		}
 
 		/// <summary>
@@ -59,6 +61,7 @@ namespace Krs.Ats.IBNet
 		public string Currency
 		{
 			get { return currency; }
+			set { currency = value; }
 		}
 
 		/// <summary>
@@ -67,6 +70,7 @@ namespace Krs.Ats.IBNet
 		public string AccountName
 		{
 			get { return accountName; }
+			set { accountName = value; }
 		}
 	}
 }

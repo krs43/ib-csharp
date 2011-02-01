@@ -8,7 +8,7 @@ namespace Krs.Ats.IBNet
 	[Serializable()]
 	public class ScannerParametersEventArgs : EventArgs
 	{
-		private readonly string xml;
+		private string xml;
 
 		/// <summary>
 		/// Full Constructor
@@ -33,6 +33,7 @@ namespace Krs.Ats.IBNet
 		public string Xml
 		{
 			get { return xml; }
+			set { xml = value; }
 		}
 	}
 }

@@ -8,10 +8,10 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class OpenOrderEventArgs : EventArgs
     {
-        private readonly Contract contract;
-        private readonly Order order;
-        private readonly int orderId;
-        private readonly OrderState orderState;
+        private Contract contract;
+        private Order order;
+        private int orderId;
+        private OrderState orderState;
 
         /// <summary>
         /// Full Constructor
@@ -46,7 +46,8 @@ namespace Krs.Ats.IBNet
         public int OrderId
         {
             get { return orderId; }
-        }
+			set { orderId = value; }
+		}
 
         /// <summary>
         /// Describes the contract for the open order.
@@ -54,7 +55,8 @@ namespace Krs.Ats.IBNet
         public Contract Contract
         {
             get { return contract; }
-        }
+			set { contract = value; }
+		}
 
         /// <summary>
         /// Gives the details of the open order.
@@ -62,7 +64,8 @@ namespace Krs.Ats.IBNet
         public Order Order
         {
             get { return order; }
-        }
+			set { order = value; }
+		}
 
         /// <summary>
         /// The openOrder() callback with the new OrderState() object will
@@ -71,6 +74,7 @@ namespace Krs.Ats.IBNet
         public OrderState OrderState
         {
             get { return orderState; }
-        }
+			set { orderState = value; }
+		}
     }
 }

@@ -8,10 +8,10 @@ namespace Krs.Ats.IBNet
 	[Serializable()]
 	public class TickSizeEventArgs : EventArgs
 	{
-		private readonly int size;
-		private readonly int tickerId;
+		private int size;
+		private int tickerId;
 
-		private readonly TickType tickType;
+		private TickType tickType;
 
 		/// <summary>
 		/// Full Constructor
@@ -40,6 +40,7 @@ namespace Krs.Ats.IBNet
 		public int TickerId
 		{
 			get { return tickerId; }
+			set { tickerId = value; }
 		}
 
 		/// <summary>
@@ -48,6 +49,7 @@ namespace Krs.Ats.IBNet
 		public TickType TickType
 		{
 			get { return tickType; }
+			set { tickType = value; }
 		}
 
 		/// <summary>
@@ -56,6 +58,7 @@ namespace Krs.Ats.IBNet
 		public int Size
 		{
 			get { return size; }
+			set { size = value; }
 		}
 	}
 }

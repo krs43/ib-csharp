@@ -8,8 +8,8 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class ContractDetailsEventArgs : EventArgs
     {
-        private readonly ContractDetails contractDetails;
-        private readonly int requestId;
+        private ContractDetails contractDetails;
+        private int requestId;
 
         /// <summary>
         /// Full Constructor
@@ -36,7 +36,8 @@ namespace Krs.Ats.IBNet
         public ContractDetails ContractDetails
         {
             get { return contractDetails; }
-        }
+			set { contractDetails = value; }
+		}
 
         /// <summary>
         /// Request Id
@@ -44,6 +45,7 @@ namespace Krs.Ats.IBNet
         public int RequestId
         {
             get { return requestId; }
-        }
+			set { requestId = value; }
+		}
     }
 }

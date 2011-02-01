@@ -8,10 +8,10 @@ namespace Krs.Ats.IBNet
 	[Serializable()]
 	public class UpdateNewsBulletinEventArgs : EventArgs
 	{
-		private readonly string message;
-		private readonly int msgId;
-		private readonly NewsType msgType;
-		private readonly string originExchange;
+		private string message;
+		private int msgId;
+		private NewsType msgType;
+		private string originExchange;
 
 		/// <summary>
 		/// Full Constructor
@@ -42,6 +42,7 @@ namespace Krs.Ats.IBNet
 		public int MsgId
 		{
 			get { return msgId; }
+			set { msgId = value; }
 		}
 
 		/// <summary>
@@ -51,6 +52,7 @@ namespace Krs.Ats.IBNet
 		public NewsType MsgType
 		{
 			get { return msgType; }
+			set { msgType = value; }
 		}
 
 		/// <summary>
@@ -59,6 +61,7 @@ namespace Krs.Ats.IBNet
 		public string Message
 		{
 			get { return message; }
+			set { message = value; }
 		}
 
 		/// <summary>
@@ -67,6 +70,7 @@ namespace Krs.Ats.IBNet
 		public string OriginExchange
 		{
 			get { return originExchange; }
+			set { originExchange = value; }
 		}
 	}
 }
