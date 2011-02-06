@@ -136,7 +136,7 @@ namespace Krs.Ats.IBNet
             if (value == null)
                 throw new ArgumentNullException("value");
             if (description == null)
-                throw new ArgumentNullException("description");
+                description = string.Empty;
 
             if (enumLookup.ContainsKey(value))
             {
