@@ -19,7 +19,7 @@
     <Language>en-US</Language>
     <FrameworkVersion>2.0.50727</FrameworkVersion>
     <DocumentationSources>
-      <DocumentationSource sourceFile="Krs.Ats.IBNet.csproj" xmlns="" />
+      <DocumentationSource sourceFile="Krs.Ats.IBNet.csproj" configuration="Release" />
     </DocumentationSources>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
     <CopyrightText>%28c%29 2011 Karl Schulze Dinosaurtech.com</CopyrightText>
