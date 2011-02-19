@@ -34,7 +34,26 @@
 
   <UsingTask AssemblyFile="Dependancies\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit"/>
 
-  <!-- Build server targets -->
+  <ItemGroup>
+    <MySourceFiles Include="$(MSBuildThisFileDirectory)\**\*.*" Exclude="$(MSBuildThisFileDirectory)\**\.svn\**;$(MSBuildThisFileDirectory)\Output\**;$(MSBuildThisFileDirectory)\**\bin\**;$(MSBuildThisFileDirectory)\**\release\**;$(MSBuildThisFileDirectory)\**\obj\**;$(MSBuildThisFileDirectory)\**\_Resharper*\**;$(MSBuildThisFileDirectory)\**\Help\**;$(MSBuildThisFileDirectory)\*.Resharper*;$(MSBuildThisFileDirectory)\*.suo" />
+    <MyBinaryFiles Include="$(MSBuildThisFileDirectory)\Krs.Ats.IBNet\bin\Release\*.*" />
+  </ItemGroup>
+
+  <Target Name="CopyFiles">
+    <RemoveDir Directories="$(MSBuildThisFileDirectory)\Output" Condition="Exists('$(MSBuildThisFileDirectory)\Output')" />
+    <MakeDir Directories="$(MSBuildThisFileDirectory)\Output\Src" Condition="!Exists('$(MSBuildThisFileDirectory)\Output\Src')" />
+    <MakeDir Directories="$(MSBuildThisFileDirectory)\Output\Bin" Condition="!Exists('$(MSBuildThisFileDirectory)\Output\Bin')" />
+    <Copy
+        SourceFiles="@(MySourceFiles)"
+        DestinationFiles="@(MySourceFiles->'$(MSBuildThisFileDirectory)\Output\Src\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
+    <Copy
+        SourceFiles="@(MyBinaryFiles)"
+        DestinationFiles="@(MyBinaryFiles->'$(MSBuildThisFileDirectory)\Output\Bin\%(Filename)%(Extension)')"
+        />
+  </Target>
+
+    <!-- Build server targets -->
 
   <Target Name="MakeBuild" DependsOnTargets="Clean;SetVersion;Build" />
 
