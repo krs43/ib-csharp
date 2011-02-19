@@ -21,7 +21,7 @@
     <DocumentationSources>
       <DocumentationSource sourceFile="Krs.Ats.IBNet.csproj" xmlns="" />
     </DocumentationSources>
-    <HelpFileFormat>Website</HelpFileFormat>
+    <HelpFileFormat>HtmlHelp1</HelpFileFormat>
     <CopyrightText>%28c%29 2011 Karl Schulze Dinosaurtech.com</CopyrightText>
     <CopyrightHref>http://www.dinosaurtech.com</CopyrightHref>
     <HelpTitle>C# Interactive Brokers Library</HelpTitle>

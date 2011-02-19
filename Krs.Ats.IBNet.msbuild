@@ -1,7 +1,5 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
   <Import Project="Dependancies\MSBuild.Community.Tasks.Targets"/>
-
   <!-- Settings -->
 
   <PropertyGroup Condition="'$(BuildType)' == ''">
@@ -35,40 +33,50 @@
   <UsingTask AssemblyFile="Dependancies\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit"/>
 
   <ItemGroup>
-    <MySourceFiles Include="$(MSBuildThisFileDirectory)\**\*.*" Exclude="$(MSBuildThisFileDirectory)\**\.svn\**;$(MSBuildThisFileDirectory)\Output\**;$(MSBuildThisFileDirectory)\**\bin\**;$(MSBuildThisFileDirectory)\**\release\**;$(MSBuildThisFileDirectory)\**\obj\**;$(MSBuildThisFileDirectory)\**\_Resharper*\**;$(MSBuildThisFileDirectory)\**\Help\**;$(MSBuildThisFileDirectory)\*.Resharper*;$(MSBuildThisFileDirectory)\*.suo" />
-    <MyBinaryFiles Include="$(MSBuildThisFileDirectory)\Krs.Ats.IBNet\bin\Release\*.*" />
+    <MySourceFiles Include="**\*.*" Exclude="**\.svn\**;Output\**;**\bin\**;**\release\**;**\obj\**;**\_Resharper*\**;**\Help\**;*.Resharper*;*.suo" />
+    <MyBinaryFiles Include="Krs.Ats.IBNet\bin\Release\*.*;Release Notes.txt;License.txt" />
+    <MyHelpFiles Include="Krs.Ats.IBNet\Help\Krs.Ats.IBNet.chm" />
   </ItemGroup>
 
   <Target Name="CopyFiles">
-    <RemoveDir Directories="$(MSBuildThisFileDirectory)\Output" Condition="Exists('$(MSBuildThisFileDirectory)\Output')" />
-    <MakeDir Directories="$(MSBuildThisFileDirectory)\Output\Src" Condition="!Exists('$(MSBuildThisFileDirectory)\Output\Src')" />
-    <MakeDir Directories="$(MSBuildThisFileDirectory)\Output\Bin" Condition="!Exists('$(MSBuildThisFileDirectory)\Output\Bin')" />
+    <RemoveDir Directories="Output" Condition="Exists('Output')" />
+    <MakeDir Directories="Output\Src" Condition="!Exists('Output\Src')" />
+    <MakeDir Directories="Output\Bin" Condition="!Exists('Output\Bin')" />
     <Copy
         SourceFiles="@(MySourceFiles)"
-        DestinationFiles="@(MySourceFiles->'$(MSBuildThisFileDirectory)\Output\Src\%(RecursiveDir)%(Filename)%(Extension)')"
+        DestinationFiles="@(MySourceFiles->'Output\Src\%(RecursiveDir)%(Filename)%(Extension)')"
         />
     <Copy
         SourceFiles="@(MyBinaryFiles)"
-        DestinationFiles="@(MyBinaryFiles->'$(MSBuildThisFileDirectory)\Output\Bin\%(Filename)%(Extension)')"
+        DestinationFiles="@(MyBinaryFiles->'Output\Bin\%(Filename)%(Extension)')"
+        />
+    <Copy
+        SourceFiles="@(MyHelpFiles)"
+        DestinationFiles="@(MyHelpFiles->'Output\Bin\%(Filename)%(Extension)')"
         />
   </Target>
 
-    <!-- Build server targets -->
+  <Target Name="BuildHelp">
+    <!-- Build source code docs -->
+    <Exec Command="&quot;$([MSBuild]::GetRegistryValue('HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSBuild\ToolsVersions\3.5', 'MSBuildToolsPath'))MSBuild.exe&quot; &quot;Krs.Ats.IBNet\Krs.Ats.IBNet.shfbproj&quot;" />
+  </Target>
 
-  <Target Name="MakeBuild" DependsOnTargets="Clean;SetVersion;Build" />
+  <!-- Build server targets -->
+
+  <Target Name="MakeBuild" DependsOnTargets="Clean;SetVersion;Build;BuildHelp;CopyFiles" />
 
   <!-- Individiual targets -->
 
   <Target Name="Clean">
     <MSBuild
-      Projects="Krs.Ats_2010.sln"
+      Projects="Krs.Ats_2008.sln"
       Targets="Clean"
       Properties="Configuration=$(BuildType)"/>
   </Target>
 
   <Target Name="Build">
     <MSBuild
-      Projects="Krs.Ats_2010.sln"
+      Projects="Krs.Ats_2008.sln"
       Targets="Build"
       Properties="Configuration=$(BuildType)"/>
   </Target>

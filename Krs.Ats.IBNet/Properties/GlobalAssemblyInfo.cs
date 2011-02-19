@@ -13,10 +13,10 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyCompany("DinosaurTech")]
+[assembly: AssemblyCompany("Tanius")]
 [assembly: AssemblyCopyright("Copyright (c) DinosaurTech 2011")]
 [assembly: AssemblyTrademark("All Rights Reserved")]
-[assembly: AssemblyVersion("2.0.0.0")]
-[assembly: AssemblyFileVersion("2.0.0.0")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
 
 
