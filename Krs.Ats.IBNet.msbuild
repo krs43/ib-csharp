@@ -1,0 +1,57 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="Dependancies\MSBuild.Community.Tasks.Targets"/>
+
+  <!-- Settings -->
+
+  <PropertyGroup Condition="'$(BuildType)' == ''">
+    <BuildType>Release</BuildType>
+  </PropertyGroup>
+
+  <!-- Cascading attempts to find a build number -->
+
+  <PropertyGroup>
+    <CompanyName>Tanius</CompanyName>
+    <Copyright>Copyright (c) DinosaurTech 2011</Copyright>
+    <Trademark>All Rights Reserved</Trademark>
+  </PropertyGroup>
+
+  <Target Name="SetVersion">
+    <PropertyGroup>
+      <VersionId Condition="'$(BUILD_NUMBER)' == ''">1.0.0.0</VersionId>
+      <VersionId Condition="'$(BUILD_NUMBER)' != ''">$(BUILD_NUMBER)</VersionId>
+    </PropertyGroup>
+
+    <AssemblyInfo
+     CodeLanguage="CS"
+     OutputFile="Krs.Ats.IBNet\Properties\GlobalAssemblyInfo.cs"
+     AssemblyCompany="$(CompanyName)"
+     AssemblyCopyright="$(Copyright)"
+     AssemblyTrademark="$(Trademark)"
+     AssemblyVersion="$(VersionId)"
+     AssemblyFileVersion="$(VersionId)" />
+  </Target>
+
+  <UsingTask AssemblyFile="Dependancies\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit"/>
+
+  <!-- Build server targets -->
+
+  <Target Name="MakeBuild" DependsOnTargets="Clean;SetVersion;Build" />
+
+  <!-- Individiual targets -->
+
+  <Target Name="Clean">
+    <MSBuild
+      Projects="Krs.Ats_2010.sln"
+      Targets="Clean"
+      Properties="Configuration=$(BuildType)"/>
+  </Target>
+
+  <Target Name="Build">
+    <MSBuild
+      Projects="Krs.Ats_2010.sln"
+      Targets="Build"
+      Properties="Configuration=$(BuildType)"/>
+  </Target>
+
+</Project>
