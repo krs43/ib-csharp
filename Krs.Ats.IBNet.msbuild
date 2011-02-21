@@ -33,7 +33,7 @@
   <UsingTask AssemblyFile="Dependencies\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit"/>
 
   <ItemGroup>
-    <MySourceFiles Include="**\*.*" Exclude="**\.svn\**;Output\**;**\bin\**;**\release\**;**\obj\**;**\_Resharper*\**;**\Help\**;**\*.Resharper*;**\*.suo;**\*.tcargs;**\*.tcprojx" />
+    <MySourceFiles Include="**\*.*" Exclude="**\.svn\**;Output\**;**\bin\**;**\release\**;**\obj\**;**\_Resharper*\**;**\Help\**;**\*.Resharper*;**\*.suo;**\*.tcargs;**\*.tcprojx;**\Krs.Ats_2008.sln.proj" />
     <MyBinaryFiles Include="Krs.Ats.IBNet\bin\Release\*.*;Release Notes.txt;License.txt" />
     <MyHelpFiles Include="Krs.Ats.IBNet\Help\Krs.Ats.IBNet.chm" />
   </ItemGroup>
