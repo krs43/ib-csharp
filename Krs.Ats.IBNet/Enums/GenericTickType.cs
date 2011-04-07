@@ -67,5 +67,15 @@ namespace Krs.Ats.IBNet
         /// Real Time Volume Tick Type
         /// </summary>
         [Description("RTVolume")] RealTimeVolume = 233,
+        /// <summary>
+        /// Inventory Type
+        /// </summary>
+        [Description("Inventory")]
+        Inventory = 256,
+        /// <summary>
+        /// Fundamental Ratios Tick Type
+        /// </summary>
+        [Description("FundamentalRatios")]
+        FundamentalRatios = 258
     }
 }
