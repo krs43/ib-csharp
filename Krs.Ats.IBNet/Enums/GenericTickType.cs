@@ -70,12 +70,10 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Inventory Type
         /// </summary>
-        [Description("Inventory")]
-        Inventory = 256,
+        [Description("Inventory")] Inventory = 256,
         /// <summary>
         /// Fundamental Ratios Tick Type
         /// </summary>
-        [Description("FundamentalRatios")]
-        FundamentalRatios = 258
+        [Description("FundamentalRatios")] FundamentalRatios = 258
     }
 }
