@@ -1347,10 +1347,16 @@ namespace Krs.Ats.IBNet
                          * 
                          * Therefore we are relying on TWS doing validation.
                          */
+
                         StringBuilder genList = new StringBuilder();
                         if (genericTickList != null)
-                            genList.AppendFormat("{0},",
-                                                 ((int) genericTickList[0]).ToString(CultureInfo.InvariantCulture));
+                        {
+                            for (int counter = 0; counter < genericTickList.Count; counter++)
+                                genList.AppendFormat("{0},",
+                                                     ((int) genericTickList[counter]).ToString(
+                                                         CultureInfo.InvariantCulture));
+                        }
+
                         if (marketDataOff)
                             genList.AppendFormat("mdoff");
 
