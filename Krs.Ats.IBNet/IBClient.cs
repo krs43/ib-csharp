@@ -2558,7 +2558,7 @@ namespace Krs.Ats.IBNet
                             send(EnumDescConverter.GetEnumDescription(order.DeltaNeutralOrderType));
                             sendMax(order.DeltaNeutralAuxPrice);
 
-                            if (serverVersion >= MinServerVersion.DeltaNeutralConId && order.DeltaNeutralOrderType != OrderType.None && order.DeltaNeutralOrderType != OrderType.Empty)
+                            if (serverVersion >= MinServerVersion.DeltaNeutralConId && order.DeltaNeutralOrderType != OrderType.Empty)
                             {
                                 send(order.DeltaNeutralConId);
                                 send(order.DeltaNeutralSettlingFirm);
@@ -4249,16 +4249,16 @@ namespace Krs.Ats.IBNet
                             if (version == 11)
                             {
                                 int receivedInt = ReadInt();
-                                order.DeltaNeutralOrderType = ((receivedInt == 0) ? OrderType.None : OrderType.Market);
+                                order.DeltaNeutralOrderType = ((receivedInt == 0) ? OrderType.Empty : OrderType.Market);
                             }
                             else
                             {
                                 // version 12 and up
                                 string dnoa = ReadStr();
-                                order.DeltaNeutralOrderType = (string.IsNullOrEmpty(dnoa) ? OrderType.None : (OrderType)EnumDescConverter.GetEnumValue(typeof (OrderType), dnoa));
+                                order.DeltaNeutralOrderType = (string.IsNullOrEmpty(dnoa) ? OrderType.Empty : (OrderType)EnumDescConverter.GetEnumValue(typeof (OrderType), dnoa));
                                 order.DeltaNeutralAuxPrice = ReadDouble();
 
-                                if (version >= 27 && order.DeltaNeutralOrderType != OrderType.None && order.DeltaNeutralOrderType != OrderType.Empty)
+                                if (version >= 27 && order.DeltaNeutralOrderType != OrderType.Empty)
                                 {
                                     order.DeltaNeutralConId = ReadInt();
                                     order.DeltaNeutralSettlingFirm = ReadStr();
@@ -4382,7 +4382,7 @@ namespace Krs.Ats.IBNet
                             order.WhatIf = !(string.IsNullOrEmpty(rstr) || rstr == "0");
 
                             string ost = ReadStr();
-                            orderState.Status = (string.IsNullOrEmpty(rstr) ? Krs.Ats.IBNet.OrderStatus.None : (Krs.Ats.IBNet.OrderStatus)EnumDescConverter.GetEnumValue(typeof(Krs.Ats.IBNet.OrderStatus), ost));
+                            orderState.Status = (string.IsNullOrEmpty(ost) ? IBNet.OrderStatus.None : (OrderStatus)EnumDescConverter.GetEnumValue(typeof(OrderStatus), ost));
                             orderState.InitMargin = ReadStr();
                             orderState.MaintMargin = ReadStr();
                             orderState.EquityWithLoan = ReadStr();

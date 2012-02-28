@@ -158,9 +158,10 @@ namespace Krs.Ats.IBNet
             faMethod = FinancialAdvisorAllocationMethod.None;
             notHeld = false;
             exemptCode = -1;
-
+            
             optOutSmartRouting = false;
             deltaNeutralConId = 0;
+            deltaNeutralOrderType = OrderType.Empty;
             deltaNeutralSettlingFirm = string.Empty;
             deltaNeutralClearingAccount = string.Empty;
             deltaNeutralClearingIntent = string.Empty;
