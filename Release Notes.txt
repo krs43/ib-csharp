@@ -3,6 +3,11 @@ Karl Schulze - www.dinosaurtech.com
 
 Release Notes
 
+9.66 New Api Release - 2/27/12
+* Backreved from 9.67 Beta release due to bugs
+* Added support for 9.66 Ib release
+* Fixed bugs in OpenOrders and Place Order methods
+
 9.6.4.16 New Api Release - 7/14/10
 * Added support for the 9.64 Ib Release
 * Added user provided patch to allow for connect/disconnect
