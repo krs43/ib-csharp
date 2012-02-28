@@ -148,6 +148,10 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// End of Tick Snapshot message
         /// </summary>
-        [Description("TICK_SNAPSHOT_END")] TickSnapshotEnd = 57
+        [Description("TICK_SNAPSHOT_END")] TickSnapshotEnd = 57,
+        /// <summary>
+        /// Market Data Type
+        /// </summary>
+        [Description("MARKET_DATA_TYPE")] MarketDataType = 58
     }
 }

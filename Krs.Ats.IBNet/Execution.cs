@@ -23,6 +23,7 @@ namespace Krs.Ats.IBNet
         private String time;
         private int cumQuantity;
         private decimal avgPrice;
+        private String orderRef;
 
         #endregion
 
@@ -51,9 +52,10 @@ namespace Krs.Ats.IBNet
         /// <param name="liquidation">Identifies the position as one to be liquidated last should the need arise.</param>
         /// <param name="cumQuantity">Cumulative quantity. Used in regular trades, combo trades and legs of the combo.</param>
         /// <param name="avgPrice">Average price. Used in regular trades, combo trades and legs of the combo.</param>
+        /// <param name="orderRef">Order Reference</param>
         public Execution(int orderId, int clientId, String executionId, String time, String accountNumber,
                          String exchange, ExecutionSide side, int shares, double price, int permId, int liquidation,
-                         int cumQuantity, decimal avgPrice)
+                         int cumQuantity, decimal avgPrice, string orderRef)
         {
             this.orderId = orderId;
             this.clientId = clientId;
@@ -68,6 +70,7 @@ namespace Krs.Ats.IBNet
             this.liquidation = liquidation;
             this.cumQuantity = cumQuantity;
             this.avgPrice = avgPrice;
+            this.orderRef = orderRef;
         }
 
         #endregion
@@ -197,6 +200,12 @@ namespace Krs.Ats.IBNet
         {
             get { return avgPrice; }
             set { avgPrice = value; }
+        }
+
+        public string OrderRef
+        {
+            get { return orderRef; }
+            set { orderRef = value; }
         }
 
         #endregion

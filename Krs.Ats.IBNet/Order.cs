@@ -27,11 +27,20 @@ namespace Krs.Ats.IBNet
         private double deltaNeutralAuxPrice;
         private OrderType deltaNeutralOrderType;
         private String designatedLocation; // set when slot=2 only.
+        private int deltaNeutralConId;
+        private string deltaNeutralSettlingFirm;
+        private string deltaNeutralClearingAccount;
+        private string deltaNeutralClearingIntent;
+
+        // HEDGE ORDERS ONLY
+        private string hedgeType; // 'D' - delta, 'B' - beta, 'F' - FX, 'P' - pair
+        private string hedgeParam; // beta value for beta hedge, ratio for pair hedge
 
         // SMART routing only
         private decimal discretionaryAmt;
         private int displaySize;
         private bool eTradeOnly;
+        private bool optOutSmartRouting;
 
         // Financial advisors only 
         private String faGroup;
@@ -110,6 +119,9 @@ namespace Krs.Ats.IBNet
         // Not Held
         private bool notHeld;
 
+        // Smart combo routing params
+        private Collection<TagValue> smartComboRoutingParams;
+
         #endregion
 
         #region Constructor
@@ -146,6 +158,12 @@ namespace Krs.Ats.IBNet
             faMethod = FinancialAdvisorAllocationMethod.None;
             notHeld = false;
             exemptCode = -1;
+
+            optOutSmartRouting = false;
+            deltaNeutralConId = 0;
+            deltaNeutralSettlingFirm = string.Empty;
+            deltaNeutralClearingAccount = string.Empty;
+            deltaNeutralClearingIntent = string.Empty;
         }
 
         #endregion
@@ -809,6 +827,57 @@ namespace Krs.Ats.IBNet
         {
             get { return exemptCode; }
             set { exemptCode = value; }
+        }
+
+        /// <summary>
+        /// Opt out of smart routing for directly routed ASX orders
+        /// </summary>
+        public bool OptOutSmartRouting
+        {
+            get { return optOutSmartRouting; }
+            set { optOutSmartRouting = value; }
+        }
+
+        public int DeltaNeutralConId
+        {
+            get { return deltaNeutralConId; }
+            set { deltaNeutralConId = value; }
+        }
+
+        public string DeltaNeutralSettlingFirm
+        {
+            get { return deltaNeutralSettlingFirm; }
+            set { deltaNeutralSettlingFirm = value; }
+        }
+
+        public string DeltaNeutralClearingAccount
+        {
+            get { return deltaNeutralClearingAccount; }
+            set { deltaNeutralClearingAccount = value; }
+        }
+
+        public string DeltaNeutralClearingIntent
+        {
+            get { return deltaNeutralClearingIntent; }
+            set { deltaNeutralClearingIntent = value; }
+        }
+
+        public string HedgeType
+        {
+            get { return hedgeType; }
+            set { hedgeType = value; }
+        }
+
+        public string HedgeParam
+        {
+            get { return hedgeParam; }
+            set { hedgeParam = value; }
+        }
+
+        public Collection<TagValue> SmartComboRoutingParams
+        {
+            get { return smartComboRoutingParams; }
+            set { smartComboRoutingParams = value; }
         }
 
         #endregion

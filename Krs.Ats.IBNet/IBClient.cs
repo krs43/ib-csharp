@@ -731,6 +731,25 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Called on a market data type call back.
+        /// </summary>
+        public event EventHandler<MarketDataTypeEventArgs> MarketDataType;
+
+        /// <summary>
+        /// Called internally when the receive thread receives a Market Data Type Event.
+        /// </summary>
+        protected virtual void OnMarketDataType(MarketDataTypeEventArgs e)
+        {
+            RaiseEvent(MarketDataType, this, e);
+        }
+
+        private void marketDataType(int requestId, MarketDataType dataType)
+        {
+            MarketDataTypeEventArgs e = new MarketDataTypeEventArgs(requestId, dataType);
+            OnMarketDataType(e);
+        }
+
+        /// <summary>
         /// This event is fired when there is an error with the communication or when TWS wants to send a message to the client.
         /// </summary>
         public event EventHandler<ErrorEventArgs> Error;
@@ -891,7 +910,7 @@ namespace Krs.Ats.IBNet
 
         #region Values
 
-        private const int clientVersion = 48;
+        private const int clientVersion = 53;
         private const int minimumServerVersion = 38;
 
         #endregion
@@ -1241,14 +1260,14 @@ namespace Krs.Ats.IBNet
                 }
 
                 //35 is the minimum version for snapshots
-                if (serverVersion < 35 && snapshot)
+                if (serverVersion < MinServerVersion.ScaleOrders && snapshot)
                 {
                     error(tickerId, ErrorMessage.UpdateTws, "It does not support snapshot market data requests.");
                     return;
                 }
 
                 //40 is the minimum version for the Underlying Component class
-                if (serverVersion < 40)
+                if (serverVersion < MinServerVersion.UnderComp)
                 {
                     if (contract.UnderlyingComponent != null)
                     {
@@ -1258,7 +1277,7 @@ namespace Krs.Ats.IBNet
                 }
 
                 //46 is the minimum version for requesting contracts by conid
-                if (serverVersion < 47)
+                if (serverVersion < MinServerVersion.RequestMarketDataConId)
                 {
                     if (contract.ContractId > 0)
                     {
@@ -1435,7 +1454,7 @@ namespace Krs.Ats.IBNet
                 }
 
                 //34 is the minimum server version for real time bars
-                if (serverVersion < 34)
+                if (serverVersion < MinServerVersion.RealTimeBars)
                 {
                     error(ErrorMessage.UpdateTws, "It does not support realtime bar data query cancellation.");
                     return;
@@ -1806,7 +1825,7 @@ namespace Krs.Ats.IBNet
                     return;
                 }
 
-                if (serverVersion < 45)
+                if (serverVersion < MinServerVersion.SecIdType)
                 {
                     if (contract.SecIdType != SecurityIdType.None || !string.IsNullOrEmpty(contract.SecId))
                     {
@@ -1895,7 +1914,7 @@ namespace Krs.Ats.IBNet
                     return;
                 }
                 //34 is the minimum version for real time bars
-                if (serverVersion < 34)
+                if (serverVersion < MinServerVersion.RealTimeBars)
                 {
                     error(ErrorMessage.UpdateTws, "It does not support real time bars.");
                     return;
@@ -2177,7 +2196,7 @@ namespace Krs.Ats.IBNet
                 }
 
                 //Scale Orders Minimum Version is 35
-                if (serverVersion < 35)
+                if (serverVersion < MinServerVersion.ScaleOrders)
                 {
                     if (order.ScaleInitLevelSize != Int32.MaxValue || order.ScalePriceIncrement != Int32.MaxValue || order.ScalePriceIncrement != decimal.MaxValue)
                     {
@@ -2187,7 +2206,7 @@ namespace Krs.Ats.IBNet
                 }
 
                 //Minimum Sell Short Combo Leg Order is 35
-                if (serverVersion < 35)
+                if (serverVersion < MinServerVersion.SshortComboLegs)
                 {
                     if (!(contract.ComboLegs.Count == 0))
                     {
@@ -2204,7 +2223,7 @@ namespace Krs.Ats.IBNet
                     }
                 }
 
-                if(serverVersion < 36)
+                if (serverVersion < MinServerVersion.WhatIfOrders)
                 {
                     if(order.WhatIf)
                     {
@@ -2213,7 +2232,7 @@ namespace Krs.Ats.IBNet
                     }
                 }
 
-                if (serverVersion < 40)
+                if (serverVersion < MinServerVersion.FundamentalData)
                 {
                     if (contract.UnderlyingComponent != null)
                     {
@@ -2222,7 +2241,7 @@ namespace Krs.Ats.IBNet
                     }
                 }
 
-                if (serverVersion < 40)
+                if (serverVersion < MinServerVersion.ScaleOrders2)
                 {
                     if (order.ScaleSubsLevelSize != System.Int32.MaxValue)
                     {
@@ -2231,7 +2250,7 @@ namespace Krs.Ats.IBNet
                     }
                 }
 
-                if (serverVersion < 41)
+                if (serverVersion < MinServerVersion.AlgoOrders)
                 {
                     if (!string.IsNullOrEmpty(order.AlgoStrategy))
                     {
@@ -2241,7 +2260,7 @@ namespace Krs.Ats.IBNet
                 }
 
 
-                if (serverVersion < 44)
+                if (serverVersion < MinServerVersion.NotHeld)
                 {
                     if (order.NotHeld)
                     {
@@ -2250,7 +2269,7 @@ namespace Krs.Ats.IBNet
                     }
                 }
 
-                if (serverVersion < 45)
+                if (serverVersion < MinServerVersion.SecIdType)
                 {
                     if (contract.SecIdType != SecurityIdType.None || !string.IsNullOrEmpty(contract.SecId))
                     {
@@ -2259,7 +2278,7 @@ namespace Krs.Ats.IBNet
                     }
                 }
 
-                if(serverVersion < 46)
+                if (serverVersion < MinServerVersion.PlaceOrderConId)
                 {
                     if (contract.ContractId > 0)
                     {
@@ -2268,7 +2287,7 @@ namespace Krs.Ats.IBNet
                     }
                 }
 
-                if (serverVersion < 52)
+                if (serverVersion < MinServerVersion.Sshortx)
                 {
                     if (order.ExemptCode != -1)
                     {
@@ -2277,7 +2296,7 @@ namespace Krs.Ats.IBNet
                     }
                 }
 
-                if (serverVersion < 52)
+                if (serverVersion < MinServerVersion.Sshortx)
                 {
                     if (contract.ComboLegs.Count > 0)
                     {
@@ -2292,7 +2311,38 @@ namespace Krs.Ats.IBNet
                     }
                 }
 
-                int version = (serverVersion < 44) ? 27 : 31;
+                if (serverVersion < MinServerVersion.HedgeOrders)
+                {
+                    if (!string.IsNullOrEmpty(order.HedgeType))
+                    {
+                        error(ErrorMessage.UpdateTws, "It does not support hedge orders.");
+                        return;
+                    }
+                }
+
+                if (serverVersion < MinServerVersion.OptOutSmartRouting)
+                {
+                    if (order.OptOutSmartRouting)
+                    {
+                        error(ErrorMessage.UpdateTws, "It does not support optOutSmartRouting parameter.");
+                        return;
+                    }
+                }
+
+                if (serverVersion < MinServerVersion.DeltaNeutralConId)
+                {
+                    if (order.DeltaNeutralConId > 0
+                            || !string.IsNullOrEmpty(order.DeltaNeutralSettlingFirm)
+                            || !string.IsNullOrEmpty(order.DeltaNeutralClearingAccount)
+                            || !string.IsNullOrEmpty(order.DeltaNeutralClearingIntent)
+                            )
+                    {
+                        error(ErrorMessage.UpdateTws, "It does not support deltaNeutral parameters: ConId, SettlingFirm, ClearingAccount, ClearingIntent");
+                        return;
+                    }
+                }
+
+                int version = (serverVersion < MinServerVersion.NotHeld) ? 27 : 35;
 
                 // send place order msg
                 try
@@ -2405,6 +2455,22 @@ namespace Krs.Ats.IBNet
                         }
                     }
 
+                    if (serverVersion >= MinServerVersion.SmartComboRoutingParams && contract.SecurityType == SecurityType.Bag)
+                    {
+                        Collection<TagValue> smartComboRoutingParams = order.SmartComboRoutingParams;
+                        int smartComboRoutingParamsCount = smartComboRoutingParams == null ? 0 : smartComboRoutingParams.Count;
+                        send(smartComboRoutingParamsCount);
+                        if (smartComboRoutingParamsCount > 0)
+                        {
+                            for (int i = 0; i < smartComboRoutingParamsCount; ++i)
+                            {
+                                TagValue tagValue = (TagValue)smartComboRoutingParams[i];
+                                send(tagValue.Tag);
+                                send(tagValue.Value);
+                            }
+                        }
+                    }
+
                     if (serverVersion >= 9)
                     {
                         send("");
@@ -2491,6 +2557,14 @@ namespace Krs.Ats.IBNet
                         {
                             send(EnumDescConverter.GetEnumDescription(order.DeltaNeutralOrderType));
                             sendMax(order.DeltaNeutralAuxPrice);
+
+                            if (serverVersion >= MinServerVersion.DeltaNeutralConId && order.DeltaNeutralOrderType != OrderType.None && order.DeltaNeutralOrderType != OrderType.Empty)
+                            {
+                                send(order.DeltaNeutralConId);
+                                send(order.DeltaNeutralSettlingFirm);
+                                send(order.DeltaNeutralClearingAccount);
+                                send(order.DeltaNeutralClearingIntent);
+                            }
                         }
                         send(order.ContinuousUpdate);
                         if (serverVersion == 26)
@@ -2515,9 +2589,9 @@ namespace Krs.Ats.IBNet
                     }
 
                     //Scale Orders require server version 35 or higher.
-                    if (serverVersion >= 35)
+                    if (serverVersion >= MinServerVersion.ScaleOrders)
                     {
-                        if (serverVersion >= 40)
+                        if (serverVersion >= MinServerVersion.ScaleOrders2)
                         {
                             sendMax(order.ScaleInitLevelSize);
                             sendMax(order.ScaleSubsLevelSize);
@@ -2530,16 +2604,30 @@ namespace Krs.Ats.IBNet
                         sendMax(order.ScalePriceIncrement);
                     }
 
-                    if(serverVersion >= 39)
+                    if (serverVersion >= MinServerVersion.HedgeOrders)
+                    {
+                        send(order.HedgeType);
+                        if (!string.IsNullOrEmpty(order.HedgeType))
+                        {
+                            send(order.HedgeParam);
+                        }
+                    }
+
+                    if (serverVersion >= MinServerVersion.OptOutSmartRouting)
+                    {
+                        send(order.OptOutSmartRouting);
+                    }
+
+                    if(serverVersion >= MinServerVersion.PtaOrders)
                     {
                         send(order.ClearingAccount);
                         send(order.ClearingIntent);
                     }
 
-                    if(serverVersion >= 44)
+                    if(serverVersion >= MinServerVersion.NotHeld)
                         send(order.NotHeld);
 
-                    if (serverVersion >= 40)
+                    if (serverVersion >= MinServerVersion.UnderComp)
                     {
                         if (contract.UnderlyingComponent != null)
                         {
@@ -2555,7 +2643,7 @@ namespace Krs.Ats.IBNet
                         }
                     }
 
-                    if (serverVersion >= 41)
+                    if (serverVersion >= MinServerVersion.AlgoOrders)
                     {
                         send(order.AlgoStrategy);
                         if (!string.IsNullOrEmpty(order.AlgoStrategy))
@@ -2576,7 +2664,7 @@ namespace Krs.Ats.IBNet
                         }
                     }
 
-                    if(serverVersion >= 36)
+                    if(serverVersion >= MinServerVersion.WhatIfOrders)
                     {
                         send(order.WhatIf);
                     }
@@ -3114,7 +3202,7 @@ namespace Krs.Ats.IBNet
                     return;
                 }
 
-                if (serverVersion < 40)
+                if (serverVersion < MinServerVersion.FundamentalData)
                 {
                     error(requestId, ErrorMessage.UpdateTws, "It does not support fundamental data requests.");
                     return;
@@ -3161,7 +3249,7 @@ namespace Krs.Ats.IBNet
                     return;
                 }
 
-                if (serverVersion < 40)
+                if (serverVersion < MinServerVersion.FundamentalData)
                 {
                     error(requestId, ErrorMessage.UpdateTws, "It does not support fundamental data requests.");
                     return;
@@ -3183,6 +3271,36 @@ namespace Krs.Ats.IBNet
                 }
             }
         }
+        
+        public virtual void CancelCalculateImpliedVolatility(int reqId)
+        {
+            if (!connected)
+            {
+                error(ErrorMessage.NotConnected);
+                return;
+            }
+
+            if (serverVersion < MinServerVersion.CancelCalculateImpliedVolatility)
+            {
+                error(reqId, ErrorMessage.UpdateTws, "It does not support calculate implied volatility cancellation.");
+                return;
+            }
+
+            const int version = 1;
+
+            try
+            {
+                // send cancel calculate implied volatility msg
+                send((int)OutgoingMessage.CancelCalcImpliedVolatility);
+                send(version);
+                send(reqId);
+            }
+            catch (Exception e)
+            {
+                error(reqId, ErrorMessage.FailSendCancelCalculateImpliedVolatility, e);
+                close();
+            }
+        }
 
         /// <summary>
         /// Calculates the Implied Volatility based on the user-supplied option and underlying prices.
@@ -3202,13 +3320,13 @@ namespace Krs.Ats.IBNet
                     return;
                 }
 
-                if (serverVersion < 49)
+                if (serverVersion < MinServerVersion.RequestCalculateImpliedVolatility)
                 {
                     error(ErrorMessage.UpdateTws, "It does not support calculate implied volatility requests.");
                     return;
                 }
 
-                int version = 1;
+                const int version = 1;
 
                 try
                 {
@@ -3243,6 +3361,144 @@ namespace Krs.Ats.IBNet
                     error(requestId, ErrorMessage.FailSendReqCalcImpliedVolatility, e);
                     close();
                 }
+            }
+        }
+
+        public virtual void RequestCalculateOptionPrice(int reqId, Contract contract, double volatility,
+                                                        double underPrice)
+        {
+            if (!connected)
+            {
+                error(ErrorMessage.NotConnected);
+                return;
+            }
+
+            if (serverVersion < MinServerVersion.RequestCalculateOptionPrice)
+            {
+                error(reqId, ErrorMessage.UpdateTws, "It does not support calculate option price requests.");
+                return;
+            }
+
+            const int version = 1;
+
+            try
+            {
+                // send calculate option price msg
+                send((int)OutgoingMessage.RequestCalcOptionPrice);
+                send(version);
+                send(reqId);
+
+                // send contract fields
+                send(contract.ContractId);
+                send(contract.Symbol);
+                send(EnumDescConverter.GetEnumDescription(contract.SecurityType));
+                send(contract.Expiry);
+                send(contract.Strike);
+                send(EnumDescConverter.GetEnumDescription(contract.Right));
+                send(contract.Multiplier);
+                send(contract.Exchange);
+                send(contract.PrimaryExchange);
+                send(contract.Currency);
+                send(contract.LocalSymbol);
+
+                send(volatility);
+                send(underPrice);
+            }
+            catch (Exception e)
+            {
+                error(reqId, ErrorMessage.FailSendRequestCalcOptionPrice, e);
+                close();
+            }
+        }
+
+        public virtual void CancelCalculateOptionPrice(int reqId)
+        {
+            if (!connected)
+            {
+                error(ErrorMessage.NotConnected);
+                return;
+            }
+
+            if (serverVersion < MinServerVersion.CancelCalculateOptionPrice)
+            {
+                error(reqId, ErrorMessage.UpdateTws, "It does not support calculate option price cancellation.");
+                return;
+            }
+
+            const int version = 1;
+
+            try
+            {
+                // send cancel calculate option price msg
+                send((int)OutgoingMessage.CancelCalcOptionPrice);
+                send(version);
+                send(reqId);
+            }
+            catch (Exception e)
+            {
+                error(reqId, ErrorMessage.FailSendCancelCalculateOptionPrice, e);
+                close();
+            }
+        }
+
+        public virtual void RequestGlobalCancel()
+        {
+            // not connected?
+            if (!connected)
+            {
+                error(ErrorMessage.NotConnected);
+                return;
+            }
+
+            if (serverVersion < MinServerVersion.RequestGlobalCancel)
+            {
+                error(ErrorMessage.UpdateTws, "It does not support globalCancel requests.");
+                return;
+            }
+
+            const int version = 1;
+
+            // send request global cancel msg
+            try
+            {
+                send((int)OutgoingMessage.RequestGlobalCancel);
+                send(version);
+            }
+            catch (Exception e)
+            {
+                error(ErrorMessage.FailSendRequestGlobalCancel, e);
+                close();
+            }
+        }
+
+        public virtual void RequestMarketDataType(int marketDataType)
+        {
+            // not connected?
+            if (!connected)
+            {
+                error(ErrorMessage.NotConnected);
+                return;
+            }
+
+            if (serverVersion < MinServerVersion.RequestMarketDataType)
+            {
+                error(ErrorMessage.UpdateTws, "It does not support marketDataType requests.");
+                return;
+            }
+
+            const int version = 1;
+
+            // send the reqMarketDataType message
+            try
+            {
+                send((int)OutgoingMessage.RequestMarketDataType);
+                send(version);
+                send(marketDataType);
+            }
+            catch (Exception e)
+            {
+                error(ErrorMessage.FailSendRequestMarketDataType, e);
+                close();
             }
         }
 
@@ -4001,6 +4257,14 @@ namespace Krs.Ats.IBNet
                                 string dnoa = ReadStr();
                                 order.DeltaNeutralOrderType = (string.IsNullOrEmpty(dnoa) ? OrderType.None : (OrderType)EnumDescConverter.GetEnumValue(typeof (OrderType), dnoa));
                                 order.DeltaNeutralAuxPrice = ReadDouble();
+
+                                if (version >= 27 && order.DeltaNeutralOrderType != OrderType.None && order.DeltaNeutralOrderType != OrderType.Empty)
+                                {
+                                    order.DeltaNeutralConId = ReadInt();
+                                    order.DeltaNeutralSettlingFirm = ReadStr();
+                                    order.DeltaNeutralClearingAccount = ReadStr();
+                                    order.DeltaNeutralClearingIntent = ReadStr();
+                                }
                             }
                             order.ContinuousUpdate = ReadInt();
                             if (serverVersion == 26)
@@ -4023,6 +4287,22 @@ namespace Krs.Ats.IBNet
                             contract.ComboLegsDescription = ReadStr();
                         }
 
+                        if (version >= 26)
+                        {
+                            int smartComboRoutingParamsCount = ReadInt();
+                            if (smartComboRoutingParamsCount > 0)
+                            {
+                                order.SmartComboRoutingParams = new Collection<TagValue>();
+                                for (int i = 0; i < smartComboRoutingParamsCount; ++i)
+                                {
+                                    TagValue tagValue = new TagValue();
+                                    tagValue.Tag = ReadStr();
+                                    tagValue.Value = ReadStr();
+                                    order.SmartComboRoutingParams.Add(tagValue);
+                                }
+                            }
+                        }
+
                         if (version >= 15)
                         {
                             if (version >= 20)
@@ -4037,6 +4317,20 @@ namespace Krs.Ats.IBNet
                                 order.ScaleInitLevelSize = ReadIntMax();
                             }
                             order.ScalePriceIncrement = ReadDecimalMax();
+                        }
+
+                        if (version >= 24)
+                        {
+                            order.HedgeType = ReadStr();
+                            if (!string.IsNullOrEmpty(order.HedgeType))
+                            {
+                                order.HedgeParam = ReadStr();
+                            }
+                        }
+
+                        if (version >= 25)
+                        {
+                            order.OptOutSmartRouting = ReadBoolFromInt();
                         }
 
                         if (version >= 19)
@@ -4325,6 +4619,10 @@ namespace Krs.Ats.IBNet
                             exec.CumQuantity = ReadInt();
                             exec.AvgPrice = ReadDecimal();
                         }
+                        if (version >= 8)
+                        {
+                            exec.OrderRef = ReadStr();
+                        }
 
                         execDetails(reqId, orderId, contract, exec);
                         break;
@@ -4530,6 +4828,15 @@ namespace Krs.Ats.IBNet
                         int reqId = ReadInt();
 
                         tickSnapshotEnd(reqId);
+                        break;
+                    }
+                case IncomingMessage.MarketDataType:
+                    {
+                        /*int version =*/ ReadInt();
+                        int reqId = ReadInt();
+                        MarketDataType mdt = (MarketDataType)ReadInt();
+
+                        marketDataType(reqId, mdt);
                         break;
                     }
                 default:

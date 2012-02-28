@@ -239,6 +239,10 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Volume per Minute
         /// </summary>
-        [Description("VOLUME_RATE")] VolumeRate = 56
+        [Description("VOLUME_RATE")] VolumeRate = 56,
+        /// <summary>
+        /// Last Regular Trading Hours Trade
+        /// </summary>
+        [Description("LAST_RTH_TRADE")] LastRthTrade = 57
     }
 }

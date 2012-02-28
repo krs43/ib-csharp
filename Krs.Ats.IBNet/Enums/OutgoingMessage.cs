@@ -136,6 +136,26 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Request Calculated Implied Volatility
         /// </summary>
-        [Description("REQ_CALC_IMPLIED_VOLAT")] RequestCalcImpliedVolatility = 54
+        [Description("REQ_CALC_IMPLIED_VOLAT")] RequestCalcImpliedVolatility = 54,
+        /// <summary>
+        /// Request Calculated Option Price
+        /// </summary>
+        [Description("REQ_CALC_OPTION_PRICE")] RequestCalcOptionPrice = 55,
+        /// <summary>
+        /// Cancel Calculated Implied Volatility
+        /// </summary>
+        [Description("CANCEL_CALC_IMPLIED_VOLAT")] CancelCalcImpliedVolatility = 56,
+        /// <summary>
+        /// Cancel Calculated Option Price
+        /// </summary>
+        [Description("CANCEL_CALC_OPTION_PRICE")] CancelCalcOptionPrice = 57,
+        /// <summary>
+        /// Request Global Cancel
+        /// </summary>
+        [Description("REQ_GLOBAL_CANCEL")] RequestGlobalCancel = 58,
+        /// <summary>
+        /// Request Market Data Type
+        /// </summary>
+        [Description("REQ_MARKET_DATA_TYPE")] RequestMarketDataType = 59
     }
 }

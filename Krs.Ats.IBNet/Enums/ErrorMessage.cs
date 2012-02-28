@@ -136,6 +136,26 @@ namespace Krs.Ats.IBNet
         /// </summary>
         [Description("Request Calculate Implied Volatility Sending Error")] FailSendReqCalcImpliedVolatility = 534,
         /// <summary>
+        /// Request Calculate Option Price Sending Error
+        /// </summary>
+        [Description("Request Calculate Option Price Sending Error")] FailSendRequestCalcOptionPrice = 535,
+        /// <summary>
+        /// Cancel Calculate Implied Volatility Sending Error
+        /// </summary>
+        [Description("Cancel Calculate Implied Volatility Sending Error")] FailSendCancelCalculateImpliedVolatility = 536,
+        /// <summary>
+        /// Cancel Calculate Option Price Sending Error
+        /// </summary>
+        [Description("Cancel Calculate Option Price Sending Error")] FailSendCancelCalculateOptionPrice = 537,
+        /// <summary>
+        /// Request Global Cancel Sending Error
+        /// </summary>
+        [Description("Request Global Cancel Sending Error")] FailSendRequestGlobalCancel = 538,
+        /// <summary>
+        /// Request Market Data Type Sending Error
+        /// </summary>
+        [Description("Request Market Data Type Sending Error")] FailSendRequestMarketDataType = 539,
+        /// <summary>
         /// No Valid ID for error message
         /// </summary>
         [Description("No Valid Id")] NoValidId = -1

@@ -71,6 +71,8 @@
     <Compile Include="Enums\AuctionStrategy.cs" />
     <Compile Include="Enums\BarSize.cs" />
     <Compile Include="Enums\ComboOpenClose.cs" />
+    <Compile Include="Enums\MarketDataType.cs" />
+    <Compile Include="Enums\MinServerVersion.cs" />
     <Compile Include="Enums\SecurityIdType.cs" />
     <Compile Include="Enums\ExecutionSide.cs" />
     <Compile Include="Enums\FinancialAdvisorAllocationMethod.cs" />
@@ -92,6 +94,7 @@
     <Compile Include="EventArgs\ConnectionClosedEventArgs.cs" />
     <Compile Include="EventArgs\ContractDetailsEndEventArgs.cs" />
     <Compile Include="EventArgs\AccountDownloadEndEventArgs.cs" />
+    <Compile Include="EventArgs\MarketDataTypeEventArgs.cs" />
     <Compile Include="EventArgs\ReportExceptionEventArgs.cs" />
     <Compile Include="EventArgs\TickSnapshotEndEventArgs.cs" />
     <Compile Include="EventArgs\DeltaNuetralValidationEventArgs.cs" />
