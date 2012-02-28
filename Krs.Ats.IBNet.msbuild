@@ -10,7 +10,7 @@
 
   <PropertyGroup>
     <CompanyName>Tanius</CompanyName>
-    <Copyright>Copyright (c) DinosaurTech 2011</Copyright>
+    <Copyright>Copyright (c) DinosaurTech 2012</Copyright>
     <Trademark>All Rights Reserved</Trademark>
   </PropertyGroup>
 
@@ -33,7 +33,7 @@
   <UsingTask AssemblyFile="Dependencies\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit"/>
 
   <ItemGroup>
-    <MySourceFiles Include="**\*.*" Exclude="**\.svn\**;Output\**;**\bin\**;**\release\**;**\obj\**;**\_Resharper*\**;**\Help\**;**\*.Resharper*;**\*.suo;**\*.tcargs;**\*.tcprojx;**\Krs.Ats_2008.sln.proj" />
+    <MySourceFiles Include="**\*.*" Exclude="**\.svn\**;Output\**;**\bin\**;**\release\**;**\obj\**;**\_Resharper*\**;**\Help\**;**\*.Resharper*;**\*.suo;**\*.tcargs;**\*.tcprojx;**\Krs.Ats_2008.sln.proj;**\*.hgignore" />
     <MyBinaryFiles Include="Krs.Ats.IBNet\bin\Release\*.*;Release Notes.txt;License.txt" />
     <MyHelpFiles Include="Krs.Ats.IBNet\Help\Krs.Ats.IBNet.chm" />
   </ItemGroup>
@@ -71,14 +71,14 @@
     <MSBuild
       Projects="Krs.Ats_2008.sln"
       Targets="Clean"
-      Properties="Configuration=$(BuildType)"/>
+      Properties="Configuration=$(BuildType);Platform=Any CPU"/>
   </Target>
 
   <Target Name="Build">
     <MSBuild
       Projects="Krs.Ats_2008.sln"
       Targets="Build"
-      Properties="Configuration=$(BuildType)"/>
+      Properties="Configuration=$(BuildType);Platform=Any CPU"/>
   </Target>
 
 </Project>
