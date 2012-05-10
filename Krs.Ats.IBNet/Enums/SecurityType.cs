@@ -46,6 +46,10 @@ namespace Krs.Ats.IBNet
         /// </summary>
         [Description("WAR")] Warrant,
         /// <summary>
+        /// Commodity
+        /// </summary>
+        [Description("CMDTY")] Commodity,
+        /// <summary>
         /// Undefined Security Type
         /// </summary>
         [Description("")] Undefined
