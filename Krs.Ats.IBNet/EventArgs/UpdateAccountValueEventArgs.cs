@@ -52,7 +52,7 @@ namespace Krs.Ats.IBNet
 		public string Value
 		{
 			get { return value; }
-			set { Value = value; }
+			set { this.value = value; }
 		}
 
 		/// <summary>
