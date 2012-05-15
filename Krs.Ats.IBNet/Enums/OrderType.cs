@@ -29,7 +29,7 @@ namespace Krs.Ats.IBNet
         /// An LOC (Limit-on-Close) order that executes at the closing price if the closing price is at or better than the submitted limit price, according to the rules of the specific exchange. Otherwise the order will be cancelled. 
         /// Non US Futures , Stocks
         /// </summary>
-        [Description("LMTCLS")] LimitOnClose,
+        [Description("LOC")] LimitOnClose,
         /// <summary>
         /// An order that is pegged to buy on the best offer and sell on the best bid.
         /// Your order is pegged to buy on the best offer and sell on the best bid. You can also use an offset amount which is subtracted from the best offer for a buy order, and added to the best bid for a sell order.
@@ -91,12 +91,10 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Market if Touched Order.
         /// </summary>
-        [Description("MIT")]
-        MarketIfTouched,
+        [Description("MIT")] MarketIfTouched,
         /// <summary>
         /// Limit if Touched Order.
         /// </summary>
-        [Description("LIT")]
-        LimitIfTouched
+        [Description("LIT")] LimitIfTouched
     }
 }
