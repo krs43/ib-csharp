@@ -32,7 +32,7 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Return Bid / Ask price only
         /// </summary>
-        [Description("BID/ASK")]
+        [Description("BID_ASK")]
         BidAsk,
     }
 }
