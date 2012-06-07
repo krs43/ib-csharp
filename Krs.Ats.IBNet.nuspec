@@ -11,7 +11,7 @@
     <licenseUrl>http://ib-csharp.googlecode.com/hg/License.txt</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Library to connect to Interactive Brokers Trader Workstation for receiving market data and placing / managing trades.</description>
-    <tags>IB TWS IBNet</tags>
+    <tags>IB TWS IBNet IBCSharp CSharp API AlgoTrading Trading</tags>
   </metadata>
   <files>
     <file src="Krs.Ats.IBNet\Bin\Release\Krs.Ats.IBNet.dll" target="lib\net20" />
