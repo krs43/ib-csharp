@@ -1,5 +1,5 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="Dependencies\MSBuild.Community.Tasks.Targets"/>
+  <Import Project="Build\Tools\MSBuild.Community.Tasks.Targets"/>
   <!-- Settings -->
 
   <PropertyGroup Condition="'$(BuildType)' == ''">
@@ -22,7 +22,7 @@
 
     <AssemblyInfo
      CodeLanguage="CS"
-     OutputFile="Krs.Ats.IBNet\Properties\GlobalAssemblyInfo.cs"
+     OutputFile="Build\Properties\GlobalAssemblyInfo.cs"
      AssemblyCompany="$(CompanyName)"
      AssemblyCopyright="$(Copyright)"
      AssemblyTrademark="$(Trademark)"
@@ -69,14 +69,14 @@
 
   <Target Name="Clean">
     <MSBuild
-      Projects="Krs.Ats_2008.sln"
+      Projects="Krs.Ats_2010.sln"
       Targets="Clean"
       Properties="Configuration=$(BuildType);Platform=Any CPU"/>
   </Target>
 
   <Target Name="Build">
     <MSBuild
-      Projects="Krs.Ats_2008.sln"
+      Projects="Krs.Ats_2010.sln"
       Targets="Build"
       Properties="Configuration=$(BuildType);Platform=Any CPU"/>
   </Target>

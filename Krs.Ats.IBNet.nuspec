@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns=
+  "http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Krs.Ats.IBNet</id>
+    <version>0.0.0.0</version>
+    <title>Interactive Brokers C# Library</title>
+    <authors>Karl Schulze</authors>
+    <owners>Karl Schulze</owners>
+    <projectUrl>http://code.google.com/p/ib-csharp/</projectUrl>
+    <licenseUrl>http://ib-csharp.googlecode.com/hg/License.txt</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Library to connect to Interactive Brokers Trader Workstation for receiving market data and placing / managing trades.</description>
+    <tags>IB TWS IBNet</tags>
+  </metadata>
+  <files>
+    <file src="Krs.Ats.IBNet\Bin\Release\Krs.Ats.IBNet.dll" target="lib\net20" />
+    <file src="Krs.Ats.IBNet\Bin\Release\Krs.Ats.IBNet.pdb" target="lib\net20" />
+    <file src="Krs.Ats.IBNet\Bin\Release\Krs.Ats.IBNet.XML" target="lib\net20" />
+  </files>
+</package>
