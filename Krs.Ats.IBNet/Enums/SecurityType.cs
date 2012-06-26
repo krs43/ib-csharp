@@ -50,6 +50,10 @@ namespace Krs.Ats.IBNet
         /// </summary>
         [Description("CMDTY")] Commodity,
         /// <summary>
+        /// Bill
+        /// </summary>
+        [Description("BILL")] Bill,
+        /// <summary>
         /// Undefined Security Type
         /// </summary>
         [Description("")] Undefined
