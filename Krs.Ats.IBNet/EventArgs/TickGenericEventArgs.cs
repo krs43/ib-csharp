@@ -60,7 +60,7 @@ namespace Krs.Ats.IBNet
 		public double Value
 		{
 			get { return value; }
-			set { Value = value; }
+			set { this.value = value; }
 		}
 	}
 }

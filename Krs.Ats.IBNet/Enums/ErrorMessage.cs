@@ -158,6 +158,22 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// No Valid ID for error message
         /// </summary>
-        [Description("No Valid Id")] NoValidId = -1
+        [Description("No Valid Id")] NoValidId = -1,
+        /// <summary>
+        /// Market data farm connection is broken
+        /// </summary>
+        [Description("Market data farm connection is broken")] MarketDataFarmConnectionIsBroken = 2103,
+        /// <summary>
+        /// Market data farm connection is OK
+        /// </summary>
+        [Description("Market data farm connection is OK")] MarketDataFarmConnectionIsOK = 2104,
+        /// <summary>
+        /// HMDS data farm connection is broken
+        /// </summary>
+        [Description("HMDS data farm connection is broken")] HmdsDataFarmConnectionIsBroken = 2105,
+        /// <summary>
+        /// HMDS data farm connection is OK
+        /// </summary>
+        [Description("HMDS data farm connection is OK")] HmdsDataFarmConnectionIsOK = 2106,
     }
 }
