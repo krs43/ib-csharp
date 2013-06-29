@@ -1064,6 +1064,7 @@ namespace Krs.Ats.IBNet
         /// Each client MUST connect with a unique clientId.</param>
         public void Connect(String host, int port, int clientId)
         {
+   
             if (host == null)
                 throw new ArgumentNullException("host");
             if (port < IPEndPoint.MinPort || port > IPEndPoint.MaxPort)
@@ -4285,6 +4286,14 @@ namespace Krs.Ats.IBNet
                                     order.DeltaNeutralClearingAccount = ReadStr();
                                     order.DeltaNeutralClearingIntent = ReadStr();
                                 }
+
+                                if (version >= 31 && !string.IsNullOrEmpty(dnoa))
+                                {
+                                    order.DeltaNeutralOpenClose = ReadStr();
+                                    order.DeltaNeutralShortSale = ReadBoolFromInt();
+                                    order.DeltaNeutralShortSaleSlot = ReadInt();
+                                    order.DeltaNeutralDesignatedLocation = ReadStr();
+                                }
                             }
                             order.ContinuousUpdate = ReadInt();
                             if (serverVersion == 26)
@@ -4300,11 +4309,55 @@ namespace Krs.Ats.IBNet
                             order.TrailStopPrice = ReadDecimal();
                         }
 
+                        if (version >= 30)
+                        {
+                            order.TrailingPercent = ReadDoubleMax();
+                        }
+
                         if (version >= 14)
                         {
                             order.BasisPoints = ReadDecimal();
                             order.BasisPointsType = ReadInt();
                             contract.ComboLegsDescription = ReadStr();
+                        }
+
+                        if (version >= 29)
+                        {
+                            int comboLegsCount = ReadInt();
+                            if (comboLegsCount > 0)
+                            {
+                                contract.ComboLegs = new Collection<ComboLeg>();
+                                for (int i = 0; i < comboLegsCount; ++i)
+                                {
+                                    int conId = ReadInt();
+                                    int ratio = ReadInt();
+                                    String action = ReadStr();
+                                    String exchange = ReadStr();
+                                    int openClose = ReadInt();
+                                    int shortSaleSlot = ReadInt();
+                                    String designatedLocation = ReadStr();
+                                    int exemptCode = ReadInt();
+
+                                    
+                                    //TODO: Fix this
+                                    //ComboLeg comboLeg = new ComboLeg(conId, ratio, action, exchange, openClose,
+                                    //        shortSaleSlot, designatedLocation, exemptCode);
+                                    //contract.ComboLegs.Add(comboLeg);
+                                }
+                            }
+
+                            int orderComboLegsCount = ReadInt();
+                            if (orderComboLegsCount > 0)
+                            {
+                                order.OrderComboLegs = new Collection<OrderComboLeg>();
+                                for (int i = 0; i < orderComboLegsCount; ++i)
+                                {
+                                    double price = ReadDoubleMax();
+
+                                    OrderComboLeg orderComboLeg = new OrderComboLeg(price);
+                                    order.OrderComboLegs.Add(orderComboLeg);
+                                }
+                            }
                         }
 
                         if (version >= 26)
@@ -4337,6 +4390,18 @@ namespace Krs.Ats.IBNet
                                 order.ScaleInitLevelSize = ReadIntMax();
                             }
                             order.ScalePriceIncrement = ReadDecimalMax();
+                        }
+
+                        if (version >= 28 && order.ScalePriceIncrement > 0.0m 
+                            && order.ScalePriceIncrement != Decimal.MaxValue)
+                        {
+                            order.ScalePriceAdjustValue = ReadDoubleMax();
+                            order.ScalePriceAdjustInterval = ReadIntMax();
+                            order.ScaleProfitOffset = ReadDoubleMax();
+                            order.ScaleAutoReset = ReadBoolFromInt();
+                            order.ScaleInitPosition = ReadIntMax();
+                            order.ScaleInitFillQty = ReadIntMax();
+                            order.ScaleRandomPercent = ReadBoolFromInt();
                         }
 
                         if (version >= 24)
