@@ -152,6 +152,10 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Market Data Type
         /// </summary>
-        [Description("MARKET_DATA_TYPE")] MarketDataType = 58
+        [Description("MARKET_DATA_TYPE")] MarketDataType = 58,    
+        /// <summary>
+        /// Commission Report
+        /// </summary>
+        [Description("COMMISION_REPORT")]  CommissionReport = 59
     }
 }

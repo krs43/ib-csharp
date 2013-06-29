@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommissionReport.cs" />
     <Compile Include="Contracts\Equity.cs" />
     <Compile Include="Contracts\Forex.cs" />
     <Compile Include="Contracts\Future.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Enums\TriggerMethod.cs" />
     <Compile Include="Enums\VolatilityType.cs" />
     <Compile Include="EventArgs\BondContractDetailsEventArgs.cs" />
+    <Compile Include="EventArgs\CommissionReportEventArgs.cs" />
     <Compile Include="EventArgs\ConnectionClosedEventArgs.cs" />
     <Compile Include="EventArgs\ContractDetailsEndEventArgs.cs" />
     <Compile Include="EventArgs\AccountDownloadEndEventArgs.cs" />
