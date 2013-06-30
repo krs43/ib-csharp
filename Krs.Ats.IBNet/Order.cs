@@ -776,7 +776,8 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Unknown - assume institutional only.
+        /// For IBExecution customers: Valid values are: 
+        /// IB, Away, and PTA (post trade allocation).
         /// </summary>
         public string ClearingIntent
         {
@@ -785,7 +786,7 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Algorithm Strategy
+        /// For information about API Algo orders, see http://www.interactivebrokers.com/en/software/api/apiguide/tables/ibalgo_parameters.htm.
         /// </summary>
         public string AlgoStrategy
         {
@@ -794,7 +795,7 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// List of Algorithm Parameters
+        /// Support for IBAlgo parameters.
         /// </summary>
         public Collection<TagValue> AlgoParams
         {
@@ -813,7 +814,9 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
-        /// Not Held
+        /// For IBDARK orders only. Orders routed to IBDARK are tagged as "post only" and 
+        /// are held in IB's order book, where incoming SmartRouted orders from other IB customers 
+        /// are eligible to trade against them.
         /// </summary>
         public bool NotHeld
         {
@@ -857,6 +860,10 @@ namespace Krs.Ats.IBNet
             set { deltaNeutralClearingAccount = value; }
         }
 
+        /// <summary>
+        /// For IBExecution customers: Valid values are: 
+        /// IB, Away, and PTA (post trade allocation).
+        /// </summary>
         public string DeltaNeutralClearingIntent
         {
             get { return deltaNeutralClearingIntent; }
@@ -880,6 +887,58 @@ namespace Krs.Ats.IBNet
             get { return smartComboRoutingParams; }
             set { smartComboRoutingParams = value; }
         }
+
+        /// <summary>
+        /// Specifies whether the order is an Open or a Close order and is used when the hedge involves a CFD and and the order is clearing away.
+        /// </summary>
+        public string DeltaNeutralOpenClose { get; set; }
+
+        /// <summary>
+        /// Used when the hedge involves a stock and indicates whether or not it is sold short.
+        /// </summary>
+        public bool DeltaNeutralShortSale { get; set; }
+
+        /// <summary>
+        /// Valid values are 1 or 2. (Institutional - Non-cleared only)
+        /// </summary>
+        public int DeltaNeutralShortSaleSlot { get; set; }
+
+        /// <summary>
+        /// Used only when shortSaleSlot = 2. (Institutional - Non-cleared only)
+        /// </summary>
+        public string DeltaNeutralDesignatedLocation { get; set; }
+
+        /// <summary>
+        /// Specify the trailing amount of a trailing stop order as a percentage. 
+        /// Observe the following guidelines when using the trailingPercent field:
+        /// This field is mutually exclusive with the existing trailing amount. 
+        /// That is, the API client can send one or the other but not both.
+        /// This field is read AFTER the stop price (barrier price) as follows: 
+        ///     deltaNeutralAuxPrice, stopPrice, trailingPercent, scale order attributes
+        /// The field will also be sent to the API in the openOrder message if the API client version is >= 56. 
+        /// It is sent after the stopPrice field as follows:
+        ///     stopPrice, trailingPct, basisPoint
+        /// </summary>
+        public double TrailingPercent { get; set; }
+
+        /// <summary>
+        /// Holds attributes for all legs in a combo order. (Smart Combo Routing)
+        /// </summary>
+        public Collection<OrderComboLeg> OrderComboLegs { get; set; }
+
+        public double ScalePriceAdjustValue { get; set; }
+
+        public int ScalePriceAdjustInterval { get; set; }
+
+        public double ScaleProfitOffset { get; set; }
+
+        public bool ScaleAutoReset { get; set; }
+
+        public int ScaleInitPosition { get; set; }
+
+        public int ScaleInitFillQty { get; set; }
+
+        public bool ScaleRandomPercent { get; set; }
 
         #endregion
     }
