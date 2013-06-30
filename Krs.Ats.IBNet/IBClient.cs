@@ -4669,15 +4669,15 @@ namespace Krs.Ats.IBNet
                         contract.SecurityType =
                             (SecurityType) EnumDescConverter.GetEnumValue(typeof (SecurityType), ReadStr());
                         contract.Expiry = ReadStr();
-                        if (version >= 9)
-                        {
-                            contract.Multiplier = ReadStr();
-                        }
                         contract.Strike = ReadDouble();
                         string rstr = ReadStr();
                         contract.Right = (string.IsNullOrEmpty(rstr) || rstr.Equals("?")
                                               ? RightType.Undefined
                                               : (RightType) EnumDescConverter.GetEnumValue(typeof (RightType), rstr));
+                        if (version >= 9)
+                        {
+                            contract.Multiplier = ReadStr();
+                        }
                         contract.Exchange = ReadStr();
                         contract.Currency = ReadStr();
                         contract.LocalSymbol = ReadStr();
