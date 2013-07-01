@@ -208,6 +208,10 @@ namespace Krs.Ats.IBNet
             set { orderRef = value; }
         }
 
+        public string EvRule { get; set; }
+
+        public double EvMultipler { get; set; }
+
         #endregion
     }
 }

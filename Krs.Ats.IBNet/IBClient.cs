@@ -750,6 +750,26 @@ namespace Krs.Ats.IBNet
         }
 
         /// <summary>
+        /// Called on a commission report call back.
+        /// </summary>
+        public event EventHandler<CommissionReportEventArgs> CommissionReport;
+
+        /// <summary>
+        /// Called internally when the receive thread receives a Market Data Type Event.
+        /// </summary>
+        protected virtual void OnCommissionReport(CommissionReportEventArgs e)
+        {
+            RaiseEvent(CommissionReport, this, e);
+        }
+
+        private void commissionReport(CommissionReport report)
+        {
+            var e = new CommissionReportEventArgs(report);
+            OnCommissionReport(e);
+        }
+
+
+        /// <summary>
         /// This event is fired when there is an error with the communication or when TWS wants to send a message to the client.
         /// </summary>
         public event EventHandler<ErrorEventArgs> Error;
@@ -910,7 +930,7 @@ namespace Krs.Ats.IBNet
 
         #region Values
 
-        private const int clientVersion = 53;
+        private const int clientVersion = 60;
         private const int minimumServerVersion = 38;
 
         #endregion
@@ -1044,6 +1064,7 @@ namespace Krs.Ats.IBNet
         /// Each client MUST connect with a unique clientId.</param>
         public void Connect(String host, int port, int clientId)
         {
+   
             if (host == null)
                 throw new ArgumentNullException("host");
             if (port < IPEndPoint.MinPort || port > IPEndPoint.MaxPort)
@@ -4265,6 +4286,14 @@ namespace Krs.Ats.IBNet
                                     order.DeltaNeutralClearingAccount = ReadStr();
                                     order.DeltaNeutralClearingIntent = ReadStr();
                                 }
+
+                                if (version >= 31 && !string.IsNullOrEmpty(dnoa))
+                                {
+                                    order.DeltaNeutralOpenClose = ReadStr();
+                                    order.DeltaNeutralShortSale = ReadBoolFromInt();
+                                    order.DeltaNeutralShortSaleSlot = ReadInt();
+                                    order.DeltaNeutralDesignatedLocation = ReadStr();
+                                }
                             }
                             order.ContinuousUpdate = ReadInt();
                             if (serverVersion == 26)
@@ -4280,11 +4309,55 @@ namespace Krs.Ats.IBNet
                             order.TrailStopPrice = ReadDecimal();
                         }
 
+                        if (version >= 30)
+                        {
+                            order.TrailingPercent = ReadDoubleMax();
+                        }
+
                         if (version >= 14)
                         {
                             order.BasisPoints = ReadDecimal();
                             order.BasisPointsType = ReadInt();
                             contract.ComboLegsDescription = ReadStr();
+                        }
+
+                        if (version >= 29)
+                        {
+                            int comboLegsCount = ReadInt();
+                            if (comboLegsCount > 0)
+                            {
+                                contract.ComboLegs = new Collection<ComboLeg>();
+                                for (int i = 0; i < comboLegsCount; ++i)
+                                {
+                                    int conId = ReadInt();
+                                    int ratio = ReadInt();
+                                    String action = ReadStr();
+                                    String exchange = ReadStr();
+                                    int openClose = ReadInt();
+                                    int shortSaleSlot = ReadInt();
+                                    String designatedLocation = ReadStr();
+                                    int exemptCode = ReadInt();
+
+                                    
+                                    //TODO: Fix this
+                                    //ComboLeg comboLeg = new ComboLeg(conId, ratio, action, exchange, openClose,
+                                    //        shortSaleSlot, designatedLocation, exemptCode);
+                                    //contract.ComboLegs.Add(comboLeg);
+                                }
+                            }
+
+                            int orderComboLegsCount = ReadInt();
+                            if (orderComboLegsCount > 0)
+                            {
+                                order.OrderComboLegs = new Collection<OrderComboLeg>();
+                                for (int i = 0; i < orderComboLegsCount; ++i)
+                                {
+                                    double price = ReadDoubleMax();
+
+                                    OrderComboLeg orderComboLeg = new OrderComboLeg(price);
+                                    order.OrderComboLegs.Add(orderComboLeg);
+                                }
+                            }
                         }
 
                         if (version >= 26)
@@ -4317,6 +4390,18 @@ namespace Krs.Ats.IBNet
                                 order.ScaleInitLevelSize = ReadIntMax();
                             }
                             order.ScalePriceIncrement = ReadDecimalMax();
+                        }
+
+                        if (version >= 28 && order.ScalePriceIncrement > 0.0m 
+                            && order.ScalePriceIncrement != Decimal.MaxValue)
+                        {
+                            order.ScalePriceAdjustValue = ReadDoubleMax();
+                            order.ScalePriceAdjustInterval = ReadIntMax();
+                            order.ScaleProfitOffset = ReadDoubleMax();
+                            order.ScaleAutoReset = ReadBoolFromInt();
+                            order.ScaleInitPosition = ReadIntMax();
+                            order.ScaleInitFillQty = ReadIntMax();
+                            order.ScaleRandomPercent = ReadBoolFromInt();
                         }
 
                         if (version >= 24)
@@ -4589,6 +4674,10 @@ namespace Krs.Ats.IBNet
                         contract.Right = (string.IsNullOrEmpty(rstr) || rstr.Equals("?")
                                               ? RightType.Undefined
                                               : (RightType) EnumDescConverter.GetEnumValue(typeof (RightType), rstr));
+                        if (version >= 9)
+                        {
+                            contract.Multiplier = ReadStr();
+                        }
                         contract.Exchange = ReadStr();
                         contract.Currency = ReadStr();
                         contract.LocalSymbol = ReadStr();
@@ -4622,6 +4711,11 @@ namespace Krs.Ats.IBNet
                         if (version >= 8)
                         {
                             exec.OrderRef = ReadStr();
+                        }
+                        if (version >= 9)
+                        {
+                            exec.EvRule = ReadStr();
+                            exec.EvMultipler = ReadDouble();
                         }
 
                         execDetails(reqId, orderId, contract, exec);
@@ -4839,6 +4933,22 @@ namespace Krs.Ats.IBNet
                         marketDataType(reqId, mdt);
                         break;
                     }
+                case IncomingMessage.CommissionReport:
+                    {
+                        /*int version =*/
+                        ReadInt();
+
+                        var report = new CommissionReport();
+                        report.ExecId = ReadStr();
+                        report.Commission = ReadDouble();
+                        report.Currency = ReadStr();
+                        report.RealizedPnL = ReadNullableDouble();
+                        report.Yield = ReadNullableDouble();
+                        report.YieldRedemptionDate = ReadNullableDateInt();
+
+                        commissionReport(report);
+                        break;
+                    }
                 default:
                     {
                         error(ErrorMessage.NoValidId);
@@ -4882,6 +4992,17 @@ namespace Krs.Ats.IBNet
             return str == null ? 0 : Int32.Parse(str, CultureInfo.InvariantCulture);
         }
 
+        private DateTime? ReadNullableDateInt()
+        {
+            var dateInt = ReadInt();
+            DateTime? date = null;
+            if (dateInt != 0)
+            {
+                date = DateTime.ParseExact(dateInt.ToString(), "yyyyMMdd", CultureInfo.InvariantCulture);
+            }
+            return date;
+        }
+
         private int ReadIntMax()
         {
             String str = ReadStr();
@@ -4899,6 +5020,20 @@ namespace Krs.Ats.IBNet
             String str = ReadStr();
             return str == null ? 0 : Double.Parse(str, CultureInfo.InvariantCulture);
         }
+
+        private double? ReadNullableDouble()
+        {
+            String str = ReadStr();
+            if (str == null || str == "1.7976931348623157E308")
+            {
+                return null;
+            }
+            else
+            {
+                return Double.Parse(str, CultureInfo.InvariantCulture);
+            }
+        }
+
 
         private decimal ReadDecimal()
         {
