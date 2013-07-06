@@ -4331,18 +4331,16 @@ namespace Krs.Ats.IBNet
                                 {
                                     int conId = ReadInt();
                                     int ratio = ReadInt();
-                                    String action = ReadStr();
+                                    ActionSide action = (ActionSide) EnumDescConverter.GetEnumValue(typeof (ActionSide), ReadStr());
                                     String exchange = ReadStr();
-                                    int openClose = ReadInt();
-                                    int shortSaleSlot = ReadInt();
+                                    ComboOpenClose openClose = (ComboOpenClose) ReadInt();
+                                    ShortSaleSlot shortSaleSlot = (ShortSaleSlot) ReadInt();
                                     String designatedLocation = ReadStr();
                                     int exemptCode = ReadInt();
-
-                                    
-                                    //TODO: Fix this
-                                    //ComboLeg comboLeg = new ComboLeg(conId, ratio, action, exchange, openClose,
-                                    //        shortSaleSlot, designatedLocation, exemptCode);
-                                    //contract.ComboLegs.Add(comboLeg);
+                                                                        
+                                    ComboLeg comboLeg = new ComboLeg(conId, ratio, action, exchange, openClose,
+                                            shortSaleSlot, designatedLocation, exemptCode);
+                                    contract.ComboLegs.Add(comboLeg);
                                 }
                             }
 
