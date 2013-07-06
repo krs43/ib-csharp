@@ -13,7 +13,7 @@ namespace Krs.Ats.IBNet
     {
         #region Private Variables
 
-        private readonly Collection<ComboLeg> comboLegs = new Collection<ComboLeg>();
+        private Collection<ComboLeg> comboLegs = new Collection<ComboLeg>();
 
         private int contractId;
 
@@ -271,6 +271,7 @@ namespace Krs.Ats.IBNet
         public Collection<ComboLeg> ComboLegs
         {
             get { return comboLegs; }
+            set { comboLegs = value; }
         }
 
         /// <summary>
