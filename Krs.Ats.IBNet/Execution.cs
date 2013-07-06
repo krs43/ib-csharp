@@ -202,14 +202,23 @@ namespace Krs.Ats.IBNet
             set { avgPrice = value; }
         }
 
+        /// <summary>
+        /// OrderRef.
+        /// </summary>
         public string OrderRef
         {
             get { return orderRef; }
             set { orderRef = value; }
         }
 
+        /// <summary>
+        /// EvRule.
+        /// </summary>
         public string EvRule { get; set; }
 
+        /// <summary>
+        /// EvMultiplier.
+        /// </summary>
         public double EvMultipler { get; set; }
 
         #endregion
