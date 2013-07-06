@@ -3293,6 +3293,10 @@ namespace Krs.Ats.IBNet
             }
         }
         
+        /// <summary>
+        /// Call this function to cancel a request to calculate volatility for a supplied option price and underlying price.
+        /// </summary>
+        /// <param name="reqId">The Ticker Id.</param>
         public virtual void CancelCalculateImpliedVolatility(int reqId)
         {
             if (!connected)
@@ -3385,6 +3389,13 @@ namespace Krs.Ats.IBNet
             }
         }
 
+        /// <summary>
+        /// Call this function to calculate option price and greek values for a supplied volatility and underlying price.
+        /// </summary>
+        /// <param name="reqId">The ticker ID.</param>
+        /// <param name="contract">Describes the contract.</param>
+        /// <param name="volatility">The volatility.</param>
+        /// <param name="underPrice">Price of the underlying.</param>
         public virtual void RequestCalculateOptionPrice(int reqId, Contract contract, double volatility,
                                                         double underPrice)
         {
@@ -3432,6 +3443,10 @@ namespace Krs.Ats.IBNet
             }
         }
 
+        /// <summary>
+        /// Call this function to cancel a request to calculate option price and greek values for a supplied volatility and underlying price.
+        /// </summary>
+        /// <param name="reqId">The ticker id.</param>
         public virtual void CancelCalculateOptionPrice(int reqId)
         {
             if (!connected)
@@ -3462,6 +3477,9 @@ namespace Krs.Ats.IBNet
             }
         }
 
+        /// <summary>
+        /// Request Global Cancel.
+        /// </summary>
         public virtual void RequestGlobalCancel()
         {
             // not connected?
@@ -3492,6 +3510,14 @@ namespace Krs.Ats.IBNet
             }
         }
 
+        /// <summary>
+        /// The API can receive frozen market data from Trader Workstation. 
+        /// Frozen market data is the last data recorded in our system. 
+        /// During normal trading hours, the API receives real-time market data. 
+        /// If you use this function, you are telling TWS to automatically switch to frozen market data after the close. 
+        /// Then, before the opening of the next trading day, market data will automatically switch back to real-time market data.
+        /// </summary>
+        /// <param name="marketDataType">1 for real-time streaming market data or 2 for frozen market data.</param>
         public virtual void RequestMarketDataType(int marketDataType)
         {
             // not connected?
@@ -4331,18 +4357,16 @@ namespace Krs.Ats.IBNet
                                 {
                                     int conId = ReadInt();
                                     int ratio = ReadInt();
-                                    String action = ReadStr();
+                                    ActionSide action = (ActionSide) EnumDescConverter.GetEnumValue(typeof (ActionSide), ReadStr());
                                     String exchange = ReadStr();
-                                    int openClose = ReadInt();
-                                    int shortSaleSlot = ReadInt();
+                                    ComboOpenClose openClose = (ComboOpenClose) ReadInt();
+                                    ShortSaleSlot shortSaleSlot = (ShortSaleSlot) ReadInt();
                                     String designatedLocation = ReadStr();
                                     int exemptCode = ReadInt();
-
-                                    
-                                    //TODO: Fix this
-                                    //ComboLeg comboLeg = new ComboLeg(conId, ratio, action, exchange, openClose,
-                                    //        shortSaleSlot, designatedLocation, exemptCode);
-                                    //contract.ComboLegs.Add(comboLeg);
+                                                                        
+                                    ComboLeg comboLeg = new ComboLeg(conId, ratio, action, exchange, openClose,
+                                            shortSaleSlot, designatedLocation, exemptCode);
+                                    contract.ComboLegs.Add(comboLeg);
                                 }
                             }
 
