@@ -10,6 +10,10 @@ namespace Krs.Ats.IBNet
     [Serializable()]
     public class CommissionReportEventArgs : EventArgs
     {
+        /// <summary>
+        /// Retuned by the executions event, contains the commission report.
+        /// </summary>
+        /// <param name="report">The commission report.</param>
         public CommissionReportEventArgs(CommissionReport report)
         {
             this.CommissionReport = report;
@@ -23,7 +27,6 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Contains the commission report details.
         /// </summary>
-        /// <seealso cref="ComissionReport"/>
         public CommissionReport CommissionReport { get; set; }
     }
 }

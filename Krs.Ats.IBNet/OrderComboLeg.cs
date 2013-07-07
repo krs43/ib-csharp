@@ -6,15 +6,28 @@ using System.Text;
 
 namespace Krs.Ats.IBNet
 {
+    /// <summary>
+    /// Order Combo Leg.
+    /// </summary>
     public class OrderComboLeg
     {
-        public double Price { get; set; } // price per leg
+        /// <summary>
+        /// The price per leg.
+        /// </summary>
+        public double Price { get; set; }
 
+        /// <summary>
+        /// Default constructor. Defaults price to double.MaxValue.
+        /// </summary>
         public OrderComboLeg()
         {
             Price = Double.MaxValue;
         }
 
+        /// <summary>
+        /// Constructor. Accepts price.
+        /// </summary>
+        /// <param name="price">The Order ComboLeg price.</param>
         public OrderComboLeg(double price)
         {
             Price = price;

@@ -842,18 +842,28 @@ namespace Krs.Ats.IBNet
             set { optOutSmartRouting = value; }
         }
 
+        /// <summary>
+        /// DeltaNeutralConId
+        /// </summary>
         public int DeltaNeutralConId
         {
             get { return deltaNeutralConId; }
             set { deltaNeutralConId = value; }
         }
 
+        /// <summary>
+        /// DeltaNeutralSettlingFirm. Institutional only.
+        /// </summary>
         public string DeltaNeutralSettlingFirm
         {
             get { return deltaNeutralSettlingFirm; }
             set { deltaNeutralSettlingFirm = value; }
         }
 
+        /// <summary>
+        /// For IBExecution customers: Specifies the true beneficiary of the order. 
+        /// This value is required for FUT/FOP orders for reporting to the exchange.
+        /// </summary>
         public string DeltaNeutralClearingAccount
         {
             get { return deltaNeutralClearingAccount; }
@@ -870,18 +880,28 @@ namespace Krs.Ats.IBNet
             set { deltaNeutralClearingIntent = value; }
         }
 
+        /// <summary>
+        /// HedgeType For hedge orders. Possible values are:
+        /// D = Delta, B = Beta, F = FX, P = Pair
+        /// </summary>
         public string HedgeType
         {
             get { return hedgeType; }
             set { hedgeType = value; }
         }
 
+        /// <summary>
+        /// Beta = x for Beta hedge orders, ratio = y for Pair hedge order.
+        /// </summary>
         public string HedgeParam
         {
             get { return hedgeParam; }
             set { hedgeParam = value; }
         }
 
+        /// <summary>
+        /// Support for IBAlgo parameters.
+        /// </summary>
         public Collection<TagValue> SmartComboRoutingParams
         {
             get { return smartComboRoutingParams; }
@@ -926,18 +946,39 @@ namespace Krs.Ats.IBNet
         /// </summary>
         public Collection<OrderComboLeg> OrderComboLegs { get; set; }
 
+        /// <summary>
+        /// For extended Scale orders.
+        /// </summary>
         public double ScalePriceAdjustValue { get; set; }
 
+        /// <summary>
+        /// For extended Scale orders.
+        /// </summary>
         public int ScalePriceAdjustInterval { get; set; }
 
+        /// <summary>
+        /// For extended Scale orders.
+        /// </summary>
         public double ScaleProfitOffset { get; set; }
 
+        /// <summary>
+        /// For extended Scale orders.
+        /// </summary>
         public bool ScaleAutoReset { get; set; }
 
+        /// <summary>
+        /// For extended Scale orders.
+        /// </summary>
         public int ScaleInitPosition { get; set; }
 
+        /// <summary>
+        /// For extended Scale orders.
+        /// </summary>
         public int ScaleInitFillQty { get; set; }
 
+        /// <summary>
+        /// For extended Scale orders.
+        /// </summary>
         public bool ScaleRandomPercent { get; set; }
 
         #endregion
