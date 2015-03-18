@@ -17,6 +17,33 @@ namespace Krs.Ats.IBNet
         /// <summary>
         /// Securities were sold.
         /// </summary>
-        [Description("SLD")] Sold
+        [Description("SLD")] Sold,
+
+        /// <summary>
+        /// Securities were lent.
+        /// </summary>
+        [Description("LEND")] Lend,
+     
+        /// <summary>
+        /// Securities were borrowed.
+        /// </summary>
+        [Description("BORROW")] Borrow,
+
+        /// <summary>
+        /// Securities were recalled.
+        /// </summary>
+        [Description("RECALL")] Recall,
+
+        /// <summary>
+        /// Securities were rerated.
+        /// </summary>
+        [Description("RERATE")]
+        Rerate,
+
+        /// <summary>
+        /// Securities were returned.
+        /// </summary>
+        [Description("RETURN")]
+        Return
     }
 }
